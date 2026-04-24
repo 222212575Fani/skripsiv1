@@ -12,12 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('anggota_tim', function (Blueprint $table) {
-            $table->id('id_anggota_tim'); //Atribut yang menyimpan ID pengguna dalam tim kerja
-            $table->foreignId('id_tim')->constrained('tim_kerja'); //Atribut yang menyimpan ID tim kerja
-            $table->foreignId('id_pengguna')->constrained('pengguna'); //Atribut yang menyimpan ID pengguna
-            $table->date('tanggal_bergabung'); //Atribut yang menyimpan tanggal seorang pengguna bergabung dalam tim kerja
-            $table->date('tanggal_keluar')->nullable(); //Atribut yang menyimpan tanggal seorang pengguna keluar/pindah tim kerja. Boleh null karena belum tentu pindah/keluar keanggotaan tim
-            $table->timestamps();
+            $table->id('id_anggota_tim');
+
+            $table->unsignedBigInteger('id_tim');
+            $table->unsignedBigInteger('id_pengguna');
+
+            $table->date('tanggal_bergabung');
+            $table->date('tanggal_keluar')->nullable();
+
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
+
+            $table->foreign('id_tim')
+                ->references('id_tim')
+                ->on('tim_kerja')
+                ->onDelete('restrict');
+
+            $table->foreign('id_pengguna')
+                ->references('id_pengguna')
+                ->on('pengguna')
+                ->onDelete('restrict');
         });
     }
 

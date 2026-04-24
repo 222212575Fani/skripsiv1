@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="text-[14px] text-white/90">
-                            © 2026 Badan Pusat Statistik
+                            © 2026 Direktorat Sistem Informasi Statistik
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         </h1>
 
                         <p class="mt-2 text-[14px] leading-6 text-[#7C7C7C] max-w-[360px]">
-                            Silakan Masuk untuk Mengelola Proyek.
+                            Silakan Masuk untuk Mengelola Proyek
                         </p>
                         <form class="mt-10">
                             <div class="mb-6">

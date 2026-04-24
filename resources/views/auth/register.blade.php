@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="text-[14px] text-white/90">
-                            © 2026 Badan Pusat Statistik
+                            © 2026 Direktorat Sistem Informasi Statistik
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         </h1>
 
                         <p class="mt-2 text-[14px] leading-6 text-[#7C7C7C] max-w-[360px]">
-                            Daftarkan akun Anda untuk Mengakses Sistem Manajemen Proyek Direktorat Sistem Informasi Statistik.
+                            Daftarkan akun Anda untuk Mengakses Sistem Manajemen Proyek Direktorat Sistem Informasi Statistik
                         </p>
 
                         <form class="mt-8">
@@ -62,13 +62,13 @@
 
                             <div class="mb-5">
                                 <label for="nip" class="block text-[14px] font-semibold text-[#232323] mb-2">
-                                    NIP (18 digit)
+                                    NIP
                                 </label>
                                 <input
                                     type="text"
                                     id="nip"
                                     name="nip"
-                                    placeholder="Masukkan NIP 18 digit"
+                                    placeholder="Masukkan NIP Anda"
                                     class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white px-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
                                 >
                             </div>

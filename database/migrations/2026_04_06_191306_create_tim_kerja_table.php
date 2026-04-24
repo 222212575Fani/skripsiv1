@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('tim_kerja', function (Blueprint $table) {
             $table->id('id_tim'); //Atribut yang menyimpan ID pengguna (auto increment)
-            $table->string('nama_tim', 100); //Atribut yang menyimpan nama tim kerja
-            $table->string('deskripsi_tim', 255); //Atribut yang menyimpan deskripsi dari tim kerja
-            $table->foreignId('id_ketua_tim')->constrained('pengguna', 'id_pengguna'); //Atribut yang menyimpan ID ketua tim dengan merujuk pada ID pengguna
+            $table->string('nama_tim', 100)->unique(); //Atribut yang menyimpan nama tim kerja
+            $table->string('deskripsi_tim', 255)->nullable(); //Atribut yang menyimpan deskripsi dari tim kerja
+            $table->unsignedBigInteger('id_ketua_tim')->unique();
+            $table->enum('status_tim', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps(); //Atribut yang menyimpan informasi created_at dan updated_at
+
+            $table->foreign('id_ketua_tim')
+                ->references('id_pengguna')
+                ->on('pengguna')
+                ->onDelete('restrict');
         });
     }
 

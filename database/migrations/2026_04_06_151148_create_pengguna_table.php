@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('token_ingat_saya', 100)->nullable(); //Atribut yang menyimpan token untuk fitur ingatkan saya saat login
             $table->unsignedBigInteger('id_role')->nullable();
             $table->foreign('id_role')->references('id_role')->on('role'); //Atribut yang menyimpan role/peran pengguna
-            $table->unsignedBigInteger('id_status_akun');
-            $table->foreign('id_status_akun')->references('id_status_akun')->on('status_akun'); //Atribut yang menyimpan status akun pengguna sebelum dan setelah aktivasi akun
+            $table->enum('status_akun', ['pending', 'aktif', 'nonaktif'])->default('pending');
             $table->timestamp('disetujui_pada')->nullable(); //Atribut yang menyimpan waktu persetujuan aktivasi akun oleh admin
             $table->unsignedBigInteger('disetujui_oleh')->nullable();
             $table->foreign('disetujui_oleh')->references('id_pengguna')->on('pengguna'); //Atribut yang menyimpan ID pengguna yang menyetujui aktivasi akun pengguna
