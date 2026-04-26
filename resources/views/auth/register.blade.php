@@ -6,6 +6,7 @@
     <title>Register</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="m-0 p-0 font-sans bg-[#ECEAF7]">
     <div class="min-h-screen flex items-center justify-center px-6 py-10">
         <div class="w-full max-w-[1180px] rounded-[26px] bg-white shadow-[0_18px_40px_rgba(91,79,197,0.18)] p-4 md:p-5">
@@ -20,10 +21,10 @@
                             *
                         </div>
 
-                        <div class="max-w-[300px]">
-                            <p class="text-[16px] text-white/90 mb-4">Selamat Datang!</p>
+                        <div class="max-w-[330px]">
+                            <p class="text-[16px] text-white/90 mb-4">Halo!</p>
                             <h2 class="text-[26px] md:text-[34px] font-extrabold leading-[1.15]">
-                                Buat Akun dan Mulai Akses Sistem
+                                Daftar dan Mulai Kelola Proyek Anda
                             </h2>
                         </div>
 
@@ -42,48 +43,34 @@
                             Buat Akun Baru
                         </h1>
 
-                        <p class="mt-2 text-[14px] leading-6 text-[#7C7C7C] max-w-[360px]">
-                            Daftarkan akun Anda untuk Mengakses Sistem Manajemen Proyek Direktorat Sistem Informasi Statistik
+                        <p class="mt-2 text-[14px] leading-6 text-[#7C7C7C] max-w-[380px]">
+                            Silakan daftar menggunakan data diri dan email resmi BPS.
                         </p>
 
-                        <form class="mt-8">
+                        <form class="mt-8" action="{{ route('register.post') }}" method="POST">
+                            @csrf
+
+                            @if ($errors->any())
+                                <div class="mb-5 rounded-[10px] bg-red-50 border border-red-200 px-4 py-3 text-[13px] text-red-700">
+                                    {{ $errors->first() }}
+                                </div>
+                            @endif
+
+                            <!-- Nama Lengkap -->
                             <div class="mb-5">
-                                <label for="name" class="block text-[14px] font-semibold text-[#232323] mb-2">
+                                <label for="nama" class="block text-[14px] font-semibold text-[#232323] mb-2">
                                     Nama Lengkap
                                 </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    placeholder="Masukkan nama lengkap Anda"
-                                    class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white px-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
-                                >
-                            </div>
 
-                            <div class="mb-5">
-                                <label for="nip" class="block text-[14px] font-semibold text-[#232323] mb-2">
-                                    NIP
-                                </label>
-                                <input
-                                    type="text"
-                                    id="nip"
-                                    name="nip"
-                                    placeholder="Masukkan NIP Anda"
-                                    class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white px-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
-                                >
-                            </div>
-
-                            <div class="mb-5">
-                                <label for="email" class="block text-[14px] font-semibold text-[#232323] mb-2">
-                                    Email
-                                </label>
                                 <div class="relative">
                                     <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        placeholder="Masukkan email Anda"
+                                        type="text"
+                                        id="nama"
+                                        name="nama"
+                                        value="{{ old('nama') }}"
+                                        placeholder="Masukkan nama lengkap Anda"
                                         class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
                                     >
 
                                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
@@ -94,6 +81,79 @@
                                 </div>
                             </div>
 
+                            <!-- NIP -->
+                            <div class="mb-5">
+                                <label for="nip" class="block text-[14px] font-semibold text-[#232323] mb-2">
+                                    NIP
+                                </label>
+
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        id="nip"
+                                        name="nip"
+                                        value="{{ old('nip') }}"
+                                        maxlength="18"
+                                        placeholder="Masukkan NIP Anda"
+                                        class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
+                                    >
+
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <p class="mt-2 text-[12px] text-[#8A8A8A]">
+                                    NIP harus terdiri dari 18 digit angka
+                                </p>
+
+                                @error('nip')
+                                    <p class="mt-1 text-[12px] text-red-600">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-5">
+                                <label for="email" class="block text-[14px] font-semibold text-[#232323] mb-2">
+                                    Email
+                                </label>
+
+                                <div class="relative">
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value="{{ old('email') }}"
+                                        placeholder="Masukkan email @bps.go.id"
+                                        class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
+                                    >
+
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M2.94 6.34A2 2 0 014.5 5.5h11a2 2 0 011.56.84L10 10.78 2.94 6.34z" />
+                                            <path d="M18 8.12l-7.47 4.7a1 1 0 01-1.06 0L2 8.12V14.5a2 2 0 002 2h12a2 2 0 002-2V8.12z" />
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <p class="mt-2 text-[12px] text-[#8A8A8A]">
+                                    Gunakan email resmi dengan domain @bps.go.id
+                                </p>
+
+                                @error('email')
+                                    <p class="mt-2 text-[12px] text-red-600">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+                            <!-- Password -->
                             <div class="mb-5">
                                 <label for="password" class="block text-[14px] font-semibold text-[#232323] mb-2">
                                     Password
@@ -106,6 +166,7 @@
                                         name="password"
                                         placeholder="Masukkan password Anda"
                                         class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-11 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
                                     >
 
                                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
@@ -126,8 +187,19 @@
                                         </svg>
                                     </button>
                                 </div>
+                                
+                                <p class="mt-2 text-[12px] text-[#8A8A8A]">
+                                    Password minimal 8 karakter
+                                </p>
+
+                                @error('password')
+                                    <p class="mt-2 text-[12px] text-red-600">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
 
+                            <!-- Konfirmasi Password -->
                             <div class="mb-7">
                                 <label for="password_confirmation" class="block text-[14px] font-semibold text-[#232323] mb-2">
                                     Konfirmasi Password
@@ -140,6 +212,7 @@
                                         name="password_confirmation"
                                         placeholder="Masukkan ulang password Anda"
                                         class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-11 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
                                     >
 
                                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
@@ -160,10 +233,15 @@
                                         </svg>
                                     </button>
                                 </div>
+                                @error('password_confirmation')
+                                    <p class="mt-2 text-[12px] text-red-600">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
 
                             <button
-                                type="button"
+                                type="submit"
                                 class="w-full h-[48px] rounded-[10px] bg-[#5C46F5] text-white text-[14px] font-semibold shadow-[0_8px_18px_rgba(92,70,245,0.28)] hover:opacity-95 transition"
                             >
                                 Daftar
@@ -184,6 +262,36 @@
             </div>
         </div>
     </div>
+
+    @if (session('success'))
+        <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+            <div class="w-full max-w-[430px] rounded-[22px] bg-white px-8 py-7 text-center shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+
+                <div class="mx-auto mb-5 flex h-[62px] w-[62px] items-center justify-center rounded-full bg-[#5C46F5]/10">
+                    <div class="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-[#5C46F5] text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[26px] w-[26px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <h2 class="mb-3 text-[24px] font-extrabold text-[#121212]">
+                    Pendaftaran Berhasil!
+                </h2>
+
+                <p class="mb-7 text-[14px] leading-6 text-[#6F6F6F]">
+                    {{ session('success') }}
+                </p>
+
+                <a
+                    href="{{ route('login') }}"
+                    class="block w-full rounded-[10px] bg-[#5C46F5] px-5 py-3 text-[14px] font-semibold text-white shadow-[0_8px_18px_rgba(92,70,245,0.28)] transition hover:opacity-95"
+                >
+                    Kembali ke Login
+                </a>
+            </div>
+        </div>
+    @endif
 
     <script>
         function togglePassword(id, btn) {

@@ -45,7 +45,22 @@
                         <p class="mt-2 text-[14px] leading-6 text-[#7C7C7C] max-w-[360px]">
                             Silakan Masuk untuk Mengelola Proyek
                         </p>
-                        <form class="mt-10">
+
+                        <form class="mt-10" action="{{ route('login.post') }}" method="POST">
+                            @csrf
+
+                            @if (session('success'))
+                                <div class="mb-5 rounded-[10px] bg-green-50 border border-green-200 px-4 py-3 text-[13px] text-green-700">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if ($errors->any())
+                                <div class="mb-5 rounded-[10px] bg-red-50 border border-red-200 px-4 py-3 text-[13px] text-red-700">
+                                    {{ $errors->first() }}
+                                </div>
+                            @endif
+
                             <div class="mb-6">
                                 <label for="email" class="block text-[14px] font-semibold text-[#232323] mb-2">
                                     Email
@@ -56,8 +71,10 @@
                                         type="email"
                                         id="email"
                                         name="email"
+                                        value="{{ old('email') }}"
                                         placeholder="Masukkan email Anda"
                                         class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-4 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
                                     >
 
                                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
@@ -80,6 +97,7 @@
                                         name="password"
                                         placeholder="Masukkan password Anda"
                                         class="w-full h-[46px] rounded-[10px] border border-[#D7D7D7] bg-white pl-12 pr-11 text-[14px] text-[#333] placeholder:text-[#A0A0A0] outline-none focus:ring-2 focus:ring-[#6B56FF]/20 focus:border-[#6B56FF]"
+                                        required
                                     >
 
                                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#9B9B9B]">
@@ -106,6 +124,7 @@
                                 <input
                                     type="checkbox"
                                     id="remember"
+                                    name="remember"
                                     class="w-4 h-4 rounded border border-[#BFBFBF] accent-[#5C46F5]"
                                 >
                                 <label for="remember" class="text-[14px] text-[#666666]">
@@ -114,7 +133,7 @@
                             </div>
 
                             <button
-                                type="button"
+                                type="submit"
                                 class="w-full h-[48px] rounded-[10px] bg-[#5C46F5] text-white text-[14px] font-semibold shadow-[0_8px_18px_rgba(92,70,245,0.28)] hover:opacity-95 transition"
                             >
                                 Login
