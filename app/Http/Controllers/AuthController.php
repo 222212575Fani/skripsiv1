@@ -50,8 +50,7 @@ class AuthController extends Controller
         'email' => $request->email,
         'password' => Hash::make($request->password),
 
-        // Role belum ditentukan saat registrasi.
-        // Role ditentukan admin saat aktivasi akun.
+        // Role belum ditentukan saat registrasi, dan harus ditentukan oleh admin terlebih dahulu saat aktivasi akun.
         'id_role' => null,
 
         // Akun baru otomatis pending.
@@ -63,7 +62,7 @@ class AuthController extends Controller
     ]);
 
     return redirect()
-        ->route('register')
+        ->route('login')
         ->with('success', 'Akun Anda telah berhasil didaftarkan dan sedang menunggu proses aktivasi oleh admin. Silakan cek status akun secara berkala dengan mencoba login menggunakan email dan password yang telah didaftarkan.');
 }
 

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PenggunaController;
 
 // Halaman awal diarahkan ke login
 Route::get('/', function () {
@@ -21,11 +23,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // Route sementara setelah login berdasarkan role
-
 // Admin diarahkan ke menu Manajemen Pengguna
-Route::get('/admin/manajemenpengguna', function () {
-    return 'Halaman Manajemen Pengguna Admin';
-})->name('admin.manajemenpengguna');
+Route::get('/admin/manajemenpengguna', [PenggunaController::class, 'index'])->name('admin.manajemenpengguna');
 
 // Menu Manajemen Tim Kerja untuk Admin
 Route::get('/admin/manajementimkerja', function () {

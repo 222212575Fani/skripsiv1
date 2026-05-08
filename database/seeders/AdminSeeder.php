@@ -23,7 +23,6 @@ class AdminSeeder extends Seeder
         }
 
         // Membuat akun admin awal.
-        // updateOrCreate dipakai supaya aman jika seeder dijalankan berkali-kali.
         Pengguna::updateOrCreate(
             [
                 'email' => 'admin@bps.go.id',

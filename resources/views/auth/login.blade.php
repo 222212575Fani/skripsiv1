@@ -48,13 +48,6 @@
 
                         <form class="mt-10" action="{{ route('login.post') }}" method="POST">
                             @csrf
-
-                            @if (session('success'))
-                                <div class="mb-5 rounded-[10px] bg-green-50 border border-green-200 px-4 py-3 text-[13px] text-green-700">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-
                             @if ($errors->any())
                                 <div class="mb-5 rounded-[10px] bg-red-50 border border-red-200 px-4 py-3 text-[13px] text-red-700">
                                     {{ $errors->first() }}
@@ -150,16 +143,28 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#5C46F5', 
+            });
+        </script>
+    @endif
 
     <script>
         function togglePassword(id, btn) {
             const input = document.getElementById(id);
             input.type = input.type === 'password' ? 'text' : 'password';
         }
-    </script>
+    </script>   
 </body>
 </html>
