@@ -21,9 +21,7 @@
             <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30">
                 <div class="flex-1">
                     @if (isset($headerTitle))
-                        <div class="max-w-md w-full">
-                            {!! $headerTitle !!}
-                        </div>
+                        <div class="max-w-md w-full">{!! $headerTitle !!}</div>
                     @else
                         <h2 class="text-xl font-extrabold text-[#5C46F5]">Dashboard</h2>
                     @endif
@@ -32,20 +30,15 @@
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center gap-4 pl-6 border-l border-gray-200 focus:outline-none hover:opacity-80 transition-opacity">
                         <div class="text-right hidden md:block">
-                            <p class="text-sm font-bold text-gray-900 leading-tight">
-                                {{ Auth::user()?->nama ?? 'Guest' }}
-                            </p>
-                            <p class="text-[10px] font-bold text-[#5C46F5] uppercase tracking-widest mt-0.5">
-                                {{ Auth::user()?->role?->nama_role ?? 'Visitor' }}
-                            </p>
+                            <p class="text-sm font-bold text-gray-900 leading-tight">{{ Auth::user()?->nama ?? 'Guest' }}</p>
+                            <p class="text-[10px] font-bold text-[#5C46F5] uppercase tracking-widest mt-0.5">{{ Auth::user()?->role?->nama_role ?? 'Visitor' }}</p>
                         </div>
                         <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-[#5C46F5] to-[#8FD0FF] flex items-center justify-center text-white font-bold shadow-lg ring-2 ring-white">
                             {{ strtoupper(substr(Auth::user()?->nama ?? 'G', 0, 1)) }}
                         </div>
                     </button>
 
-                    <div x-show="open" @click.away="open = false" 
-                        x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                    <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                         <div class="p-5 border-b border-gray-50 bg-gray-50/50 text-center">
                             <div class="w-12 h-12 rounded-full bg-[#5C46F5] flex items-center justify-center text-white font-bold mx-auto mb-2 text-lg">
                                 {{ strtoupper(substr(Auth::user()?->nama ?? 'G', 0, 1)) }}
@@ -68,9 +61,7 @@
                 </div>
             </header>
 
-            <div class="p-10 flex-1">
-                {{ $slot }}
-            </div>
+            <div class="p-10 flex-1">{{ $slot }}</div>
         </main>
     </div>
 </body>
