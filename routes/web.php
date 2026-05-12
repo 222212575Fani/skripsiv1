@@ -2,46 +2,48 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\TimKerjaController;
 
-// Halaman awal diarahkan ke login
+// Halaman Awal
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Auth - Register
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+// Auth - Guest (Hanya bisa diakses jika belum login)
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+});
 
-// Auth - Login
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+// Auth - Terlindungi (Wajib Login)
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Auth - Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // --- GRUP ADMIN ---
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // Manajemen Pengguna
+        Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
+        Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
 
+        // Manajemen Tim Kerja
+        Route::get('/manajementimkerja', [TimKerjaController::class, 'index'])->name('manajementimkerja');
+    });
 
-// Route sementara setelah login berdasarkan role
-// Admin diarahkan ke menu Manajemen Pengguna
-Route::get('/admin/manajemenpengguna', [PenggunaController::class, 'index'])->name('admin.manajemenpengguna');
+    // --- GRUP DIREKTUR ---
+    Route::get('/direktur/dashboard', function () {
+        return 'Dashboard Direktur';
+    })->name('direktur.dashboard');
 
-// Menu Manajemen Tim Kerja untuk Admin
-Route::get('/admin/manajementimkerja', function () {
-    return 'Halaman Manajemen Tim Kerja Admin';
-})->name('admin.manajementimkerja');
+    // --- GRUP KETUA TIM ---
+    Route::get('/ketuatim/dashboard', function () {
+        return 'Dashboard Ketua Tim';
+    })->name('ketuatim.dashboard');
 
-// Direktur diarahkan ke Dashboard
-Route::get('/direktur/dashboard', function () {
-    return 'Dashboard Direktur';
-})->name('direktur.dashboard');
-
-// Ketua Tim diarahkan ke Dashboard
-Route::get('/ketuatim/dashboard', function () {
-    return 'Dashboard Ketua Tim';
-})->name('ketuatim.dashboard');
-
-// Anggota diarahkan ke halaman Proyek dan Aktivitas Saya
-Route::get('/anggota/proyekaktivitas', function () {
-    return 'Proyek dan Aktivitas Saya';
-})->name('anggota.proyekaktivitas');
+    // --- GRUP ANGGOTA ---
+    Route::get('/anggota/proyekaktivitas', function () {
+        return 'Proyek dan Aktivitas Saya';
+    })->name('anggota.proyekaktivitas');
+});
