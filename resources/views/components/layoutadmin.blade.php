@@ -4,20 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Admin - SIS Project' }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    {{-- Memanggil Vite untuk memproses app.css (Plus Jakarta Sans diatur di sana) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Font Utama: Plus Jakarta Sans --}}
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    {{-- Alpine.js untuk interaksi dropdown profil --}}
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8F7FF; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #F8F7FF; 
+        }
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #5C46F5; border-radius: 10px; }
     </style>
 </head>
-<body class="m-0 p-0 text-[#1A1A1A]">
+<body class="m-0 p-0 text-[#1A1A1A] antialiased">
     <div class="flex min-h-screen">
+        {{-- Sidebar Komponen --}}
         <x-adminsidebar />
 
         <main class="flex-1 flex flex-col min-w-0">
+            {{-- Global Header --}}
             <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30">
                 <div class="flex-1">
                     @if (isset($headerTitle))
@@ -27,6 +40,7 @@
                     @endif
                 </div>
                 
+                {{-- User Profile Dropdown --}}
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center gap-4 pl-6 border-l border-gray-200 focus:outline-none hover:opacity-80 transition-opacity">
                         <div class="text-right hidden md:block">
@@ -61,7 +75,10 @@
                 </div>
             </header>
 
-            <div class="p-10 flex-1">{{ $slot }}</div>
+            {{-- Main Content Area --}}
+            <div class="p-10 flex-1">
+                {{ $slot }}
+            </div>
         </main>
     </div>
 </body>
