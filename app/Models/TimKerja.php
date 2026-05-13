@@ -9,13 +9,9 @@ class TimKerja extends Model
 {
     use HasFactory;
 
-    //Nama tabel yang digunakan dalam model ini
     protected $table = 'tim_kerja';
-
-    //Primary key dalam tabel tim kerja
     protected $primaryKey = 'id_tim';
 
-    //Atribut yang boleh diisi ketika create dan update
     protected $fillable = [
         'nama_tim',
         'deskripsi_tim',
@@ -23,27 +19,36 @@ class TimKerja extends Model
         'status_tim',
     ];
 
-    //Casting atribut tanggal/waktu
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    //Relasi untuk setiap tim kerja dipimpin oleh satu pengguna sebagai ketua tim
-    public function ketuaTim()
+    /**
+     * Relasi ke Ketua Tim
+     * Saya sarankan ganti nama menjadi 'ketua' agar lebih singkat 
+     * dan sesuai dengan Controller yang kita buat sebelumnya.
+     */
+    public function ketua()
     {
+        // Pastikan Model Pengguna sudah ada, atau gunakan User jika itu nama modelnya
         return $this->belongsTo(Pengguna::class, 'id_ketua_tim', 'id_pengguna');
     }
 
-    //Relasi untuk setiap tim kerja mempunyai banyak anggota tim
+    /**
+     * Relasi untuk semua anggota tim
+     */
     public function anggotaTim()
     {
         return $this->hasMany(AnggotaTim::class, 'id_tim', 'id_tim');
     }
 
-    //Relasi untuk mengambil data anggota tim yang masih aktif (nilai untuk atribut tanggal_keluar = null)
+    /**
+     * Relasi untuk anggota yang masih aktif
+     */
     public function anggotaAktif()
     {
-        return $this->hasMany(AnggotaTim::class, 'id_tim', 'id_tim') ->whereNull('tanggal_keluar');
+        return $this->hasMany(AnggotaTim::class, 'id_tim', 'id_tim')
+                    ->whereNull('tanggal_keluar');
     }
 }

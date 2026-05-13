@@ -22,27 +22,29 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // --- GRUP ADMIN ---
+    // Route untuk Admin
     Route::prefix('admin')->name('admin.')->group(function () {
         // Manajemen Pengguna
         Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
         Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
-
+        Route::post('/manajemenpengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
+        
         // Manajemen Tim Kerja
         Route::get('/manajementimkerja', [TimKerjaController::class, 'index'])->name('manajementimkerja');
+        Route::post('/manajementimkerja', [TimKerjaController::class, 'store'])->name('timkerja.store');
     });
 
-    // --- GRUP DIREKTUR ---
+    // Route untuk Direktur
     Route::get('/direktur/dashboard', function () {
         return 'Dashboard Direktur';
     })->name('direktur.dashboard');
 
-    // --- GRUP KETUA TIM ---
+    // Route untuk ketua tim
     Route::get('/ketuatim/dashboard', function () {
         return 'Dashboard Ketua Tim';
     })->name('ketuatim.dashboard');
 
-    // --- GRUP ANGGOTA ---
+    // Route untuk Anggota
     Route::get('/anggota/proyekaktivitas', function () {
         return 'Proyek dan Aktivitas Saya';
     })->name('anggota.proyekaktivitas');

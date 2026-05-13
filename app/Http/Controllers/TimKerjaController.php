@@ -2,33 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\TimKerja;
-use Illuminate\Support\Facades\DB;
+use App\Models\Pengguna; // Pastikan menggunakan Pengguna sesuai modelmu
+use Illuminate\Http\Request;
 
 class TimKerjaController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. Ambil data dari database dengan pagination
-        // Pastikan nama modelnya benar (TimKerja)
-        $timKerja = TimKerja::with('ketua') // Eager loading relasi ketua agar tidak error
-            ->when($request->status && $request->status !== 'semua', function($query) use ($request) {
+        // 1. Ambil data dengan relasi ketua, filter, dan pagination
+        $timKerja = TimKerja::with('ketua')
+            ->when($request->status && $request->status !== 'semua', function ($query) use ($request) {
                 return $query->where('status_tim', $request->status);
             })
-            ->when($request->search, function($query) use ($request) {
+            ->when($request->search, function ($query) use ($request) {
                 return $query->where('nama_tim', 'like', '%' . $request->search . '%');
             })
+            ->latest()
             ->paginate(10);
 
-        // 2. Hitung jumlah untuk Badge (agar tidak error juga)
+        // 2. Hitung jumlah data untuk Badge di Filter Tab
         $counts = [
-            'semua' => TimKerja::count(),
-            'aktif' => TimKerja::where('status_tim', 'aktif')->count(),
+            'semua'    => TimKerja::count(),
+            'aktif'    => TimKerja::where('status_tim', 'aktif')->count(),
             'nonaktif' => TimKerja::where('status_tim', 'nonaktif')->count(),
         ];
 
-        // 3. Kirim ke view (Pastikan variabel $timKerja dan $counts terkirim)
-        return view('admin.manajementimkerja', compact('timKerja', 'counts'));
+        // 3. Ambil data Pengguna untuk pilihan Ketua Tim di Modal
+        $users = Pengguna::orderBy('nama', 'asc')->get();
+
+        return view('admin.manajementimkerja', compact('timKerja', 'counts', 'users'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_tim' => 'required|unique:tim_kerja,nama_tim|max:100',
+            'id_ketua_tim' => 'required|exists:pengguna,id_pengguna|unique:tim_kerja,id_ketua_tim',
+            'status_tim' => 'required|in:aktif,nonaktif',
+        ]);
+
+        TimKerja::create([
+            'nama_tim' => $request->nama_tim,
+            'deskripsi_tim' => $request->deskripsi_tim,
+            'id_ketua_tim' => $request->id_ketua_tim,
+            'status_tim' => $request->status_tim,
+        ]);
+
+        return redirect()->back()->with('success', 'Tim Kerja berhasil ditambahkan!');
     }
 }
