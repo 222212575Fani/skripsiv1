@@ -52,7 +52,9 @@
 
             <form action="{{ route('admin.aktivasi') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengguna" :value="userId">
+                
+                {{-- PERBAIKAN KRUSIAL: Menggunakan input tipe text yang di-hidden (bukan type="hidden") dengan x-model agar pengikatan Alpine dijamin berhasil 100% saat dikirim --}}
+                <input type="text" name="id_pengguna" x-model="userId" class="hidden">
 
                 <div class="p-8 pt-4 space-y-6">
                     
@@ -60,7 +62,7 @@
                     <div class="grid grid-cols-3 gap-4 items-center">
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Nama Lengkap</label>
                         <div class="col-span-2">
-                            <input type="text" :value="userName" readonly
+                            <input type="text" x-model="userName" readonly
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm font-bold text-gray-500 cursor-not-allowed">
                         </div>
                     </div>
@@ -69,7 +71,7 @@
                     <div class="grid grid-cols-3 gap-4 items-center">
                         <label class="text-sm font-bold text-gray-600 tracking-tight">NIP / Identitas</label>
                         <div class="col-span-2">
-                            <input type="text" :value="userNip" readonly
+                            <input type="text" x-model="userNip" readonly
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm font-bold text-gray-500 cursor-not-allowed">
                         </div>
                     </div>
@@ -79,7 +81,7 @@
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Pilih Peran <span class="text-red-500">*</span></label>
                         <div class="col-span-2 relative">
                             <select name="id_role" required
-                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
+                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
                                 <option value="" disabled selected>Pilih Peran</option>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->id_role }}">{{ $role->nama_role }}</option>
@@ -98,7 +100,7 @@
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Penempatan Tim</label>
                         <div class="col-span-2 relative">
                             <select name="id_tim" 
-                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
+                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
                                 <option value="">Belum Ada Tim</option>
                                 @foreach($tims as $tim)
                                     <option value="{{ $tim->id_tim }}">{{ $tim->nama_tim }}</option>

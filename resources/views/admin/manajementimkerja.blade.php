@@ -64,12 +64,15 @@
                                 <td class="px-6 py-6 text-center text-gray-400 font-bold border-l-4 border-l-transparent group-hover:border-l-[#5C46F5] transition-all">
                                     {{ $timKerja->firstItem() + $index }}
                                 </td>
-                                <td class="px-6 py-6 font-bold text-gray-600 uppercase tracking-wider">
+                                
+                                {{-- NAMA TIM KERJA DIUBAH MENJADI NORMAL (TIDAK UPPERCASE) --}}
+                                <td class="px-6 py-6 font-bold text-gray-800">
                                     {{ $tim->nama_tim }}
                                 </td>
+                                
                                 <td class="px-6 py-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#5C46F5] text-[10px] font-bold">
+                                        <div class="w-8 h-8 rounded-full bg-[#5C46F5] flex items-center justify-center text-white text-[10px] font-bold shadow-sm shadow-[#5C46F5]/20">
                                             {{ strtoupper(substr($tim->ketua->nama ?? '?', 0, 1)) }}
                                         </div>
                                         <span class="font-bold text-gray-800">{{ $tim->ketua->nama ?? 'Tidak Ada' }}</span>

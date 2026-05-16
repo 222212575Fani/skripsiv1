@@ -22,6 +22,9 @@
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #5C46F5; border-radius: 10px; }
+        
+        /* 1. TAMBAHAN X-CLOAK: Menyembunyikan elemen sebelum Alpine.js siap */
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="m-0 p-0 text-[#1A1A1A] antialiased">
@@ -52,7 +55,8 @@
                         </div>
                     </button>
 
-                    <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                    {{-- 2. TAMBAHAN X-CLOAK DISINI: Mencegah pop-up berkedip saat pindah halaman --}}
+                    <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                         <div class="p-5 border-b border-gray-50 bg-gray-50/50 text-center">
                             <div class="w-12 h-12 rounded-full bg-[#5C46F5] flex items-center justify-center text-white font-bold mx-auto mb-2 text-lg">
                                 {{ strtoupper(substr(Auth::user()?->nama ?? 'G', 0, 1)) }}

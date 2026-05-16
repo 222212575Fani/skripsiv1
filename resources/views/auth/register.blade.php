@@ -18,6 +18,18 @@
             <form class="mt-8" action="{{ route('register.post') }}" method="POST">
                 @csrf
                 
+                {{-- Box Notifikasi Jika Validasi Input Gagal --}}
+                @if($errors->any())
+                    <div class="p-4 mb-5 text-sm text-red-800 rounded-xl bg-red-50 border border-red-100" role="alert">
+                        <ul class="list-disc pl-5 font-semibold space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                
+                {{-- Input Nama --}}
                 <x-authinput label="Nama Lengkap" id="nama" name="nama" type="text" placeholder="Masukkan nama lengkap" :value="old('nama')">
                     <x-slot:icon>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
@@ -26,6 +38,7 @@
                     </x-slot:icon>
                 </x-authinput>
 
+                {{-- Input NIP --}}
                 <x-authinput label="NIP" id="nip" name="nip" type="text" placeholder="Masukkan NIP Anda" :value="old('nip')">
                     <x-slot:icon>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
@@ -35,6 +48,7 @@
                     </x-slot:icon>
                 </x-authinput>
 
+                {{-- Input Email --}}
                 <x-authinput label="Email" id="email" name="email" type="email" placeholder="Masukkan email Anda" :value="old('email')">
                     <x-slot:icon>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
@@ -44,7 +58,17 @@
                     </x-slot:icon>
                 </x-authinput>
 
+                {{-- Input Password Utama --}}
                 <x-authinput label="Password" id="password" name="password" type="password" placeholder="Buat password minimal 8 karakter">
+                    <x-slot:icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                        </svg>
+                    </x-slot:icon>
+                </x-authinput>
+
+                {{-- Input Konfirmasi Password (Pencocok Aturan Validasi Laravel) --}}
+                <x-authinput label="Konfirmasi Password" id="password_confirmation" name="password_confirmation" type="password" placeholder="Ketik ulang password Anda">
                     <x-slot:icon>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
@@ -68,10 +92,24 @@
 
     @push('scripts')
     <script>
+        // Fungsi melihat password
         function togglePassword(id, btn) {
             const input = document.getElementById(id);
             input.type = input.type === 'password' ? 'text' : 'password';
         }
+
+        // Fungsi pengunci otomatis input NIP maks 18 karakter angka
+        document.addEventListener('DOMContentLoaded', function() {
+            const nipInput = document.getElementById('nip');
+            
+            if(nipInput) {
+                nipInput.setAttribute('maxlength', '18');
+
+                nipInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 18);
+                });
+            }
+        });
     </script>
     @endpush
 

@@ -64,17 +64,22 @@
                         </div>
                     </div>
 
-                    {{-- Ketua Tim --}}
+                    {{-- Ketua Tim dengan Ikon Dropdown SVG --}}
                     <div class="grid grid-cols-3 gap-4 items-center">
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Ketua Tim <span class="text-red-500">*</span></label>
                         <div class="col-span-2 relative">
                             <select name="id_ketua_tim" required
-                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2F11%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23D1D5DB%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat cursor-pointer text-gray-700">
+                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
                                 <option value="" disabled selected>Pilih Ketua Tim</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id_pengguna }}">{{ $user->nama }}</option>
                                 @endforeach
                             </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
 

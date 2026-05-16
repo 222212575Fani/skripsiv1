@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
         Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
         Route::post('/manajemenpengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
+        Route::post('/manajemenpengguna/update', [PenggunaController::class, 'update'])->name('pengguna.update');
         
         // Manajemen Tim Kerja
         Route::get('/manajementimkerja', [TimKerjaController::class, 'index'])->name('manajementimkerja');

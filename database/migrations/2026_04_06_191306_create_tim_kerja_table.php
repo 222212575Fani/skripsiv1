@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_tim'); //Atribut yang menyimpan ID pengguna (auto increment)
             $table->string('nama_tim', 100)->unique(); //Atribut yang menyimpan nama tim kerja
             $table->string('deskripsi_tim', 255)->nullable(); //Atribut yang menyimpan deskripsi dari tim kerja
-            $table->unsignedBigInteger('id_ketua_tim')->unique();
+            $table->unsignedBigInteger('id_ketua_tim');
             $table->enum('status_tim', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps(); //Atribut yang menyimpan informasi created_at dan updated_at
 

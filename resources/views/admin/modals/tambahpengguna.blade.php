@@ -12,9 +12,9 @@
 
     <div class="flex min-h-full items-center justify-center p-4">
         <div @click.away="open = false" 
-             class="relative w-full max-w-4xl transform overflow-hidden rounded-[30px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.2)] transition-all border border-gray-100">
+             class="relative w-full max-w-2xl transform overflow-hidden rounded-[30px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.2)] transition-all border border-gray-100">
             
-            {{-- Header --}}
+            {{-- Header Modal --}}
             <div class="flex items-start justify-between p-8 pb-4">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-[#5C46F5]/5 rounded-full flex items-center justify-center text-[#5C46F5]">
@@ -34,51 +34,50 @@
                 </button>
             </div>
 
+            {{-- Form Input Utama --}}
             <form action="{{ route('admin.pengguna.store') }}" method="POST" autocomplete="off">
                 @csrf
-                {{-- Hack Anti-Autofill: Browser akan mengisi dummy ini, bukan field asli kamu --}}
-                <input type="text" style="display:none" aria-hidden="true">
-                <input type="password" style="display:none" aria-hidden="true">
-
-                <div class="p-8 pt-4 space-y-8">
+                <div class="p-8 pt-4 space-y-5">
                     
-                    {{-- Baris 1: Informasi Dasar (Nama & NIP) --}}
-                    <div class="grid grid-cols-2 gap-8">
+                    {{-- Baris 1: Nama Lengkap & NIP --}}
+                    <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">Nama Lengkap <span class="text-red-500">*</span></label>
-                            <input type="text" name="nama" placeholder="Masukkan nama..." required
+                            <input type="text" name="nama" placeholder="Masukkan nama..." required value="{{ old('nama') }}"
                                 class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none text-sm font-bold placeholder:text-gray-300">
                         </div>
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">NIP <span class="text-red-500">*</span></label>
-                            <input type="text" name="nip" maxlength="18" placeholder="18 digit NIP..." required
+                            <input type="text" name="nip" placeholder="18 digit NIP..." required maxlength="18" value="{{ old('nip') }}"
                                 class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none text-sm font-bold placeholder:text-gray-300">
                         </div>
                     </div>
 
-                    {{-- Baris 2: Kredensial (Email & Password) --}}
-                    <div class="grid grid-cols-2 gap-8">
+                    {{-- Baris 2: Email & Password (AMBIL ALIH ANTI-AUTOFILL EDGE) --}}
+                    <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">Email BPS <span class="text-red-500">*</span></label>
-                            <input type="email" name="email" placeholder="user@bps.go.id" required readonly onfocus="this.removeAttribute('readonly');"
+                            <input type="email" name="nama_email_baru" id="nama_email_baru" placeholder="user@bps.go.id" required autocomplete="none" value="{{ old('nama_email_baru') }}"
                                 class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none text-sm font-bold placeholder:text-gray-300">
                         </div>
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">Password <span class="text-red-500">*</span></label>
-                            <input type="password" name="password" placeholder="Minimal 8 karakter..." required readonly onfocus="this.removeAttribute('readonly');"
+                            <input type="password" name="kata_sandi_baru" id="kata_sandi_baru" placeholder="Minimal 8 karakter..." required autocomplete="new-password"
                                 class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none text-sm font-bold placeholder:text-gray-300">
                         </div>
                     </div>
 
-                    {{-- Baris 3: Pengaturan (Dropdowns di Bawah) --}}
-                    <div class="grid grid-cols-3 gap-6 pt-4 border-t border-gray-50">
+                    {{-- Baris 3: Status Akun, Peran (Role), & Tim Kerja --}}
+                    <div class="grid grid-cols-3 gap-4 pt-2">
+                        
+                        {{-- Dropdown Status Akun --}}
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">Status Akun <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <select name="status_akun" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl appearance-none focus:border-[#5C46F5] outline-none text-sm font-bold cursor-pointer text-gray-700">
-                                    <option value="aktif">Aktif</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="nonaktif">Non-Aktif</option>
+                                    <option value="aktif" {{ old('status_akun') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="pending" {{ old('status_akun') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="nonaktif" {{ old('status_akun') == 'nonaktif' ? 'selected' : '' }}>Non-Aktif</option>
                                 </select>
                                 <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -86,14 +85,19 @@
                             </div>
                         </div>
 
+                        {{-- Dropdown Peran (Role) --}}
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">Peran (Role) <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <select name="id_role" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl appearance-none focus:border-[#5C46F5] outline-none text-sm font-bold cursor-pointer text-gray-700">
                                     <option value="" disabled selected>Pilih Peran</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->id_role }}">{{ $role->nama_role }}</option>
-                                    @endforeach
+                                    @if(isset($roles) && $roles->count() > 0)
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->id_role }}" {{ old('id_role') == $role->id_role ? 'selected' : '' }}>
+                                                {{ $role->nama_role }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -101,24 +105,30 @@
                             </div>
                         </div>
 
+                        {{-- Dropdown Penempatan Tim Kerja (Opsional) --}}
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600 tracking-tight">Tim Kerja</label>
                             <div class="relative">
                                 <select name="id_tim" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl appearance-none focus:border-[#5C46F5] outline-none text-sm font-bold cursor-pointer text-gray-700">
-                                    <option value="">Belum Ada Tim</option>
-                                    @foreach($tims as $tim)
-                                        <option value="{{ $tim->id_tim }}">{{ $tim->nama_tim }}</option>
-                                    @endforeach
+                                    <option value="" selected>Belum Ada Tim</option>
+                                    @if(isset($tims) && $tims->count() > 0)
+                                        @foreach($tims as $tim)
+                                            <option value="{{ $tim->id_tim }}" {{ old('id_tim') == $tim->id_tim ? 'selected' : '' }}>
+                                                {{ $tim->nama_tim }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
-                {{-- Footer --}}
+                {{-- Action Footer Buttons --}}
                 <div class="p-8 border-t border-gray-50 flex items-center justify-end gap-3">
                     <button type="button" @click="open = false" 
                         class="px-6 py-3 bg-white border border-gray-200 text-red-500 rounded-full font-[800] text-xs uppercase tracking-widest hover:bg-red-50 transition-all">
