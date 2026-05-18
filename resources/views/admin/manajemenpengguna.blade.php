@@ -48,20 +48,29 @@
                     @php $currentStatus = request('status', 'semua'); @endphp
                     @foreach(['semua' => 'Semua', 'pending' => 'Pending', 'aktif' => 'Aktif', 'non-aktif' => 'Non-Aktif'] as $key => $label)
                         @php
-                            $badgeColor = 'bg-gray-100 text-gray-500'; 
+                            // 1. Menentukan Warna Teks Permanen (Sesuai Logo Tabel)
+                            if ($key == 'semua') $textColor = 'text-[#5C46F5]';
+                            elseif ($key == 'pending') $textColor = 'text-amber-600';
+                            elseif ($key == 'aktif') $textColor = 'text-green-600';
+                            else $textColor = 'text-red-600';
+
+                            // 2. Menentukan Warna Background Bulatan (Abu-abu jika tidak dipilih)
+                            $bgColor = 'bg-gray-100'; 
                             if ($currentStatus == $key) {
-                                if ($key == 'semua') $badgeColor = 'bg-[#5C46F5]/10 text-[#5C46F5]';
-                                elseif ($key == 'pending') $badgeColor = 'bg-amber-100 text-amber-700 font-black';
-                                elseif ($key == 'aktif') $badgeColor = 'bg-green-100 text-green-700 font-black';
-                                elseif ($key == 'non-aktif') $badgeColor = 'bg-red-100 text-red-700 font-black';
+                                // Background menyala jika tab sedang aktif
+                                if ($key == 'semua') $bgColor = 'bg-[#5C46F5]/10';
+                                elseif ($key == 'pending') $bgColor = 'bg-amber-100';
+                                elseif ($key == 'aktif') $bgColor = 'bg-green-100';
+                                else $bgColor = 'bg-red-100';
                             }
+                            
                             $cKey = ($key == 'non-aktif') ? 'nonaktif' : $key;
                         @endphp
 
                         <a href="{{ route('admin.manajemenpengguna', ['status' => $key]) }}" 
                            class="pb-4 text-[11px] uppercase tracking-widest font-black transition-all border-b-2 {{ $currentStatus == $key ? 'border-[#5C46F5] text-[#5C46F5]' : 'border-transparent text-gray-400 hover:text-gray-600' }}">
                             {{ $label }}
-                            <span class="ml-1.5 px-2.5 py-0.5 rounded-full text-[10px] transition-all {{ $badgeColor }}">
+                            <span class="ml-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all {{ $bgColor }} {{ $textColor }}">
                                 {{ $counts[$cKey] ?? 0 }}
                             </span>
                         </a>

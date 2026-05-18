@@ -13,8 +13,8 @@
         nama = $event.detail.nama; 
         nip = $event.detail.nip; 
         status = $event.detail.status; 
-        role = $event.detail.role; 
-        tim = $event.detail.tim;
+        role = $event.detail.role ?? ''; 
+        tim = $event.detail.tim ?? '';
      " 
      @close-modal-edit-pengguna.window="open = false"
      x-show="open" 
@@ -30,8 +30,9 @@
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px] transition-opacity"></div>
 
     <div class="flex min-h-full items-center justify-center p-4">
+        
         <div @click.away="open = false" 
-             class="relative w-full max-w-2xl transform overflow-hidden rounded-[30px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.2)] transition-all border border-gray-100">
+             class="relative w-full max-w-4xl transform overflow-hidden rounded-[30px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.2)] transition-all border border-gray-100">
             
             <div class="flex items-start justify-between p-8 pb-4">
                 <div class="flex items-center gap-4">
@@ -53,25 +54,27 @@
             <form action="{{ route('admin.pengguna.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id_pengguna" x-model="id">
+                <input type="hidden" name="nip" x-model="nip">
+                <input type="hidden" name="nama" x-model="nama">
 
-                <div class="p-8 pt-4 space-y-5">
+                <div class="p-8 pt-4 space-y-6">
                     
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Nama Lengkap</label>
-                            <input type="text" name="nama" x-model="nama" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] focus:ring-1 focus:ring-[#5C46F5] outline-none text-sm font-bold transition-all">
+                            <input type="text" x-model="nama" readonly class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-gray-500 text-sm font-medium cursor-not-allowed outline-none transition-all">
                         </div>
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">NIP (18 Digit)</label>
-                            <input type="text" name="nip" x-model="nip" required maxlength="18" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 18);" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] focus:ring-1 focus:ring-[#5C46F5] outline-none text-sm font-bold transition-all">
+                            <input type="text" x-model="nip" readonly class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-gray-500 text-sm font-medium cursor-not-allowed outline-none transition-all">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 pt-2">
+                    <div class="grid grid-cols-3 gap-6 pt-2">
                         
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Status Akun</label>
-                            <select name="status_akun" x-model="status" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-bold cursor-pointer transition-all">
+                            <select name="status_akun" x-model="status" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
                                 <option value="aktif">Aktif</option>
                                 <option value="pending">Pending</option>
                                 <option value="nonaktif">Non-Aktif</option>
@@ -80,20 +83,24 @@
 
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Peran (Role)</label>
-                            <select name="id_role" x-model="role" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-bold cursor-pointer transition-all">
-                                <option value="">-- Tanpa Peran --</option>
+                            <select name="id_role" x-model="role" 
+                                :class="role === '' ? 'text-gray-400' : 'text-gray-700'"
+                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
+                                <option value="" class="text-gray-400">Pilih Peran</option>
                                 @foreach($roles as $r)
-                                    <option value="{{ $r->id_role }}">{{ $r->nama_role }}</option>
+                                    <option value="{{ $r->id_role }}" class="text-gray-700">{{ $r->nama_role }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Tim Kerja</label>
-                            <select name="id_tim" x-model="tim" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-bold cursor-pointer transition-all">
-                                <option value="">Tanpa Tim (Kosong)</option>
+                            <select name="id_tim" x-model="tim" 
+                                :class="tim === '' ? 'text-gray-400' : 'text-gray-700'"
+                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
+                                <option value="" class="text-gray-400">Pilih Tim Kerja</option>
                                 @foreach($tims as $t)
-                                    <option value="{{ $t->id_tim }}">{{ $t->nama_tim }}</option>
+                                    <option value="{{ $t->id_tim }}" class="text-gray-700">{{ $t->nama_tim }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -101,11 +108,11 @@
                     </div>
                 </div>
 
-                <div class="p-8 border-t border-gray-50 flex items-center justify-end gap-3">
-                    <button type="button" @click="open = false" class="px-6 py-3 bg-white border border-gray-200 text-red-500 rounded-full font-bold text-xs uppercase hover:bg-red-50 transition-all">
+                <div class="p-8 border-t border-gray-50 flex items-center justify-end gap-3 bg-gray-50/30">
+                    <button type="button" @click="open = false" class="px-6 py-3 bg-white border border-gray-200 text-red-500 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-red-50 transition-all">
                         Batal
                     </button>
-                    <button type="submit" class="px-8 py-3 bg-[#5C46F5] text-white rounded-full font-bold text-xs uppercase hover:bg-[#4A38D4] shadow-lg shadow-[#5C46F5]/20 active:scale-[0.98] transition-all">
+                    <button type="submit" class="px-8 py-3 bg-[#5C46F5] text-white rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#4A38D4] shadow-lg shadow-[#5C46F5]/20 active:scale-[0.98] transition-all">
                         Simpan Perubahan
                     </button>
                 </div>

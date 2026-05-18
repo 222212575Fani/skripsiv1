@@ -2,13 +2,17 @@
         open: false, 
         userId: '', 
         userName: '', 
-        userNip: '' 
+        userNip: '',
+        roleId: '',
+        timId: ''
      }" 
      @open-modal-aktivasi.window="
         open = true; 
         userId = $event.detail.id; 
         userName = $event.detail.nama; 
         userNip = $event.detail.nip;
+        roleId = '';
+        timId = '';
      " 
      @close-modal-aktivasi.window="open = false"
      x-show="open" 
@@ -52,8 +56,6 @@
 
             <form action="{{ route('admin.aktivasi') }}" method="POST">
                 @csrf
-                
-                {{-- PERBAIKAN KRUSIAL: Menggunakan input tipe text yang di-hidden (bukan type="hidden") dengan x-model agar pengikatan Alpine dijamin berhasil 100% saat dikirim --}}
                 <input type="text" name="id_pengguna" x-model="userId" class="hidden">
 
                 <div class="p-8 pt-4 space-y-6">
@@ -63,7 +65,7 @@
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Nama Lengkap</label>
                         <div class="col-span-2">
                             <input type="text" x-model="userName" readonly
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm font-bold text-gray-500 cursor-not-allowed">
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm font-medium text-gray-500 cursor-not-allowed transition-all">
                         </div>
                     </div>
 
@@ -72,7 +74,7 @@
                         <label class="text-sm font-bold text-gray-600 tracking-tight">NIP / Identitas</label>
                         <div class="col-span-2">
                             <input type="text" x-model="userNip" readonly
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm font-bold text-gray-500 cursor-not-allowed">
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none text-sm font-medium text-gray-500 cursor-not-allowed transition-all">
                         </div>
                     </div>
 
@@ -80,11 +82,12 @@
                     <div class="grid grid-cols-3 gap-4 items-center">
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Pilih Peran <span class="text-red-500">*</span></label>
                         <div class="col-span-2 relative">
-                            <select name="id_role" required
-                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
-                                <option value="" disabled selected>Pilih Peran</option>
+                            <select name="id_role" x-model="roleId" required
+                                :class="roleId === '' ? 'text-gray-400' : 'text-gray-700'"
+                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-medium appearance-none cursor-pointer">
+                                <option value="" disabled class="text-gray-400">Pilih Peran</option>
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id_role }}">{{ $role->nama_role }}</option>
+                                    <option value="{{ $role->id_role }}" class="text-gray-700">{{ $role->nama_role }}</option>
                                 @endforeach
                             </select>
                             <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
@@ -99,11 +102,12 @@
                     <div class="grid grid-cols-3 gap-4 items-center">
                         <label class="text-sm font-bold text-gray-600 tracking-tight">Penempatan Tim</label>
                         <div class="col-span-2 relative">
-                            <select name="id_tim" 
-                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-bold appearance-none cursor-pointer text-gray-700">
-                                <option value="">Belum Ada Tim</option>
+                            <select name="id_tim" x-model="timId"
+                                :class="timId === '' ? 'text-gray-400' : 'text-gray-700'"
+                                class="w-full px-4 py-3 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-4 focus:ring-[#5C46F5]/5 focus:border-[#5C46F5] outline-none transition-all text-sm font-medium appearance-none cursor-pointer">
+                                <option value="" class="text-gray-400">Pilih Tim Kerja</option>
                                 @foreach($tims as $tim)
-                                    <option value="{{ $tim->id_tim }}">{{ $tim->nama_tim }}</option>
+                                    <option value="{{ $tim->id_tim }}" class="text-gray-700">{{ $tim->nama_tim }}</option>
                                 @endforeach
                             </select>
                             <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
@@ -116,7 +120,7 @@
                 </div>
 
                 {{-- Footer Action --}}
-                <div class="p-8 border-t border-gray-50 flex items-center justify-end gap-3">
+                <div class="p-8 border-t border-gray-50 flex items-center justify-end gap-3 bg-gray-50/30">
                     <button type="button" @click="open = false" 
                         class="px-6 py-3 bg-white border border-gray-200 text-red-500 rounded-full font-[800] text-xs hover:bg-red-50 hover:border-red-200 transition-all uppercase tracking-widest">
                         Batal

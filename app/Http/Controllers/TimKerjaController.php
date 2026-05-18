@@ -86,4 +86,47 @@ class TimKerjaController extends Controller
             return redirect()->back()->withInput()->with('error', 'Gagal menambah tim kerja: ' . $e->getMessage());
         }
     }
+
+    // Memproses pembaruan record data tim kerja yang sudah ada di basis data
+    public function update(Request $request)
+    {
+        // 1. Validasi Identitas Tim: Memastikan ID wajib diisi dan ada di database
+        // 2. Validasi Nama Tim: Wajib diisi, maksimal 100 karakter, dan unique (kecuali untuk ID tim ini sendiri)
+        // 3. Validasi Penugasan Ketua: Wajib diisi, dan unique (kecuali jika pegawai tersebut memang ketua di tim ini)
+        $request->validate([
+            'id_tim'       => 'required|exists:tim_kerja,id_tim',
+            'nama_tim'     => 'required|max:100|unique:tim_kerja,nama_tim,' . $request->id_tim . ',id_tim',
+            'id_ketua_tim' => 'required|exists:pengguna,id_pengguna|unique:tim_kerja,id_ketua_tim,' . $request->id_tim . ',id_tim',
+            'status_tim'   => 'required|in:aktif,nonaktif',
+        ], [
+            // Menyediakan luaran pesan kesalahan kustom berbahasa Indonesia resmi
+            'nama_tim.required'     => 'Nama tim kerja wajib diisi.',
+            'nama_tim.unique'       => 'Nama tim ini sudah digunakan oleh tim lain.',
+            'id_ketua_tim.required' => 'Ketua tim wajib dipilih.',
+            'id_ketua_tim.unique'   => 'Pegawai ini sudah menjabat sebagai ketua di tim lain.',
+        ]);
+
+        // Membuka gerbang transaksi database guna menjaga konsistensi integritas penyimpanan
+        DB::beginTransaction();
+        try {
+            // Mencari data tim kerja spesifik berdasarkan ID
+            $timKerja = TimKerja::findOrFail($request->id_tim);
+            
+            // Memperbarui atribut entitas tim kerja
+            $timKerja->update([
+                'nama_tim'      => $request->nama_tim,
+                'deskripsi_tim' => $request->deskripsi_tim,
+                'id_ketua_tim'  => $request->id_ketua_tim,
+                'status_tim'    => $request->status_tim,
+            ]);
+
+            // Meresmikan penyimpanan berkas ke dalam database apabila berhasil tereksekusi
+            DB::commit();
+            return redirect()->back()->with('success', 'Data Tim Kerja berhasil diperbarui!');
+        } catch (\Exception $e) {
+            // Membatalkan seluruh runtunan modifikasi data jika mendeteksi adanya kegagalan eksekusi
+            DB::rollback();
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui tim kerja: ' . $e->getMessage());
+        }
+    }
 }

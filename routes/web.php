@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
         // Manajemen Tim Kerja
         Route::get('/manajementimkerja', [TimKerjaController::class, 'index'])->name('manajementimkerja');
         Route::post('/manajementimkerja', [TimKerjaController::class, 'store'])->name('timkerja.store');
+        
+        // Perbaikan: Rute update yang sebelumnya tidak terbaca di route:list sekarang sudah aktif
+        Route::post('/manajementimkerja/update', [TimKerjaController::class, 'update'])->name('timkerja.update');
     });
 
     // Route untuk Direktur
