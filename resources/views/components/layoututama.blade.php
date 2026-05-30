@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Admin - SIS Project' }}</title>
     
-    {{-- Memanggil Vite untuk memproses app.css (Plus Jakarta Sans diatur di sana) --}}
+    {{-- Memanggil Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Font Utama: Plus Jakarta Sans --}}
+    {{-- Font Utama --}}
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    {{-- Alpine.js untuk interaksi dropdown profil --}}
+    {{-- Alpine.js --}}
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     
     <style>
@@ -19,21 +19,18 @@
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #F8F7FF; 
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #5C46F5; border-radius: 10px; }
-        
-        /* 1. TAMBAHAN X-CLOAK: Menyembunyikan elemen sebelum Alpine.js siap */
         [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="m-0 p-0 text-[#1A1A1A] antialiased">
     <div class="flex min-h-screen">
-        {{-- Sidebar Komponen --}}
-        <x-adminsidebar />
+        {{-- Sidebar --}}
+        <x-sidebar />
 
         <main class="flex-1 flex flex-col min-w-0">
-            {{-- Global Header --}}
+            {{-- Header --}}
             <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30">
                 <div class="flex-1">
                     @if (isset($headerTitle))
@@ -43,7 +40,7 @@
                     @endif
                 </div>
                 
-                {{-- User Profile Dropdown --}}
+                {{-- Dropdown Profil --}}
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center gap-4 pl-6 border-l border-gray-200 focus:outline-none hover:opacity-80 transition-opacity">
                         <div class="text-right hidden md:block">
@@ -55,7 +52,6 @@
                         </div>
                     </button>
 
-                    {{-- 2. TAMBAHAN X-CLOAK DISINI: Mencegah pop-up berkedip saat pindah halaman --}}
                     <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                         <div class="p-5 border-b border-gray-50 bg-gray-50/50 text-center">
                             <div class="w-12 h-12 rounded-full bg-[#5C46F5] flex items-center justify-center text-white font-bold mx-auto mb-2 text-lg">
@@ -79,11 +75,14 @@
                 </div>
             </header>
 
-            {{-- Main Content Area --}}
+            {{-- Main Content --}}
             <div class="p-10 flex-1">
                 {{ $slot }}
             </div>
         </main>
     </div>
+
+    {{-- Komponen Toast Global --}}
+    <x-toast />
 </body>
 </html>

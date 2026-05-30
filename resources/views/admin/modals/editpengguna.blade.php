@@ -5,7 +5,8 @@
         nip: '', 
         status: '', 
         role: '', 
-        tim: '' 
+        tim: '',
+        initialStatus: '' 
      }" 
      @open-modal-edit-pengguna.window="
         open = true; 
@@ -13,11 +14,13 @@
         nama = $event.detail.nama; 
         nip = $event.detail.nip; 
         status = $event.detail.status; 
+        initialStatus = $event.detail.status; 
         role = $event.detail.role ?? ''; 
         tim = $event.detail.tim ?? '';
      " 
      @close-modal-edit-pengguna.window="open = false"
      x-show="open" 
+     x-cloak
      class="fixed inset-0 z-[999] overflow-y-auto" 
      style="display: none;"
      x-transition:enter="transition ease-out duration-300"
@@ -30,7 +33,6 @@
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px] transition-opacity"></div>
 
     <div class="flex min-h-full items-center justify-center p-4">
-        
         <div @click.away="open = false" 
              class="relative w-full max-w-4xl transform overflow-hidden rounded-[30px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.2)] transition-all border border-gray-100">
             
@@ -58,7 +60,6 @@
                 <input type="hidden" name="nama" x-model="nama">
 
                 <div class="p-8 pt-4 space-y-6">
-                    
                     <div class="grid grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Nama Lengkap</label>
@@ -71,7 +72,6 @@
                     </div>
 
                     <div class="grid grid-cols-3 gap-6 pt-2">
-                        
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Status Akun</label>
                             <select name="status_akun" x-model="status" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
@@ -79,32 +79,35 @@
                                 <option value="pending">Pending</option>
                                 <option value="nonaktif">Non-Aktif</option>
                             </select>
+                            
+                            {{-- Peringatan konfirmasi status --}}
+                            <div x-show="status === 'nonaktif' && initialStatus !== 'nonaktif'" 
+                                 x-transition 
+                                 class="mt-2 p-3 bg-red-50 text-red-600 text-[11px] font-bold rounded-lg border border-red-100 flex items-start gap-2">
+                                <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                <span>Perhatian: Akun akan dinonaktifkan. Pengguna tidak dapat mengakses sistem.</span>
+                            </div>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Peran (Role)</label>
-                            <select name="id_role" x-model="role" 
-                                :class="role === '' ? 'text-gray-400' : 'text-gray-700'"
-                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
-                                <option value="" class="text-gray-400">Pilih Peran</option>
+                            <select name="id_role" x-model="role" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
+                                <option value="">Pilih Peran</option>
                                 @foreach($roles as $r)
-                                    <option value="{{ $r->id_role }}" class="text-gray-700">{{ $r->nama_role }}</option>
+                                    <option value="{{ $r->id_role }}">{{ $r->nama_role }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-sm font-bold text-gray-600">Tim Kerja</label>
-                            <select name="id_tim" x-model="tim" 
-                                :class="tim === '' ? 'text-gray-400' : 'text-gray-700'"
-                                class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
-                                <option value="" class="text-gray-400">Pilih Tim Kerja</option>
+                            <select name="id_tim" x-model="tim" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-[#5C46F5] outline-none text-sm font-medium cursor-pointer transition-all">
+                                <option value="">Pilih Tim Kerja</option>
                                 @foreach($tims as $t)
-                                    <option value="{{ $t->id_tim }}" class="text-gray-700">{{ $t->nama_tim }}</option>
+                                    <option value="{{ $t->id_tim }}">{{ $t->nama_tim }}</option>
                                 @endforeach
                             </select>
                         </div>
-
                     </div>
                 </div>
 

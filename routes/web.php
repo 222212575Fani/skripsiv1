@@ -10,7 +10,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Auth - Guest (Hanya bisa diakses jika belum login)
+// Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
@@ -18,38 +18,44 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-// Auth - Terlindungi (Wajib Login)
+// Protected Routes (Wajib Login)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Route untuk Admin
+    // Admin Routes
     Route::prefix('admin')->name('admin.')->group(function () {
-        // Manajemen Pengguna
         Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
         Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
         Route::post('/manajemenpengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
         Route::post('/manajemenpengguna/update', [PenggunaController::class, 'update'])->name('pengguna.update');
         
-        // Manajemen Tim Kerja
         Route::get('/manajementimkerja', [TimKerjaController::class, 'index'])->name('manajementimkerja');
         Route::post('/manajementimkerja', [TimKerjaController::class, 'store'])->name('timkerja.store');
-        
-        // Perbaikan: Rute update yang sebelumnya tidak terbaca di route:list sekarang sudah aktif
         Route::post('/manajementimkerja/update', [TimKerjaController::class, 'update'])->name('timkerja.update');
     });
 
-    // Route untuk Direktur
-    Route::get('/direktur/dashboard', function () {
-        return 'Dashboard Direktur';
-    })->name('direktur.dashboard');
+    // Direktur Routes
+    Route::prefix('direktur')->name('direktur.')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard', ['role' => 'direktur', 'title' => 'Dashboard Direktur']);
+        })->name('dashboard');
+    });
 
-    // Route untuk ketua tim
-    Route::get('/ketuatim/dashboard', function () {
-        return 'Dashboard Ketua Tim';
-    })->name('ketuatim.dashboard');
+    // Ketua Tim Routes
+    Route::prefix('ketuatim')->name('ketuatim.')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard', ['role' => 'ketuatim', 'title' => 'Dashboard Ketua Tim']);
+        })->name('dashboard');
+        
+        Route::get('/manajemen-proyek', function () {
+            return view('ketuatim.proyek', ['title' => 'Manajemen Proyek']);
+        })->name('manajemenproyek');
+    });
 
-    // Route untuk Anggota
-    Route::get('/anggota/proyekaktivitas', function () {
-        return 'Proyek dan Aktivitas Saya';
-    })->name('anggota.proyekaktivitas');
+    // Anggota Routes
+    Route::prefix('anggota')->name('anggota.')->group(function () {
+        Route::get('/proyek-aktivitas', function () {
+            return view('anggota.proyek', ['title' => 'Proyek & Aktivitas']);
+        })->name('proyekaktivitas');
+    });
 });

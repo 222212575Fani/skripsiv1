@@ -59,11 +59,40 @@
     </div>
 
     @push('scripts')
+    {{-- 1. Mengimpor library CDN SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function togglePassword(id, btn) {
             const input = document.getElementById(id);
             input.type = input.type === 'password' ? 'text' : 'password';
         }
+
+        {{-- 2. Menangkap session Flash Error dari AuthController --}}
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Akses Ditolak',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#5C46F5',
+                customClass: {
+                    popup: 'rounded-[20px]'
+                }
+            });
+        @endif
+
+        {{-- 3. Menangkap session Flash Success dari AuthController --}}
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#5C46F5',
+                customClass: {
+                    popup: 'rounded-[20px]'
+                }
+            });
+        @endif
     </script>
     @endpush
 

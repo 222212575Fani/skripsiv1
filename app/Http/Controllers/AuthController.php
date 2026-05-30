@@ -92,28 +92,28 @@ class AuthController extends Controller
         // 1. Validasi Kredensial (Email & Password)
         if (!$pengguna || !Hash::check($request->password, $pengguna->password)) {
             return back()
-                ->withErrors(['email' => 'Email atau password salah'])
-                ->withInput();
+                ->withInput()
+                ->with('error', 'Email atau password salah');
         }
 
-        // 2. Validasi Status Akun (Pending/Nonaktif)
+        // 2. Validasi Status Akun (Pending/Nonaktif) - Dialihkan ke SweetAlert via session('error')
         if ($pengguna->status_akun === 'pending') {
             return back()
-                ->withErrors(['email' => 'Akun Anda belum diaktivasi oleh admin.'])
-                ->withInput();
+                ->withInput()
+                ->with('error', 'Akun Anda belum diaktivasi oleh admin.');
         }
 
         if ($pengguna->status_akun === 'nonaktif') {
             return back()
-                ->withErrors(['email' => 'Akun Anda sudah dinonaktifkan.'])
-                ->withInput();
+                ->withInput()
+                ->with('error', 'Akun Anda sudah dinonaktifkan.');
         }
 
         // 3. Validasi Penetapan Role
         if (!$pengguna->id_role) {
             return back()
-                ->withErrors(['email' => 'Role akun belum ditetapkan oleh Admin.'])
-                ->withInput();
+                ->withInput()
+                ->with('error', 'Peran (Role) akun Anda belum ditetapkan oleh Admin.');
         }
 
         // 4. Validasi Penempatan Tim (Kecuali Admin)
@@ -131,8 +131,8 @@ class AuthController extends Controller
 
             if (!$isKetua && !$isAnggota) {
                 return back()
-                    ->withErrors(['email' => 'Akun Anda aktif, namun belum ditempatkan dalam Tim Kerja. Silakan hubungi Admin.'])
-                    ->withInput();
+                    ->withInput()
+                    ->with('error', 'Akun Anda aktif, namun belum ditempatkan dalam Tim Kerja. Silakan hubungi Admin.');
             }
         }
 
@@ -169,7 +169,7 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()
             ->route('login')
-            ->withErrors(['email' => 'Role tidak dikenali. Silakan hubungi admin.']);
+            ->with('error', 'Role tidak dikenali. Silakan hubungi admin.');
     }
 
     /**
