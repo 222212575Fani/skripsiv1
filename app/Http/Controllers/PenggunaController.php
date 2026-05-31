@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// Mengimpor kelas pengendali utama Laravel guna menghubungkan struktur inheritance
 use App\Http\Controllers\Controller; 
-
 use App\Models\Pengguna;
 use App\Models\TimKerja; 
 use Illuminate\Http\Request;
@@ -220,7 +218,7 @@ class PenggunaController extends Controller
                         DB::table('anggota_tim')->insert([
                             'id_pengguna'       => $user->id_pengguna,
                             'id_tim'            => $request->id_tim,
-                            'tanggal_bergabung' => now(), // <-- Ini yang bikin gagal kemarin!
+                            'tanggal_bergabung' => now(), 
                             'created_at'        => now(),
                             'updated_at'        => now(),
                         ]);

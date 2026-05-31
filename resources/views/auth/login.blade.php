@@ -15,6 +15,7 @@
             <form class="mt-10" action="{{ route('login.post') }}" method="POST">
                 @csrf
                 
+                {{-- Menampilkan error validasi dari $request->validate() --}}
                 @if ($errors->any())
                     <div class="mb-5 rounded-[10px] bg-red-50 border border-red-200 px-4 py-3 text-[13px] text-red-700">
                         {{ $errors->first() }}
@@ -37,6 +38,7 @@
                     </x-slot:icon>
                 </x-authinput>
 
+                {{-- Fitur Remember Me --}}
                 <div class="mb-7 flex items-center gap-2">
                     <input type="checkbox" id="remember" name="remember" class="w-4 h-4 rounded border border-[#BFBFBF] accent-[#5C46F5]">
                     <label for="remember" class="text-[14px] text-[#666666]">Ingatkan Saya</label>
@@ -59,38 +61,26 @@
     </div>
 
     @push('scripts')
-    {{-- 1. Mengimpor library CDN SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        function togglePassword(id, btn) {
-            const input = document.getElementById(id);
-            input.type = input.type === 'password' ? 'text' : 'password';
-        }
-
-        {{-- 2. Menangkap session Flash Error dari AuthController --}}
+        // SweetAlert dari Session AuthController
         @if(session('error'))
             Swal.fire({
                 icon: 'error',
                 title: 'Akses Ditolak',
                 text: "{{ session('error') }}",
                 confirmButtonColor: '#5C46F5',
-                customClass: {
-                    popup: 'rounded-[20px]'
-                }
+                customClass: { popup: 'rounded-[20px]' }
             });
         @endif
 
-        {{-- 3. Menangkap session Flash Success dari AuthController --}}
         @if(session('success'))
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
                 text: "{{ session('success') }}",
                 confirmButtonColor: '#5C46F5',
-                customClass: {
-                    popup: 'rounded-[20px]'
-                }
+                customClass: { popup: 'rounded-[20px]' }
             });
         @endif
     </script>

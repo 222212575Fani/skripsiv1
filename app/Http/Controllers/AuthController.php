@@ -54,8 +54,8 @@ class AuthController extends Controller
             'nip' => $request->nip,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'id_role' => null, // Role ditentukan admin saat aktivasi
-            'status_akun' => 'pending', // Akun baru otomatis pending
+            'id_role' => null, 
+            'status_akun' => 'pending', 
             'disetujui_pada' => null,
             'disetujui_oleh' => null,
         ]);
@@ -96,7 +96,7 @@ class AuthController extends Controller
                 ->with('error', 'Email atau password salah');
         }
 
-        // 2. Validasi Status Akun (Pending/Nonaktif) - Dialihkan ke SweetAlert via session('error')
+        // 2. Validasi Status Akun
         if ($pengguna->status_akun === 'pending') {
             return back()
                 ->withInput()
@@ -118,13 +118,10 @@ class AuthController extends Controller
 
         // 4. Validasi Penempatan Tim (Kecuali Admin)
         if ($pengguna->role?->nama_role !== 'Admin') {
-            
-            // Cek apakah user terdaftar sebagai Ketua di tabel tim_kerja
             $isKetua = DB::table('tim_kerja')
                 ->where('id_ketua_tim', $pengguna->id_pengguna)
                 ->exists();
             
-            // Cek apakah user terdaftar sebagai Anggota di tabel anggota_tim
             $isAnggota = DB::table('anggota_tim')
                 ->where('id_pengguna', $pengguna->id_pengguna)
                 ->exists();
@@ -136,11 +133,14 @@ class AuthController extends Controller
             }
         }
 
-        // Lolos semua pengecekan, lakukan Login
-        Auth::login($pengguna);
-        $request->session()->regenerate();
+        // 5. LOGIN (Menggunakan $request->boolean('remember') untuk fitur "Ingat Saya")
+        // Laravel secara otomatis menggunakan kolom "remember_token" di database
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return $this->redirectByRole($pengguna);
+        }
 
-        return $this->redirectByRole($pengguna);
+        return back()->withInput()->with('error', 'Gagal masuk ke sistem.');
     }
 
     /**

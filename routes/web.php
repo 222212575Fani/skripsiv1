@@ -47,8 +47,8 @@ Route::middleware('auth')->group(function () {
             return view('dashboard', ['role' => 'ketuatim', 'title' => 'Dashboard Ketua Tim']);
         })->name('dashboard');
         
-        Route::get('/manajemen-proyek', function () {
-            return view('ketuatim.proyek', ['title' => 'Manajemen Proyek']);
+        Route::get('/manajemenproyek', function () {
+            return view('ketuatim.manajemenproyek', ['title' => 'Manajemen Proyek']);
         })->name('manajemenproyek');
     });
 
