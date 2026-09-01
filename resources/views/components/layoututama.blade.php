@@ -24,14 +24,18 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="m-0 p-0 text-[#1A1A1A] antialiased">
-    <div class="flex min-h-screen">
-        {{-- Sidebar --}}
-        <x-sidebar />
+<body class="m-0 p-0 text-[#1A1A1A] antialiased overflow-hidden">
+    {{-- 1. Bungkus layar penuh dengan h-screen dan overflow-hidden --}}
+    <div class="flex h-screen overflow-hidden">
+        
+        {{-- Sidebar (Diberikan h-full dan overflow-y-auto jika menu panjang) --}}
+        <div class="h-full flex-shrink-0">
+            <x-sidebar />
+        </div>
 
-        <main class="flex-1 flex flex-col min-w-0">
-            {{-- Header --}}
-            <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30">
+        <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+            {{-- Header (Diam / Freeze di atas) --}}
+            <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30 shrink-0">
                 <div class="flex-1">
                     @if (isset($headerTitle))
                         <div class="max-w-md w-full">{!! $headerTitle !!}</div>
@@ -75,8 +79,8 @@
                 </div>
             </header>
 
-            {{-- Main Content --}}
-            <div class="p-10 flex-1">
+            {{-- 2. Main Content (Hanya bagian ini yang bisa di-scroll dengan overflow-y-auto) --}}
+            <div class="p-10 flex-1 overflow-y-auto">
                 {{ $slot }}
             </div>
         </main>

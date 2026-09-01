@@ -1,5 +1,5 @@
-/* 1. Import Plus Jakarta Sans */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+/* 1. Import Mulish dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300..1000;1,300..1000&display=swap');
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -8,12 +8,12 @@
 @source '../**/*.js';
 
 @theme {
-    /* 2. Set Plus Jakarta Sans sebagai font utama */
-    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    /* 2. Set Mulish sebagai font utama */
+    --font-sans: 'Mulish', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
   *, html, body, button, input, select, textarea {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-family: 'Mulish', sans-serif !important;
     }
 }
