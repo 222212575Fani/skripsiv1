@@ -46,7 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('ketuatim')->name('ketuatim.')->group(function () {
         Route::get('/dashboard', [KetuaTimController::class, 'dashboard'])->name('dashboard');
         Route::get('/manajemenproyek', [KetuaTimController::class, 'manajemenProyek'])->name('manajemenproyek');
-    });
+        Route::post('/manajemenproyek/store', [KetuaTimController::class, 'storeProyek'])->name('manajemenproyek.store');
+        Route::delete('/manajemenproyek/{id}', [KetuaTimController::class, 'destroyProyek'])->name('manajemenproyek.destroy');
+        });
+
 
     // Anggota Routes
     Route::prefix('anggota')->name('anggota.')->middleware(['auth'])->group(function () {

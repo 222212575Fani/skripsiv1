@@ -58,7 +58,26 @@ class PenggunaController extends Controller
         });
 
         $roles = DB::table('role')->get(); 
-        $tims = DB::table('tim_kerja')->where('status_tim', 'aktif')->get(); 
+        
+        // Memuat data tim aktif sekaligus mendeteksi apakah tim tersebut sudah memiliki ketua yang valid & berstatus "Ketua Tim"
+        $tims = DB::table('tim_kerja')->where('status_tim', 'aktif')->get()->map(function ($tim) {
+            $sudahPunyaKetua = false;
+            
+            if (!empty($tim->id_ketua_tim)) {
+                // Cek apakah pengguna yang memegang id_ketua_tim ini akunnya aktif DAN rolenya benar-benar memegang role Ketua
+                $cekKetua = DB::table('pengguna')
+                    ->join('role', 'pengguna.id_role', '=', 'role.id_role')
+                    ->where('pengguna.id_pengguna', $tim->id_ketua_tim)
+                    ->where('pengguna.status_akun', 'aktif')
+                    ->where('role.nama_role', 'LIKE', '%ketua%')
+                    ->exists();
+
+                $sudahPunyaKetua = $cekKetua;
+            }
+
+            $tim->sudah_punya_ketua = $sudahPunyaKetua;
+            return $tim;
+        }); 
 
         $counts = [
             'semua'    => Pengguna::count(),
@@ -88,7 +107,21 @@ class PenggunaController extends Controller
             $user->disetujui_pada = now();
             $user->save();
 
-            if ($request->filled('id_tim')) {
+            $roleData = DB::table('role')->where('id_role', $request->id_role)->first();
+            $namaRole = $roleData ? strtolower($roleData->nama_role) : '';
+            
+            $isRoleKetua = strpos($namaRole, 'ketua') !== false;
+            $isRoleGlobal = strpos($namaRole, 'admin') !== false || strpos($namaRole, 'direktur') !== false;
+
+            // Jika bukan role global (Admin/Direktur) dan ada tim yang dipilih
+            if (!$isRoleGlobal && $request->filled('id_tim')) {
+                if ($isRoleKetua) {
+                    DB::table('tim_kerja')->where('id_tim', $request->id_tim)->update([
+                        'id_ketua_tim' => $user->id_pengguna,
+                        'updated_at'   => now(),
+                    ]);
+                }
+
                 DB::table('anggota_tim')->updateOrInsert(
                     ['id_pengguna' => $user->id_pengguna],
                     [
@@ -112,18 +145,18 @@ class PenggunaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama'               => 'required|string|max:100',
-            'nip'                => 'required|string|size:18|unique:pengguna,nip',
-            'nama_email_baru'    => [
+            'nama'              => 'required|string|max:100',
+            'nip'               => 'required|string|size:18|unique:pengguna,nip',
+            'nama_email_baru'   => [
                 'required',
                 'email',
                 'unique:pengguna,email',
                 'regex:/^[A-Za-z0-9._%+-]+@bps\.go\.id$/'
             ],
-            'kata_sandi_baru'    => 'required|min:8', 
-            'status_akun'        => 'required|in:aktif,pending,nonaktif',
-            'id_role'            => 'required|exists:role,id_role',
-            'id_tim'             => 'nullable|exists:tim_kerja,id_tim',
+            'kata_sandi_baru'   => 'required|min:8', 
+            'status_akun'       => 'required|in:aktif,pending,nonaktif',
+            'id_role'           => 'required|exists:role,id_role',
+            'id_tim'            => 'nullable|exists:tim_kerja,id_tim',
         ], [
             'nip.size'              => 'NIP harus 18 digit.',
             'nip.unique'            => 'NIP ini sudah terdaftar di sistem BPS.',
@@ -147,14 +180,27 @@ class PenggunaController extends Controller
                 'disetujui_pada' => $disetujuiPada,
             ]);
 
-            if ($request->filled('id_tim')) {
-                DB::table('anggota_tim')->insert([
-                    'id_tim'            => $request->id_tim,
-                    'id_pengguna'       => $pengguna->id_pengguna,
-                    'tanggal_bergabung' => now(), 
-                    'created_at'        => now(),
-                    'updated_at'        => now(),
-                ]);
+            $roleData = DB::table('role')->where('id_role', $request->id_role)->first();
+            $namaRole = $roleData ? strtolower($roleData->nama_role) : '';
+            
+            $isRoleKetua = strpos($namaRole, 'ketua') !== false;
+            $isRoleGlobal = strpos($namaRole, 'admin') !== false || strpos($namaRole, 'direktur') !== false;
+
+            if (!$isRoleGlobal && $request->filled('id_tim')) {
+                if ($isRoleKetua) {
+                    DB::table('tim_kerja')->where('id_tim', $request->id_tim)->update([
+                        'id_ketua_tim' => $pengguna->id_pengguna,
+                        'updated_at'   => now(),
+                    ]);
+                } else {
+                    DB::table('anggota_tim')->insert([
+                        'id_tim'            => $request->id_tim,
+                        'id_pengguna'       => $pengguna->id_pengguna,
+                        'tanggal_bergabung' => now(), 
+                        'created_at'        => now(),
+                        'updated_at'        => now(),
+                    ]);
+                }
             }
 
             DB::commit();
@@ -192,6 +238,7 @@ class PenggunaController extends Controller
                 $disetujuiPada = null;
             }
 
+            // 1. Update data utama tabel pengguna
             $user->update([
                 'nama'           => $request->nama,
                 'nip'            => $request->nip,
@@ -200,31 +247,42 @@ class PenggunaController extends Controller
                 'disetujui_pada' => $disetujuiPada,
             ]);
 
-            $isKetua = DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->exists();
+            // Cek role pengguna
+            $roleData = DB::table('role')->where('id_role', $request->id_role)->first();
+            $namaRole = $roleData ? strtolower($roleData->nama_role) : '';
+            
+            $isRoleKetua = strpos($namaRole, 'ketua') !== false;
+            $isRoleGlobal = strpos($namaRole, 'admin') !== false || strpos($namaRole, 'direktur') !== false;
 
-            if (!$isKetua) {
+            // Bersihkan dulu status ketua lama jika pengguna ini sebelumnya adalah ketua di tim manapun
+            DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
+
+            if ($isRoleGlobal) {
+                // Jika perannya Admin atau Direktur, pastikan bersih dari relasi tim manapun
+                DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
+                DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
+            } else {
                 if ($request->filled('id_tim')) {
-                    // ======= INI ADALAH LOGIKA BARU YANG BENAR =======
-                    $cekTim = DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->first();
-                    
-                    if ($cekTim) {
-                        DB::table('anggota_tim')
-                            ->where('id_pengguna', $user->id_pengguna)
-                            ->update([
-                                'id_tim'     => $request->id_tim,
-                                'updated_at' => now(),
-                            ]);
-                    } else {
-                        DB::table('anggota_tim')->insert([
-                            'id_pengguna'       => $user->id_pengguna,
-                            'id_tim'            => $request->id_tim,
-                            'tanggal_bergabung' => now(), 
-                            'created_at'        => now(),
-                            'updated_at'        => now(),
+                    if ($isRoleKetua) {
+                        // Jika dia menjadi ketua di tim yang dipilih
+                        DB::table('tim_kerja')->where('id_tim', $request->id_tim)->update([
+                            'id_ketua_tim' => $user->id_pengguna,
+                            'updated_at'   => now(),
                         ]);
                     }
-                    // =================================================
+
+                    // Masukkan atau perbarui ke tabel anggota_tim
+                    DB::table('anggota_tim')->updateOrInsert(
+                        ['id_pengguna' => $user->id_pengguna],
+                        [
+                            'id_tim'            => $request->id_tim,
+                            'tanggal_bergabung' => now(),
+                            'updated_at'        => now(),
+                            'created_at'        => now(),
+                        ]
+                    );
                 } else {
+                    // Jika pilihan tim dikosongkan, hapus dari anggota_tim
                     DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
                 }
             }
