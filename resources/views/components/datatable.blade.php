@@ -1,12 +1,12 @@
 @props(['paginator', 'itemName' => 'data'])
 
-<div class="bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden">
+<div class="bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden w-full">
     {{-- Slot Opsional untuk Filter Tab di atas tabel jika ada --}}
     {{ $tabs ?? '' }}
 
-    {{-- Tabel Utama --}}
+    {{-- Tabel Utama (Tanpa min-w dan menggunakan overflow-hidden agar bersih dari scroll horizontal) --}}
     <div class="w-full overflow-hidden">
-        <table class="w-full text-left border-collapse">
+        <table class="w-full text-left border-collapse table-auto">
             <thead>
                 <tr class="text-gray-400 text-[10px] uppercase tracking-wider font-bold border-b border-gray-100 bg-gray-50/30">
                     {{ $header }}
@@ -19,7 +19,7 @@
 
         {{-- Footer Paginasi Kustom Reusable dengan Dynamic Item Name --}}
         @if(isset($paginator))
-        <div class="px-8 py-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-500">
+        <div class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-500">
             <div>
                 Menampilkan {{ $paginator->firstItem() ?? 0 }} sampai {{ $paginator->lastItem() ?? 0 }} dari {{ $paginator->total() }} {{ $itemName }}
             </div>

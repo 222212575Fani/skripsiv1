@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TimKerja;
 use App\Models\Proyek;
 use App\Models\AnggotaTim;
+use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -19,10 +20,14 @@ class KetuaTimController extends Controller
         // Ambil data tim kerja yang dipimpin
         $timKerja = TimKerja::where('id_ketua_tim', $userId)->first();
 
+        // Ambil status filter dari request (default 'semua')
+        $status = $request->get('status', 'semua');
+
         if (!$timKerja) {
             $totalProyek = $belumDimulai = $berjalan = $selesai = $terlambat = 0;
             $proyekTim = collect()->paginate(6);
-            return view('ketuatim.dashboard', compact('timKerja', 'proyekTim', 'totalProyek', 'belumDimulai', 'berjalan', 'selesai', 'terlambat'));
+            $anggotaTim = collect();
+            return view('ketuatim.dashboard', compact('timKerja', 'proyekTim', 'totalProyek', 'belumDimulai', 'berjalan', 'selesai', 'terlambat', 'anggotaTim', 'status'));
         }
 
         // Ambil semua data proyek tim ini untuk kalkulasi card statistik secara akurat
@@ -38,8 +43,8 @@ class KetuaTimController extends Controller
         // Query untuk card list proyek di dashboard (memuat relasi ketuaProyek dan anggotaProyek beserta pengguna)
         $query = Proyek::where('id_tim', $timKerja->id_tim)->with(['ketuaProyek', 'anggotaProyek.pengguna']);
 
-        if ($request->filled('status') && $request->status !== 'semua') {
-            $query->where('status_proyek', $request->status);
+        if ($status !== 'semua') {
+            $query->where('status_proyek', $status);
         }
 
         if ($request->filled('search')) {
@@ -49,6 +54,27 @@ class KetuaTimController extends Controller
         // Mengambil data proyek dengan pagination 6 card per halaman
         $proyekTim = $query->latest()->paginate(6)->withQueryString();
 
+        // AMBIL DATA KETUA PROYEK OTOMATIS BERDASARKAN TAHUN BERJALAN
+        $tahunBerjalan = now()->year;
+
+        $anggotaTim = Pengguna::whereHas('anggotaTim', function($q) use ($timKerja) {
+                $q->where('id_tim', $timKerja->id_tim)->whereNull('tanggal_keluar');
+            })
+            ->whereHas('proyekDipimpin', function($q) use ($timKerja, $tahunBerjalan) {
+                $q->where('id_tim', $timKerja->id_tim)
+                  ->whereYear('created_at', $tahunBerjalan);
+            })
+            ->withCount(['proyekDipimpin' => function($q) use ($timKerja, $tahunBerjalan) {
+                $q->where('id_tim', $timKerja->id_tim)
+                  ->whereYear('created_at', $tahunBerjalan);
+            }])
+            ->get()
+            ->map(function ($member) {
+                $member->sub_teks = $member->role->nama_role ?? 'Ketua Proyek';
+                $member->jumlah_tugas = $member->proyek_dipimpin_count ?? 0;
+                return $member;
+            });
+
         return view('ketuatim.dashboard', compact(
             'timKerja', 
             'proyekTim', 
@@ -56,7 +82,9 @@ class KetuaTimController extends Controller
             'belumDimulai', 
             'berjalan', 
             'selesai', 
-            'terlambat'
+            'terlambat',
+            'anggotaTim',
+            'status'
         ));
     }
 
@@ -123,7 +151,7 @@ class KetuaTimController extends Controller
             'tanggal_mulai'   => 'nullable|date',
             'tenggat_waktu'   => 'nullable|date',
         ], [
-            'nama_proyek.required'     => 'Nama proyek wajib diisi.',
+            'nama_proyek.required'    => 'Nama proyek wajib diisi.',
             'id_ketua_proyek.required' => 'Pilih salah satu Ketua Proyek dari anggota tim.',
             'status.required'          => 'Status proyek wajib ditentukan.',
         ]);
@@ -158,15 +186,21 @@ class KetuaTimController extends Controller
     }
 
     // 4. Method untuk menghapus data Proyek
-    public function destroyProyek($id)
+    public function destroy($id)
     {
         try {
-            $proyek = Proyek::findOrFail($id);
+            $proyek = Proyek::find($id);
+
+            if (!$proyek) {
+                return redirect()->back()->with('error', 'Data proyek tidak ditemukan atau sudah dihapus.');
+            }
+
             $proyek->delete();
 
-            return redirect()->back()->with('success', 'Proyek berhasil dihapus.');
+            return redirect()->back()->with('success', 'Data proyek berhasil dihapus.');
+            
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal menghapus proyek: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

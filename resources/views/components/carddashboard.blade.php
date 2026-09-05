@@ -1,11 +1,11 @@
 @props(['proyek'])
 
-<div class="bg-white rounded-[24px] shadow-sm border border-gray-200/80 p-6 flex flex-col justify-between hover:shadow-md transition-all">
+<div class="bg-white rounded-[24px] shadow-sm border border-gray-200/80 hover:border-[#5C46F5] hover:ring-4 hover:ring-[#5C46F5]/10 p-6 flex flex-col justify-between transition-all duration-200 group">
     <div>
         {{-- Baris Atas: Nama Proyek, Badge Status, & Tanggal Mulai / Selesai --}}
         <div class="flex justify-between items-start gap-3">
             <div class="flex items-center gap-2.5 flex-wrap">
-                <h3 class="text-base font-bold text-gray-900">{{ $proyek['nama_proyek'] ?? $proyek->nama_proyek ?? '' }}</h3>
+                <h3 class="text-base font-bold text-gray-900 group-hover:text-[#5C46F5] transition-colors">{{ $proyek['nama_proyek'] ?? $proyek->nama_proyek ?? '' }}</h3>
                 
                 @php
                     $statusProyek = $proyek['status_proyek'] ?? $proyek->status_proyek ?? 'belum_dimulai';
@@ -173,9 +173,11 @@
                 </span>
             @endif
 
-            {{-- Tombol Panah ke Kanan --}}
-            <button type="button" class="w-8 h-8 rounded-full bg-gray-50 hover:bg-[#5C46F5] hover:text-white text-gray-600 flex items-center justify-center transition-all shadow-xs border border-gray-200 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            {{-- Tombol Panah ke Kanan (Berubah Ungu Penuh saat card di-hover) --}}
+            <button type="button" class="w-9 h-9 rounded-full bg-white border border-[#DDD6FE] text-[#5C46F5] flex items-center justify-center shadow-xs shrink-0 group-hover:bg-[#5C46F5] group-hover:text-white group-hover:border-transparent transition-all duration-200 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
             </button>
         </div>
     </div>

@@ -105,16 +105,14 @@
                     </div>
                 </div>
 
-                {{-- Footer Action ala Referensi --}}
-                <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
-                    <button type="button" @click="open = false" 
-                        class="px-5 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold text-xs hover:bg-gray-100 transition-all">
+                {{-- Footer Action --}}
+                <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+                    <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600" shadow="shadow-md shadow-rose-500/20">
                         Batal
-                    </button>
-                    <button type="submit" 
-                        class="px-6 py-2.5 bg-[#5C46F5] text-white rounded-xl font-bold text-xs hover:bg-[#4A38D4] shadow-md shadow-[#5C46F5]/20 transition-all">
+                    </x-button>
+                    <x-button type="submit">
                         Simpan Tim
-                    </button>
+                    </x-button>
                 </div>
             </form>
         </div>

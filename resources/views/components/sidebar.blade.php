@@ -1,10 +1,19 @@
 <aside class="w-[280px] bg-white border-r border-slate-100 flex flex-col z-20 relative transition-all duration-300 min-h-screen">
     <div class="p-8 mb-2">
         <div class="flex items-center gap-4">
-            <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-11 w-auto object-contain bg-transparent">
-            <div>
-                <h1 class="text-sm font-extrabold text-[#1E40AF] leading-none uppercase tracking-tight">SIS Project</h1>
-                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1.5 tracking-widest">BPS RI</p>
+            {{-- Tombol X tanpa latar belakang kotak, hanya teks/ikon yang berubah warna saat di-hover --}}
+            <button @click="sidebarOpen = false" class="md:hidden text-slate-500 hover:text-[#5C46F5] transition-colors focus:outline-none shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="flex items-center gap-4 flex-1">
+                <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-11 w-auto object-contain bg-transparent">
+                <div>
+                    <h1 class="text-sm font-extrabold text-[#1E40AF] leading-none uppercase tracking-tight">SIS Project</h1>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-1.5 tracking-widest">BPS RI</p>
+                </div>
             </div>
         </div>
     </div>

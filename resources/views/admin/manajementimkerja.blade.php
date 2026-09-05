@@ -1,7 +1,7 @@
 <x-layoututama title="Manajemen Tim Kerja">
     <div x-data="{}">
         
-        {{-- Kolom Pencarian di Header dengan Auto-Reset Saat Dihapus --}}
+        {{-- Slot untuk Pencarian di Header Atas --}}
         <x-slot name="headerTitle">
             <form action="{{ route('admin.manajementimkerja') }}" method="GET" id="searchForm" class="relative w-full" x-data="{ search: '{{ request('search') }}' }">
                 @if(request('status')) <input type="hidden" name="status" value="{{ request('status') }}"> @endif
@@ -17,105 +17,114 @@
             </form>
         </x-slot>
 
-        <div class="flex flex-col gap-6">
-            <div class="flex justify-between items-end px-2">
-                <div>
-                    <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Manajemen Tim Kerja</h1>
-                    <p class="text-sm text-gray-500 mt-1 font-medium">Pengaturan struktur dan kolaborasi tim di lingkungan SIS BPS.</p>
-                </div>
-                
-                <x-button @click="$dispatch('open-modal-tambah')" 
-                    class="px-6 py-3 shadow-lg shadow-[#5C46F5]/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Tambah Tim
-                </x-button>
+        {{-- Slot Header Judul Halaman yang Terpusat & Seragam --}}
+        <x-slot name="pageHeader">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Manajemen Tim Kerja</h1>
+                <p class="text-xs text-gray-400 mt-1 font-medium">Pengaturan struktur dan kolaborasi tim di lingkungan SIS BPS.</p>
             </div>
+            
+            <x-button @click="$dispatch('open-modal-tambah')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Tambah Tim Kerja</span>
+            </x-button>
+        </x-slot>
 
-            {{-- Memanggil Komponen Reusable <x-datatable> --}}
-            <x-datatable :paginator="$timKerja" item-name=" data tim kerja">
-                
-                {{-- Slot untuk Tab Status --}}
-                <x-slot name="tabs">
-                    <div class="flex items-center gap-8 border-b border-gray-100 px-8 pt-6">
-                        @php $currentStatus = request('status', 'semua'); @endphp
-                        @foreach(['semua' => 'Semua Tim', 'aktif' => 'Aktif', 'nonaktif' => 'Non-Aktif'] as $key => $label)
-                            @php
-                                if ($key == 'semua') $textColor = 'text-[#5C46F5]';
-                                elseif ($key == 'aktif') $textColor = 'text-green-600';
-                                else $textColor = 'text-red-600';
+        {{-- Memanggil Komponen Reusable <x-datatable> --}}
+        <x-datatable :paginator="$timKerja" item-name=" data tim kerja">
+            
+            {{-- Slot untuk Filter Status --}}
+            <x-slot name="tabs">
+                @php 
+                    $currentStatus = request('status', 'semua'); 
+                    $statuses = [
+                        'semua' => 'Semua Tim', 
+                        'aktif' => 'Aktif', 
+                        'nonaktif' => 'Non-Aktif'
+                    ];
+                @endphp
 
-                                $bgColor = 'bg-gray-100'; 
-                                if ($currentStatus == $key) {
-                                    if ($key == 'semua') $bgColor = 'bg-[#5C46F5]/10';
-                                    elseif ($key == 'aktif') $bgColor = 'bg-green-100';
-                                    else $bgColor = 'bg-red-100';
-                                }
-                            @endphp
-                            <a href="{{ route('admin.manajementimkerja', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}" 
-                               class="pb-4 text-[11px] uppercase tracking-widest font-black transition-all border-b-2 {{ $currentStatus == $key ? 'border-[#5C46F5] text-[#5C46F5]' : 'border-transparent text-gray-400 hover:text-gray-600' }}">
-                                {{ $label }}
-                                <span class="ml-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all {{ $bgColor }} {{ $textColor }}">
-                                    {{ $counts[$key] ?? 0 }}
-                                </span>
-                            </a>
-                        @endforeach
-                    </div>
-                </x-slot>
+                <div class="hidden md:flex items-center gap-8 border-b border-gray-100 px-8 pt-6 flex-wrap pb-3">
+                    @foreach($statuses as $key => $label)
+                        @php
+                            if ($key == 'semua') $textColor = 'text-[#5C46F5]';
+                            elseif ($key == 'aktif') $textColor = 'text-green-600';
+                            else $textColor = 'text-red-600';
 
-                {{-- Slot Definisi Header Tabel (6 Kolom untuk Tim Kerja) --}}
-                <x-slot name="header">
+                            $bgColor = 'bg-gray-100'; 
+                            if ($currentStatus == $key) {
+                                if ($key == 'semua') $bgColor = 'bg-[#5C46F5]/10';
+                                elseif ($key == 'aktif') $bgColor = 'bg-green-100';
+                                else $bgColor = 'bg-red-100';
+                            }
+                        @endphp
+                        <a href="{{ route('admin.manajementimkerja', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}" 
+                           class="pb-4 text-[11px] uppercase tracking-widest font-black transition-all border-b-2 whitespace-nowrap {{ $currentStatus == $key ? 'border-[#5C46F5] text-[#5C46F5]' : 'border-transparent text-gray-400 hover:text-gray-600' }}">
+                            {{ $label }}
+                            <span class="ml-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all {{ $bgColor }} {{ $textColor }}">
+                                {{ $counts[$key] ?? 0 }}
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+            </x-slot>
+
+            <x-slot name="header">
+                <tr class="text-gray-400 text-[10px] uppercase tracking-wider font-bold border-b border-gray-100 bg-gray-50/30 hidden md:table-row">
                     <th class="px-6 py-4 text-center w-[5%]">No</th>
                     <th class="px-6 py-4 w-[20%]">Nama Tim</th>
                     <th class="px-6 py-4 w-[35%]">Deskripsi Tim Kerja</th>
                     <th class="px-6 py-4 w-[20%]">Ketua Tim</th>
                     <th class="px-6 py-4 text-center w-[10%]">Status</th>
                     <th class="px-6 py-4 text-center w-[10%]">Aksi</th>
-                </x-slot>
-
-                {{-- Slot Isi Baris Tabel (Looping Data Tim Kerja) --}}
-                @forelse($timKerja as $index => $tim)
-                <tr class="group hover:bg-gray-50/50 transition-all duration-200 border-t border-gray-50 align-top">
-                    <td class="px-6 py-6 text-center text-gray-400 font-bold border-l-4 border-l-transparent group-hover:border-l-[#5C46F5] transition-all">
-                        {{ $timKerja->firstItem() + $index }}
-                    </td>
-                    <td class="px-6 py-6 font-bold text-gray-800 break-words">
-                        {{ $tim->nama_tim }}
-                    </td>
-                    <td class="px-6 py-6 text-sm text-gray-600 leading-relaxed whitespace-normal break-words font-medium text-justify">
-                        {{ $tim->deskripsi_tim ?? 'Deskripsi tim kerja belum diinputkan' }}
-                    </td>
-                    <td class="px-6 py-6">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-[#5C46F5] flex items-center justify-center text-white text-[10px] font-bold shadow-sm shadow-[#5C46F5]/20 shrink-0">
-                                {{ strtoupper(substr($tim->ketua->nama ?? '?', 0, 1)) }}
-                            </div>
-                            <span class="font-bold text-gray-800 break-words">{{ $tim->ketua->nama ?? 'Tidak Ada' }}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-6 text-center">
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase {{ $tim->status_tim == 'aktif' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100' }}">
-                            {{ $tim->status_tim }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-6 text-center">
-                        <button type="button"
-                                @click="$dispatch('open-modal-edit-tim', { id: '{{ $tim->id_tim }}', nama: '{{ addslashes($tim->nama_tim) }}', deskripsi: '{{ addslashes($tim->deskripsi_tim ?? '') }}', ketua: '{{ $tim->id_ketua_tim ?? '' }}', status: '{{ $tim->status_tim }}' })" 
-                                class="text-purple-300 hover:text-purple-500 transition-colors p-2 inline-flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                        </button>
-                    </td>
                 </tr>
-                @empty
-                <tr><td colspan="6" class="py-20 text-center text-gray-400 font-bold text-sm">Belum ada data tim tersedia.</td></tr>
-                @endforelse
+            </x-slot>
 
-            </x-datatable>
-        </div>
+            @forelse($timKerja as $index => $tim)
+            @php
+                $statusClass = $tim->status_tim == 'aktif' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100';
+            @endphp
+
+            <tr class="group hover:bg-gray-50/50 transition-all duration-200 border-t border-gray-50 align-top hidden md:table-row">
+                <td class="px-6 py-6 text-center text-gray-400 font-bold border-l-4 border-l-transparent group-hover:border-l-[#5C46F5] transition-all">
+                    {{ $timKerja->firstItem() + $index }}
+                </td>
+                <td class="px-6 py-6 font-bold text-gray-800 break-words text-xs">
+                    {{ $tim->nama_tim }}
+                </td>
+                <td class="px-6 py-6 text-xs text-gray-600 leading-relaxed whitespace-normal break-words font-medium text-justify">
+                    {{ $tim->deskripsi_tim ?? 'Deskripsi tim kerja belum diinputkan' }}
+                </td>
+                <td class="px-6 py-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-[#5C46F5] flex items-center justify-center text-white text-[10px] font-bold shadow-sm shadow-[#5C46F5]/20 shrink-0">
+                            {{ strtoupper(substr($tim->ketua->nama ?? '?', 0, 1)) }}
+                        </div>
+                        <span class="font-bold text-gray-800 break-words text-xs">{{ $tim->ketua->nama ?? 'Tidak Ada' }}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-6 text-center">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase border {{ $statusClass }}">
+                        {{ $tim->status_tim }}
+                    </span>
+                </td>
+                <td class="px-6 py-6 text-center">
+                    <button type="button"
+                            @click="$dispatch('open-modal-edit-tim', { id: '{{ $tim->id_tim }}', nama: '{{ addslashes($tim->nama_tim) }}', deskripsi: '{{ addslashes($tim->deskripsi_tim ?? '') }}', ketua: '{{ $tim->id_ketua_tim ?? '' }}', status: '{{ $tim->status_tim }}' })" 
+                            class="text-purple-300 hover:text-purple-500 transition-colors p-2 inline-flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
+                </td>
+            </tr>
+            @empty
+            <tr><td colspan="6" class="py-20 text-center text-gray-400 font-bold text-sm">Belum ada data tim tersedia.</td></tr>
+            @endforelse
+
+        </x-datatable>
 
         @include('admin.modals.tambahtimkerja')
         @include('admin.modals.edittimkerja')
-        
     </div>
 </x-layoututama>
