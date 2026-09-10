@@ -9,7 +9,7 @@ class AnggotaProyek extends Model
 {
     use HasFactory;
 
-    protected $table = 'anggota_proyek';          // Menyesuaikan nama tabel fisik
+    protected $table = 'anggota_proyek';         // Menyesuaikan nama tabel fisik
     protected $primaryKey = 'id_anggota_proyek'; // Menyesuaikan primary key fisik
 
     protected $guarded = [];

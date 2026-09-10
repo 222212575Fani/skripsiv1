@@ -25,7 +25,7 @@ class KetuaTimController extends Controller
 
         if (!$timKerja) {
             $totalProyek = $belumDimulai = $berjalan = $selesai = $terlambat = 0;
-            $proyekTim = collect()->paginate(6);
+            $proyekTim = collect()->paginate(10);
             $anggotaTim = collect();
             return view('ketuatim.dashboard', compact('timKerja', 'proyekTim', 'totalProyek', 'belumDimulai', 'berjalan', 'selesai', 'terlambat', 'anggotaTim', 'status'));
         }
@@ -41,7 +41,7 @@ class KetuaTimController extends Controller
         $terlambat    = $semuaProyekTim->where('status_proyek', 'terlambat')->count();
 
         // Query untuk card list proyek di dashboard (memuat relasi ketuaProyek dan anggotaProyek beserta pengguna)
-        $query = Proyek::where('id_tim', $timKerja->id_tim)->with(['ketuaProyek', 'anggotaProyek.pengguna']);
+        $query = Proyek::where('id_tim', $timKerja->id_tim)->with(['ketuaProyek', 'anggotaProyek.pengguna', 'aktivitasProyek.penanggungJawab']);
 
         if ($status !== 'semua') {
             $query->where('status_proyek', $status);
@@ -51,8 +51,8 @@ class KetuaTimController extends Controller
             $query->where('nama_proyek', 'like', '%' . $request->search . '%');
         }
 
-        // Mengambil data proyek dengan pagination 6 card per halaman
-        $proyekTim = $query->latest()->paginate(6)->withQueryString();
+        // Mengambil data proyek dengan pagination 10 card per halaman
+        $proyekTim = $query->latest()->paginate(10)->withQueryString();
 
         // AMBIL DATA KETUA PROYEK OTOMATIS BERDASARKAN TAHUN BERJALAN
         $tahunBerjalan = now()->year;
@@ -166,7 +166,8 @@ class KetuaTimController extends Controller
                 return redirect()->back()->with('error', 'Gagal: Anda tidak terdaftar sebagai ketua tim aktif.');
             }
 
-            Proyek::create([
+            // 1. Buat Proyek Baru
+            $proyek = Proyek::create([
                 'id_tim'                 => $timKerja->id_tim,
                 'nama_proyek'            => $request->nama_proyek,
                 'deskripsi_proyek'       => $request->deskripsi,            
@@ -174,6 +175,15 @@ class KetuaTimController extends Controller
                 'status_proyek'          => $request->status,
                 'tanggal_mulai'          => $request->tanggal_mulai,
                 'tanggal_target_selesai' => $request->tenggat_waktu,          
+            ]);
+
+            // 2. Tambahkan Ketua Proyek ke tabel pivot 'anggota_proyek' (id_peran_proyek = 1)
+            DB::table('anggota_proyek')->insert([
+                'id_proyek'       => $proyek->id_proyek,
+                'id_pengguna'     => $request->id_ketua_proyek,
+                'id_peran_proyek' => 1,
+                'created_at'      => now(),
+                'updated_at'      => now(),
             ]);
 
             DB::commit();
@@ -189,18 +199,79 @@ class KetuaTimController extends Controller
     public function destroy($id)
     {
         try {
+            DB::beginTransaction();
             $proyek = Proyek::find($id);
 
             if (!$proyek) {
                 return redirect()->back()->with('error', 'Data proyek tidak ditemukan atau sudah dihapus.');
             }
 
+            // Hapus relasi di anggota_proyek terlebih dahulu agar tidak terjadi foreign key constraint error
+            DB::table('anggota_proyek')->where('id_proyek', $proyek->id_proyek)->delete();
+            
             $proyek->delete();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Data proyek berhasil dihapus.');
             
         } catch (\Exception $e) {
+            DB::rollback();
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    // 5. Method untuk mengupdate data Proyek
+    public function updateProyek(Request $request, $id)
+    {
+        $request->validate([
+            'nama_proyek'     => 'required|string|max:255',
+            'deskripsi'       => 'nullable|string',
+            'id_ketua_proyek' => 'required|exists:pengguna,id_pengguna',
+            'status'          => 'required|in:belum_dimulai,berjalan,selesai,terlambat',
+            'tanggal_mulai'   => 'nullable|date',
+            'tenggat_waktu'   => 'nullable|date',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $proyek = Proyek::findOrFail($id);
+            $ketuaLama = $proyek->id_ketua_proyek;
+
+            $proyek->update([
+                'nama_proyek'            => $request->nama_proyek,
+                'deskripsi_proyek'       => $request->deskripsi,            
+                'id_ketua_proyek'        => $request->id_ketua_proyek,
+                'status_proyek'          => $request->status,
+                'tanggal_mulai'          => $request->tanggal_mulai,
+                'tanggal_target_selesai' => $request->tenggat_waktu,          
+            ]);
+
+            // Jika Ketua Proyek berubah, update relasi di anggota_proyek
+            if ($ketuaLama != $request->id_ketua_proyek) {
+                // Hapus ketua lama dari tabel pivot
+                DB::table('anggota_proyek')
+                    ->where('id_proyek', $proyek->id_proyek)
+                    ->where('id_pengguna', $ketuaLama)
+                    ->where('id_peran_proyek', 1)
+                    ->delete();
+
+                // Masukkan ketua baru ke tabel pivot
+                DB::table('anggota_proyek')->insert([
+                    'id_proyek'       => $proyek->id_proyek,
+                    'id_pengguna'     => $request->id_ketua_proyek,
+                    'id_peran_proyek' => 1,
+                    'created_at'      => now(),
+                    'updated_at'      => now(),
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Data proyek berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui proyek: ' . $e->getMessage());
         }
     }
 }

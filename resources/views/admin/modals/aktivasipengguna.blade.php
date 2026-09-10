@@ -5,25 +5,25 @@
         userNip: '',
         roleId: '',
         timId: ''
-     }" 
-     @open-modal-aktivasi.window="
+    }" 
+    @open-modal-aktivasi.window="
         open = true; 
         userId = $event.detail.id; 
         userName = $event.detail.nama; 
         userNip = $event.detail.nip;
         roleId = '';
         timId = '';
-     " 
-     @close-modal-aktivasi.window="open = false"
-     x-show="open" 
-     class="fixed inset-0 z-[999] overflow-y-auto" 
-     style="display: none;"
-     x-transition:enter="transition ease-out duration-300"
-     x-transition:enter-start="opacity-0"
-     x-transition:enter-end="opacity-100"
-     x-transition:leave="transition ease-in duration-200"
-     x-transition:leave-start="opacity-100"
-     x-transition:leave-end="opacity-0">
+    " 
+    @close-modal-aktivasi.window="open = false"
+    x-show="open" 
+    class="fixed inset-0 z-[999] overflow-y-auto" 
+    style="display: none;"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0">
     
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px] transition-opacity"></div>
 
@@ -47,7 +47,7 @@
                         <p class="text-xs font-medium text-gray-400">Berikan otorisasi dan hak akses untuk pengguna ini.</p>
                     </div>
                 </div>
-                <button @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all">
+                <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -60,6 +60,23 @@
 
                 <div class="p-8 space-y-5">
                     
+                    {{-- Alert Error di Dalam Modal --}}
+                    @if(session('error'))
+                        <div class="p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3 animate-fade-in">
+                            <div class="w-8 h-8 rounded-xl bg-rose-100 flex items-center justify-center text-rose-600 flex-shrink-0 mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-xs font-bold text-rose-900">Aktivasi Gagal</h4>
+                                <p class="text-xs text-rose-700 mt-0.5 font-medium leading-relaxed">
+                                    {{ session('error') }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- Grid 2 Kolom (Nama & NIP) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
@@ -84,7 +101,11 @@
                                     class="w-full px-4 py-2.5 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none transition-all text-xs font-medium appearance-none cursor-pointer">
                                     <option value="" disabled class="text-gray-400">Pilih Peran</option>
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id_role }}" class="text-gray-700">{{ $role->nama_role }}</option>
+                                        @if(strtolower($role->nama_role) !== 'admin')
+                                            <option value="{{ $role->id_role }}" class="text-gray-700">
+                                                {{ $role->nama_role }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
@@ -103,10 +124,8 @@
                                     class="w-full px-4 py-2.5 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none transition-all text-xs font-medium appearance-none cursor-pointer">
                                     <option value="" class="text-gray-400">Pilih Tim Kerja (Opsional)</option>
                                     @foreach($tims as $tim)
-                                        <option value="{{ $tim->id_tim }}" 
-                                            {{ $tim->sudah_punya_ketua ? 'disabled' : '' }}
-                                            class="{{ $tim->sudah_punya_ketua ? 'text-gray-300 bg-gray-50' : 'text-gray-700' }}">
-                                            {{ $tim->nama_tim }} {{ $tim->sudah_punya_ketua ? '(Sudah punya ketua)' : '' }}
+                                        <option value="{{ $tim->id_tim }}" class="text-gray-700">
+                                            {{ $tim->nama_tim }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -121,15 +140,13 @@
                 </div>
 
                 {{-- Footer Action --}}
-                <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
-                    <button type="button" @click="open = false" 
-                        class="px-5 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-xl font-bold text-xs hover:bg-gray-100 transition-all">
+                <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+                    <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">
                         Batal
-                    </button>
-                    <button type="submit" 
-                        class="px-6 py-2.5 bg-gray-900 text-white rounded-xl font-bold text-xs hover:bg-gray-800 shadow-md transition-all">
+                    </x-button>
+                    <x-button type="submit" color="bg-[#5C46F5] hover:bg-[#4b35e0] text-white" shadow="shadow-md shadow-[#5C46F5]/20">
                         Aktifkan Sekarang
-                    </button>
+                    </x-button>
                 </div>
             </form>
         </div>

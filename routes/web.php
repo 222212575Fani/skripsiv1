@@ -7,12 +7,10 @@ use App\Http\Controllers\TimKerjaController;
 use App\Http\Controllers\AnggotaProyekController;
 use App\Http\Controllers\KetuaTimController;
 
-// Halaman Awal
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
@@ -20,11 +18,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-// Protected Routes (Wajib Login)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Admin Routes
+    // Admin
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
         Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
@@ -35,24 +32,30 @@ Route::middleware('auth')->group(function () {
         Route::post('/manajementimkerja/update', [TimKerjaController::class, 'update'])->name('timkerja.update');
     });
 
-    // Direktur Routes
+    // Direktur
     Route::prefix('direktur')->name('direktur.')->group(function () {
         Route::get('/dashboard', function () {
             return view('dashboard', ['role' => 'direktur', 'title' => 'Dashboard Direktur']);
         })->name('dashboard');
     });
 
-    // Ketua Tim Routes
+    // Ketua Tim
     Route::prefix('ketuatim')->name('ketuatim.')->group(function () {
         Route::get('/dashboard', [KetuaTimController::class, 'dashboard'])->name('dashboard');
         Route::get('/manajemenproyek', [KetuaTimController::class, 'manajemenProyek'])->name('manajemenproyek');
         Route::post('/manajemenproyek/store', [KetuaTimController::class, 'storeProyek'])->name('manajemenproyek.store');
         Route::delete('/manajemenproyek/{id}', [KetuaTimController::class, 'destroyProyek'])->name('manajemenproyek.destroy');
-        });
+        Route::put('/proyek/{id}', [KetuaTimController::class, 'updateProyek'])->name('proyek.update');
+    });
 
-
-    // Anggota Routes
-    Route::prefix('anggota')->name('anggota.')->middleware(['auth'])->group(function () {
-    Route::get('/proyek-aktivitas', [AnggotaProyekController::class, 'index'])->name('proyekaktivitas');
+    // Anggota
+    Route::prefix('anggota')->name('anggota.')->group(function () {
+        Route::get('/proyekaktivitas', [AnggotaProyekController::class, 'index'])->name('proyekaktivitas');
+        Route::get('/proyekaktivitas/{id}/aktivitas', [AnggotaProyekController::class, 'showAktivitas'])->name('proyek.aktivitas');
+        Route::post('/proyekaktivitas/{id}/aktivitas', [AnggotaProyekController::class, 'storeAktivitas'])->name('aktivitas.store');
+        Route::put('/aktivitas/{id}', [AnggotaProyekController::class, 'updateAktivitas'])->name('aktivitas.update');
+        Route::delete('/aktivitas/{id}', [AnggotaProyekController::class, 'destroyAktivitas'])->name('aktivitas.destroy');
+        Route::post('/aktivitas/{id}/progress', [AnggotaProyekController::class, 'storeProgressAktivitas'])->name('aktivitas.progress');
+        Route::get('/aktivitassaya', [AnggotaProyekController::class, 'aktivitasSaya'])->name('aktivitassaya');
     });
 });
