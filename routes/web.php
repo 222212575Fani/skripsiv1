@@ -6,6 +6,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\TimKerjaController;
 use App\Http\Controllers\AnggotaProyekController;
 use App\Http\Controllers\KetuaTimController;
+use App\Http\Controllers\DirekturController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -34,9 +35,7 @@ Route::middleware('auth')->group(function () {
 
     // Direktur
     Route::prefix('direktur')->name('direktur.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard', ['role' => 'direktur', 'title' => 'Dashboard Direktur']);
-        })->name('dashboard');
+        Route::get('/dashboard', [DirekturController::class, 'dashboard'])->name('dashboard');
     });
 
     // Ketua Tim

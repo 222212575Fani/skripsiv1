@@ -1,10 +1,10 @@
-<aside class="w-[280px] bg-[#F5F3FF] text-[#5C46F5] flex flex-col z-20 relative transition-all duration-300 min-h-screen justify-between border-r border-purple-100/60">
+<aside class="w-[280px] bg-[#F5F3FF] text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 min-h-screen justify-between border-r border-purple-100/60">
     <div class="flex flex-col">
         <!-- Logo / Brand -->
         <div class="p-8 mb-2">
             <div class="flex items-center gap-4">
                 {{-- Tombol X untuk mobile --}}
-                <button @click="sidebarOpen = false" class="md:hidden text-[#5C46F5]/70 hover:text-[#5C46F5] transition-colors focus:outline-none shrink-0">
+                <button @click="sidebarOpen = false" class="md:hidden text-[#6E5BC3]/70 hover:text-[#6E5BC3] transition-colors focus:outline-none shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -13,8 +13,8 @@
                 <div class="flex items-center gap-4 flex-1">
                     <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-10 w-auto object-contain bg-transparent">
                     <div>
-                        <h1 class="text-sm font-extrabold text-[#5C46F5] leading-none uppercase tracking-tight">SIS Project</h1>
-                        <p class="text-[10px] font-bold text-[#5C46F5]/70 uppercase mt-1.5 tracking-widest">BPS RI</p>
+                        <h1 class="text-sm font-extrabold text-[#6E5BC3] leading-none uppercase tracking-tight">SIS Project</h1>
+                        <p class="text-[10px] font-bold text-[#6E5BC3]/70 uppercase mt-1.5 tracking-widest">BPS RI</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,6 @@
                         ['route' => 'ketuatim.manajemenproyek', 'label' => 'Manajemen Proyek', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'],
                     ];
                 } else {
-                    // Menu Proyek (Jika menjadi Ketua Proyek)
                     if ($isKetuaProyek) {
                         $menus[] = [
                             'route' => 'anggota.proyekaktivitas', 
@@ -61,38 +60,43 @@
                         ];
                     }
                     
-                    // Menu Aktivitas Saya (Jika menjadi Anggota Proyek / PJ Tugas)
                     if ($isAnggotaProyek || (!$isKetuaProyek && !$isAnggotaProyek)) {
                         $menus[] = [
                             'route' => 'anggota.aktivitassaya', 
-                            'label' => 'Aktivitas Saya', 
+                            'label' => 'Aktivitas', 
                             'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'
                         ];
                     }
                 }
+
+                // Cek jika total menu yang tampil untuk user ini hanya ada 1 buah
+                $isSingleMenu = count($menus) === 1;
             @endphp
 
             @forelse($menus as $menu)
-                @php $isActive = request()->routeIs($menu['route']); @endphp
+                @php 
+                    // Jika menunya cuma 1, atau route-nya cocok, maka paksa jadi Aktif (menyala ungu)
+                    $isActive = $isSingleMenu || request()->routeIs($menu['route']) || request()->is('*' . $menu['route'] . '*'); 
+                @endphp
                 
                 <a href="{{ route($menu['route']) }}" 
-                    class="group flex items-center justify-between px-4 py-3 text-xs rounded-2xl transition-all duration-200 font-bold {{ $isActive ? 'bg-[#5C46F5] text-white shadow-md shadow-[#5C46F5]/25 font-extrabold' : 'text-[#5C46F5]/80 hover:bg-[#5C46F5] hover:text-white hover:shadow-md hover:shadow-[#5C46F5]/25' }}">
+                    class="group flex items-center justify-between px-4 py-3 text-xs rounded-2xl transition-all duration-200 font-bold {{ $isActive ? 'bg-[#6E5BC3] text-white shadow-md shadow-[#6E5BC3]/25 font-extrabold' : 'text-[#6E5BC3]/80 hover:bg-[#6E5BC3] hover:text-white hover:shadow-md hover:shadow-[#6E5BC3]/25' }}">
                     
                     <div class="flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-[#5C46F5]/80 group-hover:text-white' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-[#6E5BC3]/80 group-hover:text-white' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="{{ $menu['icon'] }}" />
                         </svg>
                         <span>{{ $menu['label'] }}</span>
                     </div>
                 </a>
             @empty
-                <p class="px-4 text-xs text-[#5C46F5]/50 italic">Tidak ada menu tersedia.</p>
+                <p class="px-4 text-xs text-[#6E5BC3]/50 italic">Tidak ada menu tersedia.</p>
             @endforelse
         </nav>
     </div>
 
     <!-- Footer Sidebar -->
     <div class="p-8 border-t border-purple-200/50">
-        <p class="text-[10px] font-bold text-[#5C46F5]/60 uppercase tracking-widest">&copy; 2026 Badan Pusat Statistik</p>
+        <p class="text-[10px] font-bold text-[#6E5BC3]/60 uppercase tracking-widest">&copy; 2026 Badan Pusat Statistik</p>
     </div>
 </aside>

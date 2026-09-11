@@ -1,11 +1,13 @@
-<x-layoututama title="Proyek & Aktivitas">
+<x-layoututama title="Proyek">
     <div x-data="{ 
-        tab: 'ketua', 
         search: '{{ request('search') }}',
         status: '{{ request('status', 'semua') }}',
+        tahun: '{{ request('tahun', 'semua') }}',
+        bulan: '{{ request('bulan', 'semua') }}',
         filterOpen: false,
+        bulanOpen: false,
         fetchProjects() {
-            let url = `{{ route('anggota.proyekaktivitas') }}?search=${encodeURIComponent(this.search)}&status=${this.status}`;
+            let url = `{{ route('anggota.proyekaktivitas') }}?search=${encodeURIComponent(this.search)}&status=${this.status}&tahun=${this.tahun}&bulan=${this.bulan}`;
             
             fetch(url, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -23,13 +25,13 @@
         }
     }" class="flex flex-col gap-6">
 
-        {{-- TEKS SAMBUTAN DI ATAS CARD STATISTIK --}}
-        <div class="px-2">
-            <h1 class="text-xl font-bold text-gray-900">
-                Halo, {{ auth()->user()->nama ?? auth()->user()->name }}
+        {{-- CONTAINER BANNER UNGU UTAMA (SERASI DENGAN DASHBOARD DIREKTUR) --}}
+        <div class="bg-gradient-to-r from-[#6E5BC3] to-[#8470E5] rounded-[28px] shadow-sm p-6 text-white">
+            <h1 class="text-base font-bold">
+                Halo, {{ auth()->user()->nama ?? auth()->user()->name }}! 👋
             </h1>
-            <p class="text-xs text-[#6E5BC3] font-normal mt-0.5">
-                Lihat dan kelola proyek mu!
+            <p class="text-xs text-purple-100 mt-1">
+                Lihat dan kelola seluruh proyekmu dengan mudah di sini.
             </p>
         </div>
 
@@ -81,49 +83,33 @@
             />
         </div>
 
-        {{-- TAB SWITCHER (Jika Peran Ganda) --}}
-        @if(isset($isPeranGanda) && $isPeranGanda)
-        <div class="flex items-center gap-4 border-b border-gray-200 px-2 mt-2">
-            <button @click="tab = 'ketua'" 
-                :class="tab === 'ketua' ? 'border-[#6E5BC3] text-[#6E5BC3]' : 'border-transparent text-gray-400 hover:text-gray-600'"
-                class="pb-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all">
-                Proyek yang Saya Ketuai ({{ $proyekKetua->count() }})
-            </button>
-            <button @click="tab = 'anggota'" 
-                :class="tab === 'anggota' ? 'border-[#6E5BC3] text-[#6E5BC3]' : 'border-transparent text-gray-400 hover:text-gray-600'"
-                class="pb-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all">
-                Proyek sebagai Anggota ({{ $proyekAnggota->count() }})
-            </button>
-        </div>
-        @endif
-
         {{-- 2. KOTAK UTAMA DENGAN FILTER & PENCARIAN --}}
         <div class="bg-white rounded-[28px] shadow-sm border border-gray-100 p-5 flex flex-col gap-3">
             
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 class="text-lg font-bold text-gray-900">
-                        @if(request('status') == 'belum_dimulai') Proyek Belum Dimulai
-                        @elseif(request('status') == 'berjalan') Proyek Sedang Berjalan
-                        @elseif(request('status') == 'selesai') Proyek Selesai
-                        @elseif(request('status') == 'terlambat') Proyek Terlambat
-                        @else Daftar Proyek Penugasan
+                        @if(request('status') == 'belum_dimulai') Proyek yang Saya Ketuai (Belum Dimulai)
+                        @elseif(request('status') == 'berjalan') Proyek yang Saya Ketuai (Sedang Berjalan)
+                        @elseif(request('status') == 'selesai') Proyek yang Saya Ketuai (Selesai)
+                        @elseif(request('status') == 'terlambat') Proyek yang Saya Ketuai (Terlambat)
+                        @else Daftar Proyek yang Saya Ketuai
                         @endif
                     </h2>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                     {{-- Input Search --}}
-                    <div class="relative flex-1 md:w-64 group/search">
-                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover/search:text-[#6E5BC3] transition-colors">
+                    <div class="relative flex-1 md:w-72 group/search">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6E5BC3] transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </span>
                         
-                        <input type="text" x-model="search" @input.debounce.400ms="fetchProjects()" placeholder="Cari nama proyek..." 
-                            class="w-full pl-10 pr-9 py-2 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-normal text-gray-700 hover:text-[#6E5BC3] focus:text-[#6E5BC3] placeholder-gray-400 hover:placeholder-[#6E5BC3] focus:placeholder-gray-400 focus:outline-none focus:border-[#6E5BC3] transition-all">
+                        <input type="text" x-model="search" @input.debounce.400ms="fetchProjects()" placeholder="Cari proyek..." 
+                            class="w-full pl-10 pr-9 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-medium text-[#6E5BC3] placeholder-[#6E5BC3] focus:outline-none focus:border-[#6E5BC3] transition-all">
 
                         <template x-if="search">
-                            <button @click="search = ''; fetchProjects();" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <button @click="search = ''; fetchProjects();" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E5BC3] hover:text-[#5C4AB5]">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -131,12 +117,70 @@
                         </template>
                     </div>
 
+                    {{-- Filter Bulan & Tahun --}}
+                    <div class="relative group/bulan">
+                        <button @click="bulanOpen = !bulanOpen; filterOpen = false;" @click.outside="bulanOpen = false" type="button" 
+                            class="flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-2xl text-xs font-medium transition-all cursor-pointer min-w-[170px]">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span x-text="
+                                    (bulan === 'semua' ? 'Semua Bulan' : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][bulan - 1]) + 
+                                    (tahun === 'semua' ? '' : ' ' + tahun)
+                                "></span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+
+                        <div x-show="bulanOpen" x-cloak class="absolute left-0 mt-2 w-80 bg-white border border-purple-100 rounded-[28px] shadow-xl p-4 z-50 space-y-4">
+                            
+                            <div class="flex flex-col gap-1.5">
+                                <div class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest">PILIH TAHUN</div>
+                                <div class="grid grid-cols-5 gap-1.5 max-h-36 overflow-y-auto pr-1">
+                                    <button @click="tahun = 'semua'; fetchProjects();" 
+                                        :class="tahun === 'semua' ? 'bg-[#6E5BC3] text-white' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100 hover:text-[#6E5BC3]'"
+                                        class="py-1.5 px-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer text-center col-span-5">
+                                        Semua Tahun
+                                    </button>
+                                    @for($i = date('Y'); $i >= 1990; $i--)
+                                        <button @click="tahun = '{{ $i }}'; fetchProjects();" 
+                                            :class="tahun === '{{ $i }}' ? 'bg-[#6E5BC3] text-white' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100 hover:text-[#6E5BC3]'"
+                                            class="py-1.5 px-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer text-center">
+                                            {{ $i }}
+                                        </button>
+                                    @endfor
+                                </div>
+                            </div>
+
+                            <div class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest border-t border-gray-100 pt-3">PILIH BULAN</div>
+                            
+                            <div>
+                                <button @click="bulan = 'semua'; bulanOpen = false; fetchProjects();" 
+                                    :class="bulan === 'semua' ? 'bg-[#6E5BC3] text-white shadow-sm' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100 hover:text-[#6E5BC3]'"
+                                    class="w-full py-2 px-4 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-center mb-2">
+                                    Semua Bulan
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <template x-for="(namaBulan, index) in ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']">
+                                    <button @click="bulan = (index + 1).toString(); bulanOpen = false; fetchProjects();" 
+                                        :class="bulan === (index + 1).toString() ? 'bg-[#6E5BC3] text-white shadow-sm' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100 hover:text-[#6E5BC3]'"
+                                        class="py-2.5 px-2 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-center"
+                                        x-text="namaBulan">
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Dropdown Filter Status --}}
                     <div class="relative group/filter">
-                        <button @click="filterOpen = !filterOpen" @click.outside="filterOpen = false" type="button" 
-                            class="flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] text-gray-500 hover:text-[#6E5BC3] rounded-2xl text-xs font-normal transition-all cursor-pointer min-w-[180px]">
+                        <button @click="filterOpen = !filterOpen; bulanOpen = false;" @click.outside="filterOpen = false" type="button" 
+                            class="flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-2xl text-xs font-medium transition-all cursor-pointer min-w-[160px]">
                             <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover/filter:text-[#6E5BC3] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" />
                                 </svg>
                                 <span>
@@ -144,70 +188,22 @@
                                     @elseif(request('status') == 'berjalan') Sedang Berjalan
                                     @elseif(request('status') == 'selesai') Selesai
                                     @elseif(request('status') == 'terlambat') Terlambat
-                                    @else Filter Status Proyek
+                                    @else Semua Status
                                     @endif
                                 </span>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 group-hover/filter:text-[#6E5BC3] transition-transform duration-200" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
 
                         <div x-show="filterOpen" x-cloak 
-                            class="absolute right-0 mt-2 w-64 bg-white border border-gray-100 rounded-[24px] shadow-xl p-3 z-50 space-y-1.5">
-                            
-                            <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#6E5BC3] font-normal text-xs">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" />
-                                </svg>
-                                <span>Filter Status Proyek</span>
-                            </div>
-
-                            <button @click="status = 'semua'; filterOpen = false; fetchProjects();" 
-                                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                :class="status === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Semua Proyek</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'semua' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">
-                                    {{ $totalProyek ?? 0 }}
-                                </span>
-                            </button>
-
-                            <button @click="status = 'belum_dimulai'; filterOpen = false; fetchProjects();" 
-                                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                :class="status === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Belum Dimulai</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'belum_dimulai' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">
-                                    {{ $proyekBelumDimulai ?? 0 }}
-                                </span>
-                            </button>
-
-                            <button @click="status = 'berjalan'; filterOpen = false; fetchProjects();" 
-                                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                :class="status === 'berjalan' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Sedang Berjalan</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'berjalan' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">
-                                    {{ $proyekBerjalan ?? 0 }}
-                                </span>
-                            </button>
-
-                            <button @click="status = 'selesai'; filterOpen = false; fetchProjects();" 
-                                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                :class="status === 'selesai' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Selesai</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'selesai' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">
-                                    {{ $proyekSelesai ?? 0 }}
-                                </span>
-                            </button>
-
-                            <button @click="status = 'terlambat'; filterOpen = false; fetchProjects();" 
-                                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                :class="status === 'terlambat' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Terlambat</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'terlambat' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">
-                                    {{ $proyekTerlambat ?? 0 }}
-                                </span>
-                            </button>
-
+                            class="absolute right-0 mt-2 w-56 bg-white border border-purple-100 rounded-[24px] shadow-xl p-3 z-50 space-y-1">
+                            <button @click="status = 'semua'; filterOpen = false; fetchProjects();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50 hover:text-[#6E5BC3]">Semua Status</button>
+                            <button @click="status = 'belum_dimulai'; filterOpen = false; fetchProjects();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50 hover:text-[#6E5BC3]">Belum Dimulai</button>
+                            <button @click="status = 'berjalan'; filterOpen = false; fetchProjects();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50 hover:text-[#6E5BC3]">Sedang Berjalan</button>
+                            <button @click="status = 'selesai'; filterOpen = false; fetchProjects();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50 hover:text-[#6E5BC3]">Selesai</button>
+                            <button @click="status = 'terlambat'; filterOpen = false; fetchProjects();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50 hover:text-[#6E5BC3]">Terlambat</button>
                         </div>
                     </div>
                 </div>
@@ -215,43 +211,18 @@
 
             {{-- PEMBUNGKUS HASIL PROYEK --}}
             <div id="project-results-wrapper" class="flex flex-col gap-3 mt-1">
-                @if(isset($isPeranGanda) && $isPeranGanda)
-                    {{-- TAB KETUA --}}
-                    <div x-show="tab === 'ketua'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @forelse($proyekKetua ?? [] as $p)
-                            <x-carddashboard :proyek="$p" />
-                        @empty
-                            <div class="col-span-2 py-12 text-center text-gray-400 text-xs font-normal bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
-                                Belum ada proyek yang Anda ketuai.
-                            </div>
-                        @endforelse
-                    </div>
-
-                    {{-- TAB ANGGOTA --}}
-                    <div x-show="tab === 'anggota'" x-cloak class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @forelse($proyekAnggota ?? [] as $p)
-                            <x-carddashboard :proyek="$p" />
-                        @empty
-                            <div class="col-span-2 py-12 text-center text-gray-400 text-xs font-normal bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
-                                Belum ada proyek sebagai anggota.
-                            </div>
-                        @endforelse
-                    </div>
-                @else
-                    {{-- JIKA BUKAN PERAN GANDA --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @forelse($semuaProyek ?? [] as $p)
-                            <x-carddashboard :proyek="$p" />
-                        @empty
-                            <div class="col-span-2 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
-                                Tidak ada data proyek yang ditemukan sesuai filter/pencarian.
-                            </div>
-                        @endforelse
-                    </div>
-                @endif
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @forelse($semuaProyek ?? [] as $p)
+                        <x-carddashboard :proyek="$p" />
+                    @empty
+                        <div class="col-span-2 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
+                            Tidak ada data proyek yang ditemukan sesuai filter/pencarian.
+                        </div>
+                    @endforelse
+                </div>
 
                 {{-- FOOTER: PAGINASI BERSIH TANPA KOTAK ABU-ABU --}}
-                @if(isset($semuaProyek))
+                @if(isset($semuaProyek) && $semuaProyek->count() > 0)
                 <div class="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-500">
                     <div>
                         Menampilkan 
@@ -260,7 +231,7 @@
                         <span class="font-bold text-gray-700">{{ $semuaProyek->lastItem() ?? 0 }}</span> 
                         dari 
                         <span class="font-bold text-gray-700">{{ $semuaProyek->total() }}</span> 
-                        data proyek penugasan
+                        data proyek yang saya ketuai
                     </div>
 
                     <div class="flex items-center gap-2">
@@ -275,7 +246,7 @@
                             </a>
                         @endif
 
-                        {{-- Nomor Halaman (Tampil Bersih Tanpa Kontainer Abu-abu) --}}
+                        {{-- Nomor Halaman --}}
                         <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
                             @foreach ($semuaProyek->getUrlRange(1, max(1, $semuaProyek->lastPage())) as $page => $url)
                                 @if ($page == $semuaProyek->currentPage())

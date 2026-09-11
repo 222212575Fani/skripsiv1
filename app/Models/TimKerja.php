@@ -26,13 +26,26 @@ class TimKerja extends Model
 
     /**
      * Relasi ke Ketua Tim
-     * Saya sarankan ganti nama menjadi 'ketua' agar lebih singkat 
-     * dan sesuai dengan Controller yang kita buat sebelumnya.
      */
     public function ketua()
     {
-        // Pastikan Model Pengguna sudah ada, atau gunakan User jika itu nama modelnya
         return $this->belongsTo(Pengguna::class, 'id_ketua_tim', 'id_pengguna');
+    }
+
+    /**
+     * Alias relasi untuk mendukung pemanggilan ketuaTim di Controller
+     */
+    public function ketuaTim()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_ketua_tim', 'id_pengguna');
+    }
+
+    /**
+     * Relasi ke Proyek (Menghubungkan tim kerja dengan daftar proyeknya)
+     */
+    public function proyek()
+    {
+        return $this->hasMany(Proyek::class, 'id_tim', 'id_tim');
     }
 
     /**

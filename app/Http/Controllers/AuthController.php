@@ -87,7 +87,7 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi',
         ]);
 
-        $pengguna = Pengguna::where('email', $request->email)->first();
+        $pengguna = Pengguna::with('role')->where('email', $request->email)->first();
 
         // 1. Validasi Kredensial (Email & Password)
         if (!$pengguna || !Hash::check($request->password, $pengguna->password)) {
@@ -116,8 +116,9 @@ class AuthController extends Controller
                 ->with('error', 'Peran (Role) akun Anda belum ditetapkan oleh Admin.');
         }
 
-        // 4. Validasi Penempatan Tim (Kecuali Admin)
-        if ($pengguna->role?->nama_role !== 'Admin') {
+        // 4. Validasi Penempatan Tim (Kecuali untuk Admin dan Direktur)
+        $namaRole = $pengguna->role?->nama_role;
+        if ($namaRole !== 'Admin' && $namaRole !== 'Direktur') {
             $isKetua = DB::table('tim_kerja')
                 ->where('id_ketua_tim', $pengguna->id_pengguna)
                 ->exists();
@@ -134,7 +135,6 @@ class AuthController extends Controller
         }
 
         // 5. LOGIN (Menggunakan $request->boolean('remember') untuk fitur "Ingat Saya")
-        // Laravel secara otomatis menggunakan kolom "remember_token" di database
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->boolean('remember'))) {
             $request->session()->regenerate();
             return $this->redirectByRole($pengguna);

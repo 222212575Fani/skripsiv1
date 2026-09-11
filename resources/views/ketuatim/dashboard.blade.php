@@ -22,19 +22,14 @@
         }
     }">
         
-        {{-- SECTION 1: KARTU MEMANJANG UTAMA (UNGU PEKAT #5C46F5) --}}
-        <div class="bg-gradient-to-r from-[#5C46F5] to-[#7563F7] rounded-[24px] shadow-lg shadow-[#5C46F5]/15 p-8 text-white flex flex-col justify-between items-start gap-4">
-            <div>
-                <span class="px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/20 text-white backdrop-blur-md">
-                    Pusat Kendali Tim Kerja
-                </span>
-                <h1 class="text-2xl lg:text-3xl font-bold mt-3">
-                    Dashboard Monitoring {{ $timKerja->nama_tim ?? 'Belum Ada Tim' }}
-                </h1>
-                <p class="text-xs lg:text-sm text-indigo-100 font-normal mt-1 max-w-2xl text-justify">
-                    Selamat datang kembali, <span class="font-semibold text-white">{{ auth()->user()->nama ?? auth()->user()->name }}</span>. Pantau kinerja dan progres seluruh proyek tim Anda di sini.
-                </p>
-            </div>
+        {{-- SECTION 1: KARTU MEMANJANG UTAMA (GRADASI UNGU DIREKTUR) --}}
+        <div class="bg-gradient-to-r from-[#6E5BC3] to-[#8470E5] rounded-[28px] shadow-sm p-6 text-white flex flex-col justify-between items-start gap-2">
+            <h1 class="text-base font-bold">
+                Halo, {{ auth()->user()->nama ?? auth()->user()->name }}! 👋
+            </h1>
+            <p class="text-xs text-purple-100 font-normal">
+                Selamat Datang di Dashboard Monitoring Proyek <span class="font-semibold text-white">{{ $timKerja->nama_tim ?? 'Tim Kerja' }}</span>
+            </p>
         </div>
 
         {{-- SECTION 2: 6 KARTU STATISTIK MENGGUNAKAN cardstatistikdashboard --}}
@@ -224,7 +219,6 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
                     @forelse($paginatorProyek ?? [] as $p)
-                        {{-- Menggunakan route detail aktivitas yang aman --}}
                         <x-carddashboard :proyek="$p" :href="route('anggota.proyek.aktivitas', $p->id_proyek ?? $p['id_proyek'])" />
                     @empty
                     <div class="col-span-2 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
@@ -236,7 +230,7 @@
                     @endforelse
                 </div>
 
-                {{-- CUSTOM PAGINATION (BERSIH TANPA KOTAK ABU-ABU) --}}
+                {{-- CUSTOM PAGINATION --}}
                 @if(isset($paginatorProyek))
                 <div class="mt-8 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-500">
                     <div>
@@ -250,7 +244,6 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        {{-- Tombol Previous (Bulat Ungu) --}}
                         @if (method_exists($paginatorProyek, 'onFirstPage') && $paginatorProyek->onFirstPage())
                             <span class="w-9 h-9 rounded-full bg-purple-100 text-purple-300 flex items-center justify-center cursor-not-allowed shadow-xs font-bold">
                                 &lsaquo;
@@ -261,7 +254,6 @@
                             </a>
                         @endif
 
-                        {{-- Nomor Halaman (Tampil Bersih Tanpa Kontainer Abu-abu) --}}
                         <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
                             @php
                                 $lastPage = method_exists($paginatorProyek, 'lastPage') ? max(1, $paginatorProyek->lastPage()) : 1;
@@ -282,7 +274,6 @@
                             @endforeach
                         </div>
 
-                        {{-- Tombol Next (Bulat Ungu) --}}
                         @if (method_exists($paginatorProyek, 'hasMorePages') && $paginatorProyek->hasMorePages())
                             <a href="{{ $paginatorProyek->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-[#5C46F5] text-white hover:bg-[#4A38D4] flex items-center justify-center transition-all shadow-sm shadow-[#5C46F5]/30 font-bold">
                                 &rsaquo;
@@ -300,7 +291,7 @@
         </div>
         @endif
 
-        {{-- SECTION 4: CARD MEMBER TIM DI PALING BAWAH (DAFTAR KETUA PROYEK) --}}
+        {{-- SECTION 4: CARD MEMBER TIM DI PALING BAWAH --}}
         <div>
             <x-cardmember 
                 title="Daftar Ketua Proyek" 

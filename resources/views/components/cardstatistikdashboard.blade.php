@@ -9,14 +9,14 @@
 
 <div class="bg-white p-5 rounded-[24px] shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:shadow-md">
     <div class="flex flex-col justify-center">
-        <!-- Judul Atas -->
-        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">{{ $title }}</p>
+        <!-- Judul Atas (Diubah jadi warna hitam & font normal) -->
+        <p class="text-[11px] font-normal uppercase tracking-wider text-gray-900">{{ $title }}</p>
         
         <!-- Angka Nilai -->
         <p class="text-3xl font-extrabold {{ $color }} mt-1 tracking-tight">{{ $value }}</p>
         
-        <!-- Subtitle Bawah (Dipaksa Sebaris dengan whitespace-nowrap) -->
-        <p class="text-[11px] font-semibold {{ $color }} mt-1.5 whitespace-nowrap opacity-90">
+        <!-- Subtitle Bawah (Font diubah menjadi normal, warna tetap mengikuti variabel) -->
+        <p class="text-[11px] font-normal {{ $color }} mt-1.5 whitespace-nowrap opacity-90">
             <span>{{ $subtitle }}</span>
         </p>
     </div>
