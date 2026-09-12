@@ -4,7 +4,11 @@
         userName: '', 
         userNip: '',
         roleId: '',
-        timId: ''
+        roleName: 'Pilih Peran',
+        openRoleDropdown: false,
+        timId: '',
+        timName: 'Pilih Tim Kerja (Opsional)',
+        openTimDropdown: false
     }" 
     @open-modal-aktivasi.window="
         open = true; 
@@ -12,7 +16,9 @@
         userName = $event.detail.nama; 
         userNip = $event.detail.nip;
         roleId = '';
+        roleName = 'Pilih Peran';
         timId = '';
+        timName = 'Pilih Tim Kerja (Opsional)';
     " 
     @close-modal-aktivasi.window="open = false"
     x-show="open" 
@@ -28,11 +34,12 @@
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px] transition-opacity"></div>
 
     <div class="flex min-h-full items-center justify-center p-4">
+        {{-- overflow-hidden diubah ke overflow-visible agar kotak dropdown tidak terpotong batas modal --}}
         <div @click.away="open = false" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-             class="relative w-full max-w-2xl transform overflow-hidden rounded-[24px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
+             class="relative w-full max-w-2xl transform overflow-visible rounded-[24px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
             
             {{-- Header --}}
             <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
@@ -91,51 +98,68 @@
                         </div>
                     </div>
 
-                    {{-- Grid 2 Kolom (Role & Penempatan Tim) --}}
+                    {{-- Grid 2 Kolom (Role & Penempatan Tim) dengan Dropdown Scroll Kustom --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div>
+                        
+                        {{-- DROPDOWN KUSTOM: PILIH PERAN --}}
+                        <div class="relative">
                             <label class="block text-xs font-bold text-gray-700 mb-2">Pilih Peran <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <select name="id_role" x-model="roleId" required
-                                    :class="roleId === '' ? 'text-gray-400' : 'text-gray-700'"
-                                    class="w-full px-4 py-2.5 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none transition-all text-xs font-medium appearance-none cursor-pointer">
-                                    <option value="" disabled class="text-gray-400">Pilih Peran</option>
-                                    @foreach($roles as $role)
-                                        @if(strtolower($role->nama_role) !== 'admin')
-                                            <option value="{{ $role->id_role }}" class="text-gray-700">
-                                                {{ $role->nama_role }}
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                            
+                            <input type="hidden" name="id_role" x-model="roleId" required>
+
+                            <button @click="openRoleDropdown = !openRoleDropdown; openTimDropdown = false;" @click.outside="openRoleDropdown = false" type="button" 
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                <span x-text="roleName" :class="roleId === '' ? 'text-gray-400 font-normal' : 'text-gray-700 font-bold'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            {{-- Dropdown list dengan max-h-36 dan overflow-y-auto agar bisa di-scroll di dalam kotaknya sendiri --}}
+                            <div x-show="openRoleDropdown" x-cloak class="absolute left-0 mt-2 w-full bg-white border border-purple-100 rounded-[20px] shadow-xl p-2 z-50 space-y-1 max-h-36 overflow-y-auto">
+                                @foreach($roles as $role)
+                                    @if(strtolower($role->nama_role) !== 'admin')
+                                        <button type="button" 
+                                            @click="roleId = '{{ $role->id_role }}'; roleName = '{{ $role->nama_role }}'; openRoleDropdown = false;"
+                                            class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-medium transition-all cursor-pointer">
+                                            {{ $role->nama_role }}
+                                        </button>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
 
-                        <div>
+                        {{-- DROPDOWN KUSTOM: PENEMPATAN TIM --}}
+                        <div class="relative">
                             <label class="block text-xs font-bold text-gray-700 mb-2">Penempatan Tim</label>
-                            <div class="relative">
-                                <select name="id_tim" x-model="timId"
-                                    :class="timId === '' ? 'text-gray-400' : 'text-gray-700'"
-                                    class="w-full px-4 py-2.5 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none transition-all text-xs font-medium appearance-none cursor-pointer">
-                                    <option value="" class="text-gray-400">Pilih Tim Kerja (Opsional)</option>
-                                    @foreach($tims as $tim)
-                                        <option value="{{ $tim->id_tim }}" class="text-gray-700">
-                                            {{ $tim->nama_tim }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                            
+                            <input type="hidden" name="id_tim" x-model="timId">
+
+                            <button @click="openTimDropdown = !openTimDropdown; openRoleDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                <span x-text="timName" :class="timId === '' ? 'text-gray-400 font-normal' : 'text-gray-700 font-bold'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            {{-- Dropdown list dengan max-h-36 dan overflow-y-auto agar bisa di-scroll di dalam kotaknya sendiri --}}
+                            <div x-show="openTimDropdown" x-cloak class="absolute left-0 mt-2 w-full bg-white border border-purple-100 rounded-[20px] shadow-xl p-2 z-50 space-y-1 max-h-36 overflow-y-auto">
+                                <button type="button" 
+                                    @click="timId = ''; timName = 'Pilih Tim Kerja (Opsional)'; openTimDropdown = false;"
+                                    class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#5C46F5] font-medium transition-all cursor-pointer">
+                                    Pilih Tim Kerja (Opsional)
+                                </button>
+                                @foreach($tims as $tim)
+                                    <button type="button" 
+                                        @click="timId = '{{ $tim->id_tim }}'; timName = '{{ $tim->nama_tim }}'; openTimDropdown = false;"
+                                        class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-medium transition-all cursor-pointer">
+                                        {{ $tim->nama_tim }}
+                                    </button>
+                                @endforeach
                             </div>
                         </div>
+
                     </div>
                 </div>
 

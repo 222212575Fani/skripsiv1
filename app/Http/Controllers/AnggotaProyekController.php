@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Proyek;
 use App\Models\AktivitasProyek;
 use App\Models\ProgressAktivitas;
+use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Notifications\GeneralNotification; // <-- Import GeneralNotification
 
 class AnggotaProyekController extends Controller
 {
@@ -258,8 +260,17 @@ class AnggotaProyekController extends Controller
 
         $this->tambahkanAnggotaProyek($proyek, (int) $request->id_penanggung_jawab);
 
+        // KIRIM NOTIFIKASI KE ANGGOTA YANG DIBERI TUGAS AKTIVITAS
+        $targetPengguna = Pengguna::find($request->id_penanggung_jawab);
+        if ($targetPengguna) {
+            $targetPengguna->notify(new GeneralNotification(
+                'Tugas Aktivitas Baru',
+                "Anda mendapatkan penugasan aktivitas baru: '{$request->nama_aktivitas}' pada proyek {$proyek->nama_proyek}."
+            ));
+        }
+
         return redirect()->route('anggota.proyek.aktivitas', $id)
-                     ->with('success', 'Aktivitas proyek berhasil ditambahkan.');
+                   ->with('success', 'Aktivitas proyek berhasil ditambahkan.');
     }
 
     public function updateAktivitas(Request $request, $id)

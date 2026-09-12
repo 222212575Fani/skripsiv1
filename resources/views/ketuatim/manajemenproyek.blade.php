@@ -1,7 +1,7 @@
 <x-layoututama title="Manajemen Proyek">
     <div x-data="{}" class="flex flex-col gap-6 w-full">
         
-        {{-- MEMANGGIL KOMPONEN DATATABLE (Membawa Kotak Putih Luar & Kotak Tabel Ungu) --}}
+        {{-- MEMANGGIL KOMPONEN DATATABLE --}}
         <x-datatable :paginator="$proyeks ?? null" item-name="data proyek">
             
             <x-slot name="tabs">
@@ -12,7 +12,7 @@
                     </div>
 
                     <div class="flex items-center gap-3 w-full md:w-auto">
-                        {{-- Live Search --}}
+                        {{-- Live Search dengan Hover & Focus Ungu yang Konsisten --}}
                         <div class="relative flex-1 md:w-64 group/search" x-data="{ search: '{{ request('search') }}' }">
                             <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover/search:text-[#5C46F5] transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -30,7 +30,7 @@
                                 "
                                 placeholder="Cari Proyek / Ketua..." 
                                 autocomplete="off"
-                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#5C46F5] rounded-2xl text-xs font-normal text-gray-700 focus:outline-none focus:border-[#5C46F5] transition-all">
+                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#5C46F5] rounded-2xl text-xs font-normal text-gray-700 hover:text-[#5C46F5] focus:text-[#5C46F5] placeholder:text-gray-400 group-hover/search:placeholder:text-[#9E8CE3] focus:placeholder:text-[#9E8CE3] focus:outline-none focus:border-[#5C46F5] transition-all">
                         </div>
 
                         <x-button @click="$dispatch('open-modal-tambah-proyek')">
@@ -101,7 +101,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                             </svg>
                         </div>
-                        <span class="font-bold text-gray-900 text-xs break-words">{{ $proyek->nama_proyek }}</span>
+                        <span class="font-normal text-gray-900 text-xs break-words">{{ $proyek->nama_proyek }}</span>
                     </div>
                 </td>
                 <td class="py-4 px-4 text-xs text-gray-600 font-normal leading-relaxed">

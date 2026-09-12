@@ -8,6 +8,7 @@ use App\Models\TimKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\UserActivatedNotification;
 
 class PenggunaController extends Controller
 {
@@ -106,6 +107,8 @@ class PenggunaController extends Controller
             $user->disetujui_pada = now();
             $user->save();
 
+            $namaTim = null;
+
             // Jika role global (Direktur/Admin baru menggantikan posisi lama), 
             // pastikan dia bersih dari relasi tim operasional biasa
             if ($isRoleGlobal) {
@@ -113,6 +116,9 @@ class PenggunaController extends Controller
             } 
             // Jika role ketua tim / anggota
             elseif ($request->filled('id_tim')) {
+                $timTarget = DB::table('tim_kerja')->where('id_tim', $request->id_tim)->first();
+                $namaTim = $timTarget ? $timTarget->nama_tim : null;
+
                 if ($isRoleKetua) {
                     DB::table('tim_kerja')->where('id_tim', $request->id_tim)->update([
                         'id_ketua_tim' => $user->id_pengguna,
@@ -131,8 +137,11 @@ class PenggunaController extends Controller
                 );
             }
 
+            // KIRIM NOTIFIKASI KE PENGGUNA TERSEBUT
+            $user->notify(new UserActivatedNotification($namaTim));
+
             DB::commit();
-            return redirect()->back()->with('success', 'Akun ' . $user->nama . ' berhasil diaktifkan dengan peran baru!');
+            return redirect()->back()->with('success', 'Akun ' . $user->nama . ' berhasil diaktivasi dengan peran baru!');
             
         } catch (\Exception $e) {
             DB::rollback();
@@ -193,7 +202,12 @@ class PenggunaController extends Controller
                 'disetujui_pada' => $disetujuiPada,
             ]);
 
+            $namaTim = null;
+
             if (!$isRoleGlobal && $request->filled('id_tim')) {
+                $timTarget = DB::table('tim_kerja')->where('id_tim', $request->id_tim)->first();
+                $namaTim = $timTarget ? $timTarget->nama_tim : null;
+
                 if ($isRoleKetua) {
                     DB::table('tim_kerja')->where('id_tim', $request->id_tim)->update([
                         'id_ketua_tim' => $pengguna->id_pengguna,
@@ -208,6 +222,11 @@ class PenggunaController extends Controller
                         'updated_at'        => now(),
                     ]);
                 }
+            }
+
+            // Jika langsung didaftarkan dengan status aktif, kirim notifikasi
+            if ($request->status_akun === 'aktif') {
+                $pengguna->notify(new UserActivatedNotification($namaTim));
             }
 
             DB::commit();
@@ -251,10 +270,10 @@ class PenggunaController extends Controller
         DB::beginTransaction();
         try {
             $user = Pengguna::findOrFail($request->id_pengguna);
-
+            $statusLama = $user->status_akun;
             $disetujuiPada = $user->disetujui_pada;
 
-            if ($request->status_akun === 'aktif' && $user->status_akun !== 'aktif') {
+            if ($request->status_akun === 'aktif' && $statusLama !== 'aktif') {
                 $disetujuiPada = now();
             } elseif ($request->status_akun !== 'aktif') {
                 $disetujuiPada = null;
@@ -271,11 +290,16 @@ class PenggunaController extends Controller
             // Bersihkan relasi ketua tim lama jika sebelumnya dia ketua
             DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
 
+            $namaTim = null;
+
             if ($isRoleGlobal) {
                 DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
                 DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
             } else {
                 if ($request->filled('id_tim')) {
+                    $timTarget = DB::table('tim_kerja')->where('id_tim', $request->id_tim)->first();
+                    $namaTim = $timTarget ? $timTarget->nama_tim : null;
+
                     if ($isRoleKetua) {
                         DB::table('tim_kerja')->where('id_tim', $request->id_tim)->update([
                             'id_ketua_tim' => $user->id_pengguna,
@@ -295,6 +319,11 @@ class PenggunaController extends Controller
                 } else {
                     DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
                 }
+            }
+
+            // Jika status berubah menjadi aktif (dari non-aktif/pending), kirim notifikasi
+            if ($request->status_akun === 'aktif' && $statusLama !== 'aktif') {
+                $user->notify(new UserActivatedNotification($namaTim));
             }
 
             DB::commit();

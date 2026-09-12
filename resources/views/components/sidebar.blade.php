@@ -69,17 +69,16 @@
                     }
                 }
 
-                // Cek jika total menu yang tampil untuk user ini hanya ada 1 buah
                 $isSingleMenu = count($menus) === 1;
-            @endphp
+            @endphp <!-- DIPERBAIKI: Menggunakan @endphp yang benar -->
 
             @forelse($menus as $menu)
                 @php 
-                    // Jika menunya cuma 1, atau route-nya cocok, maka paksa jadi Aktif (menyala ungu)
                     $isActive = $isSingleMenu || request()->routeIs($menu['route']) || request()->is('*' . $menu['route'] . '*'); 
                 @endphp
                 
                 <a href="{{ route($menu['route']) }}" 
+                    wire:navigate
                     class="group flex items-center justify-between px-4 py-3 text-xs rounded-2xl transition-all duration-200 font-bold {{ $isActive ? 'bg-[#6E5BC3] text-white shadow-md shadow-[#6E5BC3]/25 font-extrabold' : 'text-[#6E5BC3]/80 hover:bg-[#6E5BC3] hover:text-white hover:shadow-md hover:shadow-[#6E5BC3]/25' }}">
                     
                     <div class="flex items-center gap-3">

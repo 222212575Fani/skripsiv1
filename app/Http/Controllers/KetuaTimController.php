@@ -9,6 +9,7 @@ use App\Models\AnggotaTim;
 use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\GeneralNotification; // <-- Import GeneralNotification
 
 class KetuaTimController extends Controller
 {
@@ -186,6 +187,15 @@ class KetuaTimController extends Controller
                 'updated_at'      => now(),
             ]);
 
+            // 3. KIRIM NOTIFIKASI OTOMATIS KE KETUA PROYEK TERPILIH
+            $ketuaProyek = Pengguna::find($request->id_ketua_proyek);
+            if ($ketuaProyek) {
+                $ketuaProyek->notify(new GeneralNotification(
+                    'Penugasan Ketua Proyek',
+                    "Anda telah ditunjuk sebagai Ketua Proyek untuk proyek '{$request->nama_proyek}' di bawah {$timKerja->nama_tim}."
+                ));
+            }
+
             DB::commit();
             return redirect()->back()->with('success', 'Proyek baru berhasil ditambahkan!');
 
@@ -264,6 +274,15 @@ class KetuaTimController extends Controller
                     'created_at'      => now(),
                     'updated_at'      => now(),
                 ]);
+
+                // KIRIM NOTIFIKASI KE KETUA PROYEK BARU
+                $ketuaBaru = Pengguna::find($request->id_ketua_proyek);
+                if ($ketuaBaru) {
+                    $ketuaBaru->notify(new GeneralNotification(
+                        'Penugasan Ketua Proyek',
+                        "Anda telah ditunjuk sebagai Ketua Proyek untuk proyek '{$request->nama_proyek}'."
+                    ));
+                }
             }
 
             DB::commit();

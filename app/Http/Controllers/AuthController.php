@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\UserRegisteredNotification;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -49,7 +51,7 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak sesuai',
         ]);
 
-        Pengguna::create([
+        $user = Pengguna::create([
             'nama' => $request->nama,
             'nip' => $request->nip,
             'email' => $request->email,
@@ -59,6 +61,16 @@ class AuthController extends Controller
             'disetujui_pada' => null,
             'disetujui_oleh' => null,
         ]);
+
+        // Kirim Notifikasi ke Admin bahwa ada pengguna baru mendaftar
+        // Mencari pengguna yang memiliki role Admin (sesuaikan relasi role atau nama rolenya)
+        $admins = Pengguna::whereHas('role', function($query) {
+            $query->where('nama_role', 'Admin');
+        })->get();
+
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new UserRegisteredNotification($user));
+        }
 
         return redirect()
             ->route('login')

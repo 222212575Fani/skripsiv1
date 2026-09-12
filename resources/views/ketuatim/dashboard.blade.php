@@ -111,14 +111,14 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                    {{-- Input Search --}}
+                    {{-- Input Search dengan Interaksi Hover/Focus Ungu --}}
                     <div class="relative flex-1 md:w-64 group/search">
-                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover/search:text-[#5C46F5] transition-colors">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover/search:text-[#5C46F5] group-focus-within/search:text-[#5C46F5] transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </span>
                         
                         <input type="text" x-model="search" @input.debounce.400ms="fetchProjects()" placeholder="Cari nama proyek..." 
-                            class="w-full pl-10 pr-9 py-2 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#5C46F5] rounded-2xl text-xs font-normal text-gray-700 hover:text-[#5C46F5] focus:text-[#5C46F5] placeholder-gray-400 focus:outline-none focus:border-[#5C46F5] transition-all">
+                            class="w-full pl-10 pr-9 py-2 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#5C46F5] focus:border-[#5C46F5] rounded-2xl text-xs font-normal text-gray-700 hover:text-[#5C46F5] focus:text-[#5C46F5] placeholder:text-gray-400 hover:placeholder:text-[#9E8CE3] focus:placeholder:text-[#9E8CE3] focus:outline-none transition-all">
 
                         <template x-if="search">
                             <button @click="search = ''; fetchProjects();" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -222,8 +222,11 @@
                         <x-carddashboard :proyek="$p" :href="route('anggota.proyek.aktivitas', $p->id_proyek ?? $p['id_proyek'])" />
                     @empty
                     <div class="col-span-2 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
-                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2 text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+                        {{-- ICON EMPTY STATE BERWARNA UNGU --}}
+                        <div class="w-12 h-12 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center mx-auto mb-3 text-[#5C46F5] shadow-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                            </svg>
                         </div>
                         Tidak ada data proyek yang ditemukan sesuai filter/pencarian.
                     </div>

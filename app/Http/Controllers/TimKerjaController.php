@@ -6,6 +6,7 @@ use App\Models\TimKerja;
 use App\Models\Pengguna; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\GeneralNotification; // <-- Import GeneralNotification
 
 class TimKerjaController extends Controller
 {
@@ -51,7 +52,6 @@ class TimKerjaController extends Controller
             'id_ketua_tim.required' => 'Ketua tim wajib dipilih.',
         ]);
 
-        // Logika bisnis: Cek apakah sudah jadi ketua di tim lain yang aktif
         $cek = TimKerja::where('id_ketua_tim', $request->id_ketua_tim)
                        ->where('status_tim', 'aktif')
                        ->exists();
@@ -62,12 +62,21 @@ class TimKerjaController extends Controller
 
         DB::beginTransaction();
         try {
-            TimKerja::create([
+            $tim = TimKerja::create([
                 'nama_tim'      => $request->nama_tim,
                 'deskripsi_tim' => $request->deskripsi_tim,
                 'id_ketua_tim'  => $request->id_ketua_tim,
                 'status_tim'    => $request->status_tim,
             ]);
+
+            // KIRIM NOTIFIKASI OTOMATIS KE KETUA TIM TERBARU
+            $ketuaTim = Pengguna::find($request->id_ketua_tim);
+            if ($ketuaTim && $request->status_tim === 'aktif') {
+                $ketuaTim->notify(new GeneralNotification(
+                    'Penugasan Ketua Tim Baru',
+                    "Anda telah resmi dipilih dan ditugaskan sebagai Ketua Tim untuk {$request->nama_tim}."
+                ));
+            }
 
             DB::commit();
             return redirect()->back()->with('success', 'Tim Kerja berhasil ditambahkan!');
@@ -86,7 +95,6 @@ class TimKerjaController extends Controller
             'status_tim'   => 'required|in:aktif,nonaktif',
         ]);
 
-        // Logika bisnis: Cek, tapi abaikan tim yang sedang diedit (id_tim != $request->id_tim)
         $cek = TimKerja::where('id_ketua_tim', $request->id_ketua_tim)
                        ->where('status_tim', 'aktif')
                        ->where('id_tim', '!=', $request->id_tim)
@@ -99,12 +107,25 @@ class TimKerjaController extends Controller
         DB::beginTransaction();
         try {
             $tim = TimKerja::findOrFail($request->id_tim);
+            $ketuaLama = $tim->id_ketua_tim;
+
             $tim->update([
                 'nama_tim'      => $request->nama_tim,
                 'deskripsi_tim' => $request->deskripsi_tim,
                 'id_ketua_tim'  => $request->id_ketua_tim,
                 'status_tim'    => $request->status_tim,
             ]);
+
+            // Jika ketua tim berubah atau baru diaktifkan, kirim notifikasi
+            if ($ketuaLama != $request->id_ketua_tim && $request->status_tim === 'aktif') {
+                $ketuaBaru = Pengguna::find($request->id_ketua_tim);
+                if ($ketuaBaru) {
+                    $ketuaBaru->notify(new GeneralNotification(
+                        'Penugasan Ketua Tim Baru',
+                        "Anda telah ditunjuk sebagai Ketua Tim untuk {$request->nama_tim}."
+                    ));
+                }
+            }
 
             DB::commit();
             return redirect()->back()->with('success', 'Data Tim Kerja berhasil diperbarui!');

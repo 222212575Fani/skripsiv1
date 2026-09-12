@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'SIS PROJECT' }}</title>
+    <title>{{ $title ?? 'SIS Project' }}</title>
+    
+    <!-- Vite CSS & JS (Tanpa Alpine di app.js) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- TAMBAHKAN ALPINE CDN KHUSUS DI SINI AGAR TIDAK BENTROK DENGAN SWAGGER DI FILE LAIN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Livewire Styles -->
+    @livewireStyles
+
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8F7FF; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #9E8CE3; border-radius: 10px; }
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-[#F8F7FF] font-sans antialiased overflow-x-hidden m-0 p-0 relative min-h-screen">
+<body class="bg-[#F8F7FF] font-sans antialiased overflow-x-hidden m-0 p-0 relative min-h-screen text-[#2D2A4A]">
 
-    {{-- KONTANTER UTAMA LAYOUT FULL --}}
+    {{-- KONTAINER UTAMA LAYOUT FULL --}}
     <div class="min-h-screen w-full flex flex-col bg-[#F8F7FF]">
         
-        {{-- BILAH ATAS UNGU: Menggunakan max-w-7xl dan padding yang persis sama dengan konten bawah --}}
-        <div class="w-full bg-[#6E5BC3] pt-7 pb-16 relative">
+        {{-- BILAH ATAS UNGU --}}
+        <div class="w-full bg-[#6E5BC3] pt-7 pb-16 relative shadow-inner">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
                 <div>
                     {{ $headerAction ?? '' }}
@@ -39,5 +50,9 @@
 
     </div>
 
+    <x-toast />
+
+    <!-- Livewire Scripts -->
+    @livewireScripts
 </body>
 </html>

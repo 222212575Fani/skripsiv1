@@ -1,5 +1,5 @@
 <x-layoututama title="Aktivitas">
-    {{-- CSS Kustom untuk Scrollbar Tipis dan Elegan --}}
+    {{-- CSS Kustom untuk Scrollbar Tipis & Ikon Kalender Ungu --}}
     <style>
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
@@ -13,6 +13,20 @@
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #6E5BC3;
+        }
+        .pj-dropdown-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #9E8CE3 #F8F7FF;
+            scrollbar-gutter: stable;
+        }
+        .pj-dropdown-scroll::-webkit-scrollbar { width: 6px; }
+        .pj-dropdown-scroll::-webkit-scrollbar-track { background: #F8F7FF; border-radius: 9999px; }
+        .pj-dropdown-scroll::-webkit-scrollbar-thumb { background: #9E8CE3; border-radius: 9999px; }
+        .pj-dropdown-scroll::-webkit-scrollbar-thumb:hover { background: #6E5BC3; }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(38%) sepia(85%) saturate(1541%) hue-rotate(230deg) brightness(95%) contrast(92%);
+            cursor: pointer;
         }
     </style>
 
@@ -43,7 +57,7 @@
         }
     }" class="flex flex-col gap-6 w-full">
 
-        {{-- ================= 1. BAGIAN ATAS: 2 KOLOM (KIRI: CONTAINER UNGU + STATISTIK, KANAN: SIDEBAR KALENDER) ================= --}}
+        {{-- ================= 1. BAGIAN ATAS: 2 KOLOM (KIRI: CONTAINER UNGU + STATISTIK, KANAN: SIDEBAR KALENDER 7 HARI) ================= --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
             
             {{-- SISI KIRI: CONTAINER UNGU BESAR --}}
@@ -96,7 +110,7 @@
             </div>
 
 
-            {{-- SISI KANAN: SIDEBAR KALENDER & PENGINGAT --}}
+            {{-- SISI KANAN: SIDEBAR KALENDER 7 HARI & PENGINGAT --}}
             <div class="bg-white border border-purple-100 rounded-[28px] p-5 flex flex-col justify-between shadow-xs"
                  x-data="{
                     currentDate: new Date(),
@@ -109,13 +123,13 @@
                         let diff = start.getDate() - day + (day === 0 ? -6 : 1) + (this.weekOffset * 7);
                         let monday = new Date(start.setDate(diff));
                         
-                        const indoDays = ['MIN', 'SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'];
+                        const indoDays = ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB', 'MIN'];
                         let days = [];
-                        for(let i=0; i<6; i++) {
+                        for(let i=0; i<7; i++) {
                             let d = new Date(monday);
                             d.setDate(monday.getDate() + i);
                             days.push({
-                                name: indoDays[d.getDay()],
+                                name: indoDays[i],
                                 number: d.getDate(),
                                 isToday: d.toDateString() === new Date().toDateString()
                             });
@@ -128,26 +142,30 @@
                  }">
                 
                 <div class="flex flex-col gap-5">
-                    {{-- Bagian Kalender Mini dengan Tombol Prev/Next --}}
+                    {{-- Bagian Kalender Mini (Prev di Kiri, Bulan di Tengah Satu Baris, Next di Kanan) --}}
                     <div class="flex flex-col gap-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-gray-900" x-text="formattedMonth"></span>
-                            <div class="flex items-center gap-1.5">
+                        <div class="grid grid-cols-3 items-center w-full">
+                            <div class="flex justify-start">
                                 <button @click="prevWeek()" class="p-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                                 </button>
+                            </div>
+                            <div class="text-center">
+                                <span class="text-sm font-bold text-gray-900 whitespace-nowrap" x-text="formattedMonth"></span>
+                            </div>
+                            <div class="flex justify-end">
                                 <button @click="nextWeek()" class="p-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-6 gap-1.5 text-center">
+                        <div class="grid grid-cols-7 gap-1 text-center">
                             <template x-for="day in weekDays">
-                                <div class="flex flex-col items-center justify-center py-2.5 rounded-xl text-xs transition-all"
+                                <div class="flex flex-col items-center justify-center py-2 rounded-xl text-xs transition-all"
                                      :class="day.isToday ? 'bg-[#6E5BC3] text-white font-bold shadow-xs' : 'bg-purple-50/40 text-gray-600 hover:bg-purple-100/60'">
-                                    <span class="text-[9px] uppercase opacity-80" x-text="day.name"></span>
-                                    <span class="font-bold mt-0.5 text-sm" x-text="day.number"></span>
+                                    <span class="text-[8px] uppercase opacity-80" x-text="day.name"></span>
+                                    <span class="font-bold mt-0.5 text-xs" x-text="day.number"></span>
                                 </div>
                             </template>
                         </div>
@@ -319,7 +337,7 @@
                                     </span>
                                 </div>
 
-                                {{-- Daftar Aktivitas Penugasan (Menggunakan kelas custom-scrollbar untuk scroll tipis) --}}
+                                {{-- Daftar Aktivitas Penugasan --}}
                                 <div class="flex flex-col gap-3 max-h-[380px] overflow-y-auto pr-2 custom-scrollbar">
                                     @foreach($proyek->aktivitasProyek as $akt)
                                         @php
@@ -343,7 +361,21 @@
                                             $rentangTanggal = ($tglMulai && $tglSelesai) ? ($tglMulai . ' - ' . $tglSelesai) : ($tglSelesai ?? '-');
                                         @endphp
 
-                                        <div class="bg-gray-50/60 rounded-2xl p-4 border border-purple-100 hover:border-[#6E5BC3]/40 transition-all flex flex-col gap-3">
+                                        {{-- KARTU AKTIVITAS YANG BISA DIKLIK --}}
+                                        <div @click="$dispatch('open-modal-detail-aktivitas', {
+                                                nama: '{{ addslashes($akt->nama_aktivitas) }}',
+                                                pj: '{{ addslashes($akt->penanggungJawab->nama ?? "-") }}',
+                                                pm: '{{ addslashes($proyek->ketuaProyek->nama ?? "-") }}',
+                                                progress: '{{ $progressValue }}',
+                                                status: '{{ $statusLabel }}',
+                                                tglMulai: '{{ $tglMulai ?? "-" }}',
+                                                tglSelesai: '{{ $tglSelesai ?? "-" }}',
+                                                kendalaInternal: @js($akt->kendala_internal ?? []),
+                                                kendalaEksternal: @js($akt->kendala_eksternal ?? []),
+                                                dokumen: @js($akt->dokumenPendukung ?? [])
+                                            })"
+                                            class="bg-gray-50/60 rounded-2xl p-4 border border-purple-100 hover:border-[#6E5BC3]/40 hover:bg-purple-50/20 transition-all flex flex-col gap-3 cursor-pointer group">
+                                            
                                             <div class="flex items-start justify-between gap-2">
                                                 <div class="flex-1">
                                                     <span class="inline-block px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-purple-50 text-[#6E5BC3] mb-1.5">
@@ -373,7 +405,7 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                                     <span>{{ $rentangTanggal }}</span>
                                                 </div>
-                                                <button type="button" @click="$dispatch('open-modal-lapor-progress', { id: '{{ $akt->id_aktivitas }}', nama: '{{ addslashes($akt->nama_aktivitas) }}', progress: '{{ $progressValue }}' })" 
+                                                <button type="button" @click.stop="$dispatch('open-modal-lapor-progress', { id: '{{ $akt->id_aktivitas }}', nama: '{{ addslashes($akt->nama_aktivitas) }}', progress: '{{ $progressValue }}' })" 
                                                     class="px-2.5 py-1 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all text-[10px] font-semibold cursor-pointer shadow-xs">
                                                     Lapor Progress
                                                 </button>
@@ -417,6 +449,7 @@
 
     </div>
 
-    {{-- Muat Modal Lapor Progress --}}
+    {{-- Muat Modal Lapor Progress & Modal Detail Aktivitas --}}
     @include('anggota.modals.laporprogress')
+    @include('anggota.detailaktivitas')
 </x-layoututama>
