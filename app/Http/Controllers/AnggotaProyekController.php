@@ -10,7 +10,7 @@ use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Notifications\GeneralNotification; // <-- Import GeneralNotification
+use App\Notifications\GeneralNotification;
 
 class AnggotaProyekController extends Controller
 {
@@ -64,16 +64,12 @@ class AnggotaProyekController extends Controller
     {
         $userId = auth()->id();
 
-        // Ambil seluruh data proyek yang diketuai untuk pengecekan peran
         $proyekKetuaAll = Proyek::where('id_ketua_proyek', $userId)->get();
         
-        // JIKA PENGGUNA TIDAK MENGETUAI PROYEK APAPUN (Murni Anggota), 
-        // arahkan langsung tampilannya ke fungsi aktivitasSaya()
         if ($proyekKetuaAll->isEmpty()) {
             return $this->aktivitasSaya($request);
         }
 
-        // 1. Ambil proyek HANYA di mana pengguna ini bertindak sebagai Ketua Proyek
         $queryKetua = Proyek::with(['ketuaProyek', 'aktivitasProyek.penanggungJawab'])
             ->where('id_ketua_proyek', $userId);
         
@@ -88,7 +84,6 @@ class AnggotaProyekController extends Controller
             ->distinct('id_pengguna')
             ->count('id_pengguna');
 
-        // 3. Terapkan filter pencarian, status, tahun, dan bulan jika ada
         if ($request->filled('search')) {
             $queryKetua->where('nama_proyek', 'like', '%' . $request->search . '%');
         }
@@ -168,7 +163,6 @@ class AnggotaProyekController extends Controller
             $proyekQuery->where('status_proyek', $request->status);
         }
 
-        // DIATUR DISINI: Tepat 15 item per halaman (3 kolom x 5 baris)
         $proyekTerlibat = $proyekQuery->latest()->paginate(15)->withQueryString();
 
         $totalAktivitasSaya = AktivitasProyek::where('id_penanggung_jawab', $userId)->count();
@@ -206,8 +200,9 @@ class AnggotaProyekController extends Controller
             $queryAktivitas->where('status_aktivitas', request('status'));
         }
 
+        // WAJIB ADA: Memuat relasi penanggungJawab dan dokumenPendukung
         $aktivitasProyek = $queryAktivitas
-            ->with('penanggungJawab')
+            ->with(['penanggungJawab', 'dokumenPendukung'])
             ->latest('id_aktivitas')
             ->paginate(10)
             ->withQueryString();
@@ -260,7 +255,6 @@ class AnggotaProyekController extends Controller
 
         $this->tambahkanAnggotaProyek($proyek, (int) $request->id_penanggung_jawab);
 
-        // KIRIM NOTIFIKASI KE ANGGOTA YANG DIBERI TUGAS AKTIVITAS
         $targetPengguna = Pengguna::find($request->id_penanggung_jawab);
         if ($targetPengguna) {
             $targetPengguna->notify(new GeneralNotification(

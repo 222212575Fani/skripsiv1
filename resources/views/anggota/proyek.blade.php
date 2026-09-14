@@ -25,7 +25,7 @@
         }
     }" class="flex flex-col gap-6">
 
-        {{-- CONTAINER BANNER UNGU UTAMA (SERASI DENGAN DASHBOARD DIREKTUR) --}}
+        {{-- CONTAINER BANNER UNGU UTAMA --}}
         <div class="bg-gradient-to-r from-[#6E5BC3] to-[#8470E5] rounded-[28px] shadow-sm p-6 text-white">
             <h1 class="text-base font-bold">
                 Halo, {{ auth()->user()->nama ?? auth()->user()->name }}! 👋
@@ -213,7 +213,7 @@
             <div id="project-results-wrapper" class="flex flex-col gap-3 mt-1">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @forelse($semuaProyek ?? [] as $p)
-                        <x-carddashboard :proyek="$p" />
+                        @include('anggota.cardproyek', ['proyek' => $p])
                     @empty
                         <div class="col-span-2 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
                             Tidak ada data proyek yang ditemukan sesuai filter/pencarian.

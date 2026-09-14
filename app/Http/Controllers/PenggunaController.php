@@ -8,7 +8,7 @@ use App\Models\TimKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Notifications\UserActivatedNotification;
+use App\Notifications\GeneralNotification;
 
 class PenggunaController extends Controller
 {
@@ -79,7 +79,6 @@ class PenggunaController extends Controller
         $isRoleKetua = strpos($namaRole, 'ketua') !== false;
         $isRoleGlobal = strpos($namaRole, 'admin') !== false || strpos($namaRole, 'direktur') !== false;
 
-        // VALIDASI: Jika role adalah Ketua Tim dan memilih tim yang sudah punya ketua aktif
         if (!$isRoleGlobal && $isRoleKetua && $request->filled('id_tim')) {
             $timTarget = DB::table('tim_kerja')->where('id_tim', $request->id_tim)->first();
             
@@ -92,7 +91,7 @@ class PenggunaController extends Controller
                 if ($cekKetuaAktif) {
                     return redirect()->back()
                         ->withInput()
-                        ->with('error', 'Tim kerja "' . $timTarget->nama_tim . '" sudah memiliki ketua tim yang aktif. Satu tim kerja hanya dapat memiliki satu ketua.');
+                        ->with('error', 'Tim kerja "' . $timTarget->nama_tim . '" sudah memiliki ketua tim yang aktif.');
                 }
             }
         }
@@ -109,12 +108,9 @@ class PenggunaController extends Controller
 
             $namaTim = null;
 
-            // Jika role global (Direktur/Admin baru menggantikan posisi lama), 
-            // pastikan dia bersih dari relasi tim operasional biasa
             if ($isRoleGlobal) {
                 DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
             } 
-            // Jika role ketua tim / anggota
             elseif ($request->filled('id_tim')) {
                 $timTarget = DB::table('tim_kerja')->where('id_tim', $request->id_tim)->first();
                 $namaTim = $timTarget ? $timTarget->nama_tim : null;
@@ -137,8 +133,10 @@ class PenggunaController extends Controller
                 );
             }
 
-            // KIRIM NOTIFIKASI KE PENGGUNA TERSEBUT
-            $user->notify(new UserActivatedNotification($namaTim));
+            // KIRIM NOTIFIKASI MENGGUNAKAN GENERAL NOTIFICATION (2 parameter)
+            $title = 'Aktivasi Akun';
+            $message = 'Selamat! Akun Anda telah diaktivasi oleh Admin pada Tim ' . ($namaTim ?? 'Terkait');
+            $user->notify(new GeneralNotification($title, $message));
 
             DB::commit();
             return redirect()->back()->with('success', 'Akun ' . $user->nama . ' berhasil diaktivasi dengan peran baru!');
@@ -224,9 +222,10 @@ class PenggunaController extends Controller
                 }
             }
 
-            // Jika langsung didaftarkan dengan status aktif, kirim notifikasi
             if ($request->status_akun === 'aktif') {
-                $pengguna->notify(new UserActivatedNotification($namaTim));
+                $title = 'Aktivasi Akun';
+                $message = 'Akun Anda telah ditambahkan dan diaktivasi oleh Admin.';
+                $pengguna->notify(new GeneralNotification($title, $message));
             }
 
             DB::commit();
@@ -287,7 +286,6 @@ class PenggunaController extends Controller
                 'disetujui_pada' => $disetujuiPada,
             ]);
 
-            // Bersihkan relasi ketua tim lama jika sebelumnya dia ketua
             DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
 
             $namaTim = null;
@@ -321,9 +319,10 @@ class PenggunaController extends Controller
                 }
             }
 
-            // Jika status berubah menjadi aktif (dari non-aktif/pending), kirim notifikasi
             if ($request->status_akun === 'aktif' && $statusLama !== 'aktif') {
-                $user->notify(new UserActivatedNotification($namaTim));
+                $title = 'Perubahan Status Akun';
+                $message = 'Status akun Anda telah diubah menjadi aktif oleh Admin.';
+                $user->notify(new GeneralNotification($title, $message));
             }
 
             DB::commit();

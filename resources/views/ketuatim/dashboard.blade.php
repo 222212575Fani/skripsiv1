@@ -211,18 +211,17 @@
                 </div>
             </div>
 
-            {{-- PEMBUNGKUS HASIL PROYEK --}}
+            {{-- PEMBUNGKUS HASIL PROYEK MENGGUNAKAN carddashboardtim --}}
             <div id="project-results-wrapper">
                 @php
                     $paginatorProyek = $proyekTim ?? $proyeks ?? null;
                 @endphp
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start mt-2">
                     @forelse($paginatorProyek ?? [] as $p)
-                        <x-carddashboard :proyek="$p" :href="route('anggota.proyek.aktivitas', $p->id_proyek ?? $p['id_proyek'])" />
+                        <x-carddashboardtim :proyek="$p" />
                     @empty
-                    <div class="col-span-2 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
-                        {{-- ICON EMPTY STATE BERWARNA UNGU --}}
+                    <div class="col-span-3 py-16 text-center text-gray-400 text-xs font-normal bg-gray-50/30 rounded-2xl border border-dashed border-gray-200">
                         <div class="w-12 h-12 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center mx-auto mb-3 text-[#5C46F5] shadow-xs">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -232,69 +231,12 @@
                     </div>
                     @endforelse
                 </div>
-
-                {{-- CUSTOM PAGINATION --}}
-                @if(isset($paginatorProyek))
-                <div class="mt-8 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-500">
-                    <div>
-                        Menampilkan 
-                        <span class="font-bold text-gray-700">{{ $paginatorProyek->firstItem() ?? ($paginatorProyek->count() > 0 ? 1 : 0) }}</span> 
-                        sampai 
-                        <span class="font-bold text-gray-700">{{ $paginatorProyek->lastItem() ?? $paginatorProyek->count() }}</span> 
-                        dari 
-                        <span class="font-bold text-gray-700">{{ method_exists($paginatorProyek, 'total') ? $paginatorProyek->total() : $paginatorProyek->count() }}</span> 
-                        data proyek
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        @if (method_exists($paginatorProyek, 'onFirstPage') && $paginatorProyek->onFirstPage())
-                            <span class="w-9 h-9 rounded-full bg-purple-100 text-purple-300 flex items-center justify-center cursor-not-allowed shadow-xs font-bold">
-                                &lsaquo;
-                            </span>
-                        @else
-                            <a href="{{ method_exists($paginatorProyek, 'previousPageUrl') && $paginatorProyek->previousPageUrl() ? $paginatorProyek->previousPageUrl() : '#' }}" class="w-9 h-9 rounded-full bg-[#5C46F5] text-white hover:bg-[#4A38D4] flex items-center justify-center transition-all shadow-sm shadow-[#5C46F5]/30 font-bold">
-                                &lsaquo;
-                            </a>
-                        @endif
-
-                        <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
-                            @php
-                                $lastPage = method_exists($paginatorProyek, 'lastPage') ? max(1, $paginatorProyek->lastPage()) : 1;
-                                $currentPage = method_exists($paginatorProyek, 'currentPage') ? $paginatorProyek->currentPage() : 1;
-                                $urlRange = method_exists($paginatorProyek, 'getUrlRange') ? $paginatorProyek->getUrlRange(1, $lastPage) : [1 => '#'];
-                            @endphp
-
-                            @foreach ($urlRange as $page => $url)
-                                @if ($page == $currentPage)
-                                    <span class="w-7 h-7 rounded-full bg-white text-[#5C46F5] border border-[#5C46F5] flex items-center justify-center font-bold shadow-xs">
-                                        {{ $page }}
-                                    </span>
-                                @else
-                                    <a href="{{ $url }}" class="w-7 h-7 rounded-full hover:bg-purple-50 text-gray-600 flex items-center justify-center transition-all">
-                                        {{ $page }}
-                                    </a>
-                                @endif
-                            @endforeach
-                        </div>
-
-                        @if (method_exists($paginatorProyek, 'hasMorePages') && $paginatorProyek->hasMorePages())
-                            <a href="{{ $paginatorProyek->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-[#5C46F5] text-white hover:bg-[#4A38D4] flex items-center justify-center transition-all shadow-sm shadow-[#5C46F5]/30 font-bold">
-                                &rsaquo;
-                            </a>
-                        @else
-                            <span class="w-9 h-9 rounded-full bg-purple-100 text-purple-300 flex items-center justify-center cursor-not-allowed shadow-xs font-bold">
-                                &rsaquo;
-                            </span>
-                        @endif
-                    </div>
-                </div>
-                @endif
             </div>
 
         </div>
         @endif
 
-        {{-- SECTION 4: CARD MEMBER TIM DI PALING BAWAH --}}
+        {{-- SECTION 4: CARD MEMBER TIM --}}
         <div>
             <x-cardmember 
                 title="Daftar Ketua Proyek" 

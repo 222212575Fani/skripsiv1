@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Notifications\UserRegisteredNotification;
+use App\Notifications\GeneralNotification;
 use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
@@ -62,14 +62,15 @@ class AuthController extends Controller
             'disetujui_oleh' => null,
         ]);
 
-        // Kirim Notifikasi ke Admin bahwa ada pengguna baru mendaftar
-        // Mencari pengguna yang memiliki role Admin (sesuaikan relasi role atau nama rolenya)
+        // Kirim Notifikasi ke Admin menggunakan GeneralNotification (2 parameter: title & message)
         $admins = Pengguna::whereHas('role', function($query) {
             $query->where('nama_role', 'Admin');
         })->get();
 
         if ($admins->isNotEmpty()) {
-            Notification::send($admins, new UserRegisteredNotification($user));
+            $title = 'Registrasi Pengguna Baru';
+            $message = 'Pengguna baru atas nama ' . $user->nama . ' telah mendaftar dan menunggu aktivasi.';
+            Notification::send($admins, new GeneralNotification($title, $message));
         }
 
         return redirect()
@@ -146,7 +147,7 @@ class AuthController extends Controller
             }
         }
 
-        // 5. LOGIN (Menggunakan $request->boolean('remember') untuk fitur "Ingat Saya")
+        // 5. LOGIN
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->boolean('remember'))) {
             $request->session()->regenerate();
             return $this->redirectByRole($pengguna);

@@ -9,17 +9,14 @@ class AktivitasProyek extends Model
 {
     use HasFactory;
 
-    protected $table = 'aktivitas_proyek'; // Sesuaikan dengan nama tabel di database
-    protected $primaryKey = 'id_aktivitas'; // Sesuaikan primary key jika ada
+    protected $table = 'aktivitas_proyek'; 
+    protected $primaryKey = 'id_aktivitas'; 
     protected $guarded = [];
 
     protected $casts = [
         'target' => 'float',
     ];
 
-    /**
-     * Progress setiap aktivitas dibatasi dari 0 sampai 100 persen.
-     */
     public function setTargetAttribute($value): void
     {
         $this->attributes['target'] = min(100, max(0, (float) $value));
@@ -31,9 +28,6 @@ class AktivitasProyek extends Model
         static::deleted(fn (AktivitasProyek $aktivitas) => $aktivitas->syncProgressProyek());
     }
 
-    /**
-     * Progress proyek adalah rata-rata progress seluruh aktivitasnya.
-     */
     public function syncProgressProyek(): void
     {
         $rataRataProgress = static::where('id_proyek', $this->id_proyek)->avg('target') ?? 0;
@@ -58,5 +52,11 @@ class AktivitasProyek extends Model
     public function progressAktivitas()
     {
         return $this->hasMany(ProgressAktivitas::class, 'id_aktivitas', 'id_aktivitas');
+    }
+
+    // Relasi ke Dokumen Pendukung
+    public function dokumenPendukung()
+    {
+        return $this->hasMany(DokumenPendukung::class, 'id_aktivitas', 'id_aktivitas');
     }
 }

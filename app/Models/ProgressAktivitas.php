@@ -10,7 +10,10 @@ class ProgressAktivitas extends Model
     use HasFactory;
 
     protected $table = 'progress_aktivitas';
-    protected $primaryKey = 'id_progress';
+    protected $primaryKey = 'id_progress'; // <-- Pastikan ini ada!
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $guarded = [];
 
     protected $casts = [

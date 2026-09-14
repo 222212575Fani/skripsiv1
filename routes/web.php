@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     // Direktur
     Route::prefix('direktur')->name('direktur.')->group(function () {
         Route::get('/dashboard', [DirekturController::class, 'dashboard'])->name('dashboard');
+        Route::get('/dashboard/dataprogress', [DirekturController::class, 'getChartData'])->name('chart.data');
     });
 
     // Ketua Tim

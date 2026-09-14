@@ -20,9 +20,9 @@
         status = $event.detail.status;
         tglMulai = $event.detail.tglMulai;
         tglSelesai = $event.detail.tglSelesai;
-        kendalaInternal = $event.detail.kendalaInternal;
-        kendalaEksternal = $event.detail.kendalaEksternal;
-        dokumen = $event.detail.dokumen;
+        kendalaInternal = $event.detail.kendalaInternal || [];
+        kendalaEksternal = $event.detail.kendalaEksternal || [];
+        dokumen = $event.detail.dokumen || [];
     " 
     @close-modal-detail-aktivitas.window="open = false"
     x-show="open" 
@@ -81,7 +81,6 @@
                     <div>
                         <span class="text-[11px] font-bold text-gray-700 block mb-1">Project Manager (Ketua Proyek)</span>
                         <span class="text-xs font-normal text-gray-800 flex items-center gap-2">
-                            {{-- Ikon Orang Pengganti --}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             <span class="font-normal text-gray-700" x-text="pm"></span>
                         </span>
@@ -143,20 +142,27 @@
                     </div>
                 </div>
 
-                {{-- Daftar Dokumen Pendukung --}}
+                {{-- Daftar Dokumen Pendukung (Teks Lihat Simpel) --}}
                 <div class="space-y-2">
                     <span class="text-xs font-bold text-gray-700 block">Daftar Dokumen Pendukung</span>
                     <div class="bg-gray-50/50 border border-purple-100/60 rounded-2xl p-4 max-h-48 overflow-y-auto custom-scrollbar">
                         <template x-if="dokumen.length > 0">
                             <div class="space-y-2">
                                 <template x-for="doc in dokumen">
-                                    <a :href="doc.url || '#'" target="_blank" class="flex items-center justify-between p-2.5 bg-white hover:bg-purple-50/40 border border-gray-200 hover:border-purple-200 rounded-xl transition-all text-xs group/doc">
+                                    <div class="flex items-center justify-between p-3 bg-white hover:bg-purple-50/40 border border-gray-200 hover:border-purple-200 rounded-xl transition-all text-xs group/doc">
                                         <div class="flex items-center gap-2.5 truncate">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                                            <span class="font-medium text-gray-700 group-hover/doc:text-[#6E5BC3] truncate" x-text="doc.nama || doc"></span>
+                                            <span class="font-medium text-gray-700 truncate" x-text="typeof doc === 'object' ? (doc.nama_dokumen || doc.nama) : doc"></span>
                                         </div>
-                                        <span class="text-[10px] font-bold text-[#6E5BC3] bg-purple-50 px-2.5 py-1 rounded-lg shrink-0">Lihat</span>
-                                    </a>
+                                        <button type="button" 
+                                                @click="
+                                                    let fileUrl = typeof doc === 'object' ? (doc.url || ('{{ asset('storage') }}/' + doc.file_path)) : doc;
+                                                    window.open(fileUrl, '_blank');
+                                                " 
+                                                class="text-xs font-bold text-[#6E5BC3] hover:text-[#5C4AB5] hover:underline cursor-pointer transition-all shrink-0">
+                                            Lihat
+                                        </button>
+                                    </div>
                                 </template>
                             </div>
                         </template>
