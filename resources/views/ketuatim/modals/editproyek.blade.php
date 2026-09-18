@@ -38,7 +38,7 @@
     @close-modal-edit-proyek.window="open = false"
     x-show="open" 
     x-cloak
-    class="fixed inset-0 z-[999] overflow-y-auto" 
+    class="fixed inset-0 z-999 overflow-y-auto" 
     style="display: none;"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0"
@@ -55,12 +55,12 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-             class="relative w-full max-w-2xl transform overflow-visible rounded-[24px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
+             class="relative w-full max-w-2xl transform overflow-visible rounded-3xl bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
             
             {{-- Header Ala Referensi --}}
             <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#5C46F5] shadow-sm">
+                    <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
@@ -88,7 +88,7 @@
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Nama Proyek <span class="text-red-500">*</span></label>
                             <input type="text" name="nama_proyek" x-model="nama_proyek" required 
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700">
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700">
                         </div>
 
                         {{-- Dropdown Kustom Status Proyek --}}
@@ -103,7 +103,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
-                                <div x-show="statusOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-[24px] shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2 z-[1000] space-y-1 max-h-44 overflow-y-auto">
+                                <div x-show="statusOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-3xl shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2 z-1000 space-y-1 max-h-44 overflow-y-auto">
                                     <button type="button" @click="status_proyek = 'belum_dimulai'; statusNama = 'Belum Dimulai'; statusOpen = false"
                                         class="w-full flex items-center px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
                                         :class="status_proyek === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
@@ -141,7 +141,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
-                            <div x-show="ketuaOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-[24px] shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2 z-[1000] space-y-1 max-h-44 overflow-y-auto">
+                            <div x-show="ketuaOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-3xl shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2 z-1000 space-y-1 max-h-44 overflow-y-auto">
                                 @foreach($anggotaTim ?? [] as $member)
                                     @php
                                         $mId = $member->pengguna->id_pengguna ?? $member->id_pengguna;
@@ -162,12 +162,12 @@
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Mulai</label>
                             <input type="date" name="tanggal_mulai" x-model="tanggal_mulai" 
-                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Tenggat Waktu</label>
                             <input type="date" name="tenggat_waktu" x-model="tanggal_target_selesai" 
-                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
                         </div>
                     </div>
 
@@ -175,7 +175,7 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Proyek</label>
                         <textarea name="deskripsi" x-model="deskripsi_proyek" rows="3" placeholder="Tuliskan deskripsi singkat proyek..."
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 resize-none"></textarea>
                     </div>
 
                 </div>
@@ -185,7 +185,7 @@
                     <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">
                         Batal
                     </x-button>
-                    <x-button type="submit" class="bg-[#5C46F5] hover:bg-[#4A38D4] text-white" shadow="shadow-md shadow-[#5C46F5]/20">
+                    <x-button type="submit" class="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20">
                         Simpan Perubahan
                     </x-button>
                 </div>

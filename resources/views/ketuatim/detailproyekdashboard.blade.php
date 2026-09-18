@@ -23,7 +23,7 @@
                 <div class="flex items-center gap-3 w-full md:w-auto">
                     {{-- Live Search: Nuansa ungu dari awal --}}
                     <div class="relative flex-1 md:w-64 group/search" x-data="{ search: '{{ request('search') }}' }">
-                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5C46F5] transition-colors">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6E5BC3] transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </span>
                         <input type="text" x-model="search" 
@@ -43,11 +43,11 @@
                                     });
                             "
                             placeholder="Cari aktivitas..." 
-                            class="w-full pl-10 pr-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-2xl text-xs font-medium text-[#5C46F5] placeholder-[#5C46F5] focus:outline-none focus:border-[#5C46F5] transition-all">
+                            class="w-full pl-10 pr-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-medium text-[#6E5BC3] placeholder-[#6E5BC3] focus:outline-none focus:border-[#6E5BC3] transition-all">
                     </div>
 
                     @if($isKetuaProyek)
-                        <button type="button" @click="$dispatch('open-tambah-aktivitas')" class="px-4 py-2.5 bg-[#5C46F5] text-white rounded-2xl text-xs font-semibold hover:bg-[#4A38D4] transition-all flex items-center gap-2 shadow-sm shadow-[#5C46F5]/30 shrink-0 cursor-pointer">
+                        <button type="button" @click="$dispatch('open-tambah-aktivitas')" class="px-4 py-2.5 bg-[#6E5BC3] text-white rounded-2xl text-xs font-semibold hover:bg-[#5C4AB5] transition-all flex items-center gap-2 shadow-sm shadow-[#6E5BC3]/30 shrink-0 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                             <span>Tambah Aktivitas</span>
                         </button>
@@ -73,9 +73,9 @@
                         <div class="flex items-center gap-3 px-2 flex-wrap mb-2 filter-tabs-container">
                             @foreach($statuses as $key => $label)
                                 <a href="{{ url()->current() }}?status={{ $key }}{{ request('search') ? '&search='.request('search') : '' }}" 
-                                   class="py-1.5 px-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap {{ $currentStatus == $key ? 'bg-[#5C46F5]/10 text-[#5C46F5]' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50' }}">
+                                   class="py-1.5 px-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap {{ $currentStatus == $key ? 'bg-[#6E5BC3]/10 text-[#6E5BC3]' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50' }}">
                                     {{ $label }}
-                                    <span class="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#5C46F5] text-white' : 'bg-gray-100 text-gray-600' }}">
+                                    <span class="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
                                         {{ $counts[$key] ?? 0 }}
                                     </span>
                                 </a>
@@ -143,14 +143,14 @@
                                         status: '{{ $item->status_aktivitas }}',
                                         tglMulai: '{{ $item->tanggal_mulai }}',
                                         tglSelesai: '{{ $item->tanggal_target_selesai }}',
-                                        kendalaInternal: [], 
-                                        kendalaEksternal: [], 
+                                        kendalaInternal: @js($item->kendala_internal ?? []), 
+                                        kendalaEksternal: @js($item->kendala_eksternal ?? []), 
                                         dokumen: @json($item->dokumenPendukung->map(fn($d) => [
                                             'nama' => $d->nama_dokumen,
                                             'url' => asset('storage/' . $d->file_path)
                                         ]))
                                     })"
-                                    class="p-1.5 rounded-xl bg-purple-50 text-[#5C46F5] hover:bg-[#5C46F5] hover:text-white transition-all shadow-xs cursor-pointer"
+                                    class="p-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all shadow-xs cursor-pointer"
                                     title="Detail Aktivitas">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -170,7 +170,7 @@
                                             tglMulai: '{{ $item->tanggal_mulai }}', 
                                             tglSelesai: '{{ $item->tanggal_target_selesai }}' 
                                         })" 
-                                        class="p-1.5 rounded-xl bg-purple-50 text-[#5C46F5] hover:bg-[#5C46F5] hover:text-white transition-all shadow-xs cursor-pointer" 
+                                        class="p-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all shadow-xs cursor-pointer" 
                                         title="Edit Aktivitas">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -187,25 +187,20 @@
                                         </svg>
                                     </button>
                                 @else
-                                    <button type="button" @click="$dispatch('open-modal-lapor-progress', { id: '{{ $item->id_aktivitas }}', nama: '{{ addslashes($item->nama_aktivitas) }}', progress: '{{ $item->target ?? 0 }}' })" class="px-2.5 py-1.5 rounded-xl bg-purple-50 text-[#5C46F5] hover:bg-[#5C46F5] hover:text-white transition-all text-[10px] font-semibold shadow-xs cursor-pointer" title="Laporkan Progress">Lapor Progress</button>
+                                    <button type="button" @click="$dispatch('open-modal-lapor-progress', { id: '{{ $item->id_aktivitas }}', nama: '{{ addslashes($item->nama_aktivitas) }}', progress: '{{ $item->target ?? 0 }}' })" class="px-2.5 py-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all text-[10px] font-semibold shadow-xs cursor-pointer" title="Laporkan Progress">Lapor Progress</button>
                                 @endif
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="py-16 text-center bg-white">
-                            <div class="flex flex-col items-center justify-center gap-3">
-                                <div class="w-12 h-12 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-[#5C46F5] shadow-xs">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                                    </svg>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-bold text-gray-700">Belum ada aktivitas tercatat</span>
-                                    <span class="text-[11px] text-gray-400 font-normal mt-0.5">Aktivitas proyek ini akan muncul setelah ditambahkan.</span>
-                                </div>
-                            </div>
+                        <td colspan="9" class="bg-white">
+                            <x-emptystate 
+                                :border="false" 
+                                padding="py-16 px-4" 
+                                title="Tidak Ada Aktivitas Ditemukan" 
+                                message="Tidak ada aktivitas yang sesuai dengan kata kunci pencarian atau filter yang Anda pilih." 
+                            />
                         </td>
                     </tr>
                     @endforelse
@@ -242,8 +237,8 @@
                     
                     <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
                         <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-[#F8F7FF] border border-purple-100 rounded-xl flex items-center justify-center text-[#5C46F5] shadow-xs">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#5C46F5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="w-10 h-10 bg-[#F8F7FF] border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M12 4v16m8-8H4" />
                                 </svg>
                             </div>
@@ -265,13 +260,13 @@
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
                                 <input type="text" name="nama_aktivitas" placeholder="Masukkan nama aktivitas..." required autocomplete="off"
-                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-normal">
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-normal">
                             </div>
 
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Aktivitas</label>
                                 <textarea name="deskripsi_aktivitas" rows="3" placeholder="Tuliskan deskripsi atau ringkasan aktivitas..."
-                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-normal resize-none"></textarea>
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-normal resize-none"></textarea>
                             </div>
 
                             <div>
@@ -287,19 +282,19 @@
                                 <div class="relative group/filter" @click.outside="pjOpen = false">
                                     <input type="hidden" name="id_penanggung_jawab" x-model="pj">
                                     <button type="button" @click="pjOpen = !pjOpen"
-                                        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#5C46F5] rounded-2xl text-xs font-normal transition-all cursor-pointer">
+                                        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-normal transition-all cursor-pointer">
                                         <span x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 group-hover/filter:text-[#5C46F5] transition-all duration-200" :class="pjOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 group-hover/filter:text-[#6E5BC3] transition-all duration-200" :class="pjOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                     </button>
                                     <div x-show="pjOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-[24px] shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2 z-[1000] space-y-1 max-h-44 overflow-y-auto">
-                                        <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#5C46F5] text-xs font-normal">
+                                        <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#6E5BC3] text-xs font-normal">
                                             <span>Pilih Penanggung Jawab</span>
                                         </div>
                                         @forelse($listAnggotaTim as $member)
                                             @if($member->pengguna)
                                                 <button type="button" @click="pj = '{{ $member->pengguna->id_pengguna }}'; pjNama = '{{ addslashes($member->pengguna->nama) }}'; pjOpen = false"
                                                     class="w-full flex items-center px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                                    :class="pj == '{{ $member->pengguna->id_pengguna }}' ? 'bg-[#F8F7FF] text-[#5C46F5]' : 'text-gray-700 hover:bg-gray-50'">
+                                                    :class="pj == '{{ $member->pengguna->id_pengguna }}' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
                                                     <span>{{ $member->pengguna->nama }}</span>
                                                 </button>
                                             @endif
@@ -333,7 +328,7 @@
 
                         <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
                             <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white cursor-pointer">Batal</button>
-                            <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#5C46F5] hover:bg-[#4A38D4] text-white cursor-pointer">Simpan Aktivitas</button>
+                            <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white cursor-pointer">Simpan Aktivitas</button>
                         </div>
                     </form>
                 </div>
@@ -432,7 +427,7 @@
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center shadow-xs">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="#5C46F5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    <path stroke="#6E5BC3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                 </svg>
                             </div>
                             <div>
@@ -514,7 +509,7 @@
 
                         <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
                             <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white cursor-pointer">Batal</button>
-                            <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#5C46F5] hover:bg-[#4A38D4] text-white cursor-pointer">Simpan Perubahan</button>
+                            <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white cursor-pointer">Simpan Perubahan</button>
                         </div>
                     </form>
                 </div>
@@ -569,13 +564,13 @@
                     {{-- Header Modal --}}
                     <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100 bg-white sticky top-0 z-10">
                         <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#5C46F5] shadow-xs shrink-0">
+                            <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-xs shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                 </svg>
                             </div>
                             <div>
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-[#5C46F5] uppercase tracking-wider">Detail Aktivitas</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-[#6E5BC3] uppercase tracking-wider">Detail Aktivitas</span>
                                 <h3 class="text-base font-bold text-gray-900 tracking-tight mt-0.5" x-text="nama"></h3>
                             </div>
                         </div>
@@ -594,20 +589,20 @@
                             <div>
                                 <span class="text-[11px] font-bold text-gray-700 block mb-1">Penanggung Jawab</span>
                                 <span class="text-xs font-normal text-gray-800 flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#5C46F5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     <span class="font-normal text-gray-700" x-text="pj"></span>
                                 </span>
                             </div>
                             <div>
                                 <span class="text-[11px] font-bold text-gray-700 block mb-1">Project Manager (Ketua Proyek)</span>
                                 <span class="text-xs font-normal text-gray-800 flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#5C46F5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     <span class="font-normal text-gray-700" x-text="pm"></span>
                                 </span>
                             </div>
                             <div class="sm:col-span-2 pt-2 border-t border-purple-100/60 flex items-center justify-between text-xs">
                                 <span class="text-gray-700 flex items-center gap-1.5 font-bold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     Rentang Waktu:
                                 </span>
                                 <span class="font-normal text-gray-700"><span x-text="tglMulai"></span> — <span x-text="tglSelesai"></span></span>
@@ -618,7 +613,7 @@
                         <div class="space-y-2">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="font-bold text-gray-700">Persentase Progress</span>
-                                <span class="font-black text-[#5C46F5]" x-text="progress + '%'"></span>
+                                <span class="font-black text-[#6E5BC3]" x-text="progress + '%'"></span>
                             </div>
                             <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                                 <div class="bg-[#2EBD85] h-2.5 rounded-full transition-all duration-500" :style="`width: ${progress}%`"></div>
@@ -634,17 +629,17 @@
                                         <template x-for="doc in dokumen">
                                             <a :href="doc.url || '#'" target="_blank" class="flex items-center justify-between p-2.5 bg-white hover:bg-purple-50/40 border border-gray-200 hover:border-purple-200 rounded-xl transition-all text-xs group/doc">
                                                 <div class="flex items-center gap-2.5 truncate">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                                                    <span class="font-medium text-gray-700 group-hover/doc:text-[#5C46F5] truncate" x-text="doc.nama"></span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                                    <span class="font-medium text-gray-700 group-hover/doc:text-[#6E5BC3] truncate" x-text="doc.nama"></span>
                                                 </div>
-                                                <span class="text-[10px] font-bold text-[#5C46F5] bg-purple-50 px-2.5 py-1 rounded-lg shrink-0">Lihat</span>
+                                                <span class="text-[10px] font-bold text-[#6E5BC3] bg-purple-50 px-2.5 py-1 rounded-lg shrink-0">Lihat</span>
                                             </a>
                                         </template>
                                     </div>
                                 </template>
                                 <template x-if="dokumen.length === 0">
                                     <div class="flex flex-col items-center justify-center py-6 gap-2 text-center">
-                                        <div class="w-10 h-10 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-[#5C46F5] shadow-xs">
+                                        <div class="w-10 h-10 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-[#6E5BC3] shadow-xs">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                             </svg>
@@ -659,7 +654,7 @@
 
                     {{-- Footer Modal --}}
                     <div class="px-8 py-4 border-t border-gray-100 flex items-center justify-end bg-gray-50/50">
-                        <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#5C46F5] hover:bg-[#4A38D4] text-white transition-all cursor-pointer shadow-sm shadow-[#5C46F5]/20">
+                        <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white transition-all cursor-pointer shadow-sm shadow-[#6E5BC3]/20">
                             Tutup
                         </button>
                     </div>
@@ -680,7 +675,7 @@
         .pj-dropdown-scroll::-webkit-scrollbar { width: 6px; }
         .pj-dropdown-scroll::-webkit-scrollbar-track { background: #F8F7FF; border-radius: 9999px; }
         .pj-dropdown-scroll::-webkit-scrollbar-thumb { background: #9E8CE3; border-radius: 9999px; }
-        .pj-dropdown-scroll::-webkit-scrollbar-thumb:hover { background: #5C46F5; }
+        .pj-dropdown-scroll::-webkit-scrollbar-thumb:hover { background: #6E5BC3; }
         
         .datatable-container-wrapper nav span[aria-current="page"] > span,
         .datatable-container-wrapper div[class*="rounded-full"],

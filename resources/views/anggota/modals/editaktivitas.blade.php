@@ -19,7 +19,18 @@
         tglMulai = $event.detail.tglMulai; 
         tglSelesai = $event.detail.tglSelesai;
     " 
+    @open-edit-aktivitas.window="
+        open = true; 
+        id = $event.detail.id; 
+        nama = $event.detail.nama; 
+        deskripsi = $event.detail.deskripsi; 
+        pj = $event.detail.pj; 
+        pjNama = $event.detail.pjNama;
+        tglMulai = $event.detail.tglMulai; 
+        tglSelesai = $event.detail.tglSelesai;
+    "
     @close-modal-edit-aktivitas.window="open = false"
+    @close-edit-aktivitas.window="open = false"
     x-show="open" 
     x-cloak
     class="fixed inset-0 z-[999] overflow-y-auto" 
@@ -44,7 +55,7 @@
                 <div class="flex items-center gap-4">
                     {{-- Kotak & Ikon Pensil Berwarna Ungu Pakai Inline Style --}}
                     <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-purple-600 shadow-xs">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" style="color: #7B66EE; stroke: #7B66EE;" fill="none" viewBox="0 0 24 24" stroke-width="2.3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" style="color: #6E5BC3; stroke: #6E5BC3;" fill="none" viewBox="0 0 24 24" stroke-width="2.3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
                     </div>
@@ -70,14 +81,14 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
                         <input type="text" name="nama_aktivitas" x-model="nama" required autocomplete="off"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700">
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700">
                     </div>
 
                     {{-- Deskripsi Aktivitas --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Aktivitas</label>
                         <textarea name="deskripsi_aktivitas" x-model="deskripsi" rows="3"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 resize-none"></textarea>
                     </div>
 
                     {{-- Penanggung Jawab --}}
@@ -132,14 +143,14 @@
                             <input type="date" name="tanggal_mulai" x-model="tglMulai" required 
                                 min="{{ $minMulai }}"
                                 @if($maxSelesai) max="{{ $maxSelesai }}" @endif
-                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Selesai (Target) <span class="text-red-500">*</span></label>
                             <input type="date" name="tanggal_target_selesai" x-model="tglSelesai" required 
                                 :min="tglMulai ? tglMulai : '{{ $minMulai }}'"
                                 @if($maxSelesai) max="{{ $maxSelesai }}" @endif
-                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
                         </div>
                     </div>
 
@@ -149,7 +160,7 @@
                     <x-button type="button" @click="open = false" class="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">
                         Batal
                     </x-button>
-                    <x-button type="submit" class="bg-[#5C46F5] hover:bg-[#4b35e0] text-white" shadow="shadow-md shadow-[#5C46F5]/20">
+                    <x-button type="submit" class="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20">
                         Simpan Perubahan
                     </x-button>
                 </div>

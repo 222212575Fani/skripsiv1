@@ -50,7 +50,11 @@
                 let doc = parser.parseFromString(html, 'text/html');
                 let newWrapper = doc.getElementById('aktivitas-kanban-wrapper').innerHTML;
                 
-                document.getElementById('aktivitas-kanban-wrapper').innerHTML = newWrapper;
+                let wrapper = document.getElementById('aktivitas-kanban-wrapper');
+                wrapper.innerHTML = newWrapper;
+                if (window.Alpine) {
+                    window.Alpine.initTree(wrapper);
+                }
                 window.history.pushState({}, '', url);
             })
             .catch(error => console.error('Error:', error));
@@ -61,7 +65,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
             
             {{-- SISI KIRI: CONTAINER UNGU BESAR --}}
-            <div class="lg:col-span-2 bg-gradient-to-r from-[#6E5BC3] to-[#8470E5] rounded-[32px] shadow-sm p-8 text-white flex flex-col justify-between gap-6">
+            <div class="lg:col-span-2 bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-4xl shadow-sm p-8 text-white flex flex-col justify-between gap-6">
                 
                 {{-- Header Banner --}}
                 <div class="flex flex-col gap-2.5">
@@ -177,7 +181,7 @@
                             <h5 class="text-xs font-bold text-gray-900">Pengingat Aktivitas & Tugas</h5>
                         </div>
 
-                        <div class="flex flex-col gap-2.5 max-h-[180px] overflow-y-auto pr-1">
+                        <div class="flex flex-col gap-2.5 max-h-45 overflow-y-auto pr-1">
                             <div class="p-3 bg-amber-50/60 border border-amber-100 rounded-2xl flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
                                     <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wide">Peringatan Tugas</span>
@@ -205,19 +209,19 @@
 
 
         {{-- ================= 2. BAGIAN BAWAH: KOTAK PENCARIAN & FILTER BAR ================= --}}
-        <div class="bg-white rounded-[28px] shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row items-center justify-between gap-4 w-full">
-            <div class="flex flex-wrap items-center gap-3 w-full">
-                {{-- Input Search Memanjang Penuh --}}
-                <div class="relative flex-1 md:w-72 group/search">
+        <div class="bg-white rounded-[28px] shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col gap-3 w-full">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 w-full">
+                {{-- 1. Input Search Memanjang Penuh saat Layar Diperkecil --}}
+                <div class="relative w-full lg:flex-1 group/search">
                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6E5BC3] transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </span>
                     
                     <input type="text" x-model="search" @input.debounce.400ms="fetchAktivitas()" placeholder="Cari aktivitas..." 
-                        class="w-full pl-10 pr-9 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-medium text-[#6E5BC3] placeholder-[#6E5BC3] focus:outline-none focus:border-[#6E5BC3] transition-all">
+                        class="w-full pl-10 pr-9 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-full text-xs font-normal text-gray-800 placeholder:text-[#6E5BC3] focus:outline-none focus:border-[#6E5BC3] transition-all shadow-2xs">
 
                     <template x-if="search">
-                        <button @click="search = ''; fetchAktivitas();" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E5BC3] hover:text-[#5C4AB5]">
+                        <button @click="search = ''; fetchAktivitas();" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E5BC3] hover:text-[#5C4AB5] cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -225,90 +229,125 @@
                     </template>
                 </div>
 
-                {{-- Filter Bulan & Tahun --}}
-                <div class="relative group/bulan">
-                    <button @click="bulanOpen = !bulanOpen; filterOpen = false;" @click.outside="bulanOpen = false" type="button" 
-                        class="flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-2xl text-xs font-medium transition-all cursor-pointer min-w-[170px]">
-                        <div class="flex items-center gap-2">
+                {{-- 2. Filter Bulan & Tahun --}}
+                <div class="relative w-full lg:w-auto group/bulan" @click.outside="bulanOpen = false">
+                    <button @click="bulanOpen = !bulanOpen; filterOpen = false;" type="button" 
+                        class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs lg:min-w-42.5">
+                        <div class="flex items-center gap-2 truncate">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            <span x-text="
-                                (bulan === 'semua' ? 'Semua Bulan' : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][bulan - 1]) + 
+                            <span class="truncate" x-text="
+                                (bulan === 'semua' ? 'Semua Bulan' : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][parseInt(bulan) - 1]) + 
                                 (tahun === 'semua' ? '' : ' ' + tahun)
                             "></span>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
 
-                    <div x-show="bulanOpen" x-cloak class="absolute left-0 mt-2 w-80 bg-white border border-purple-100 rounded-[28px] shadow-xl p-4 z-50 space-y-4">
+                    <div x-show="bulanOpen" x-cloak class="absolute left-0 right-0 lg:right-auto mt-2 w-full lg:w-80 bg-white border border-purple-100 rounded-[28px] shadow-xl p-4 z-50 space-y-4">
                         <div class="flex flex-col gap-1.5">
                             <div class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest">PILIH TAHUN</div>
-                            <div class="grid grid-cols-5 gap-1.5 max-h-36 overflow-y-auto pr-1">
-                                <button @click="tahun = 'semua'; fetchAktivitas();" 
-                                    :class="tahun === 'semua' ? 'bg-[#6E5BC3] text-white' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
-                                    class="py-1.5 px-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer text-center col-span-5">
+                            <div class="grid grid-cols-4 sm:grid-cols-5 gap-1.5 max-h-36 overflow-y-auto pr-1 custom-scrollbar">
+                                <button type="button" @click="tahun = 'semua'; fetchAktivitas();" 
+                                    :class="tahun === 'semua' ? 'bg-[#6E5BC3] text-white font-bold' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
+                                    class="py-1.5 px-1 rounded-xl text-[11px] transition-all cursor-pointer text-center col-span-4 sm:col-span-5">
                                     Semua Tahun
                                 </button>
-                                @for($i = date('Y'); $i >= 1990; $i--)
-                                    <button @click="tahun = '{{ $i }}'; fetchAktivitas();" 
-                                        :class="tahun === '{{ $i }}' ? 'bg-[#6E5BC3] text-white' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
-                                        class="py-1.5 px-1 rounded-xl text-[11px] font-bold transition-all cursor-pointer text-center">
+                                @php
+                                    $maxTahun = max((int)date('Y'), 2027);
+                                @endphp
+                                @for($i = $maxTahun; $i >= 1990; $i--)
+                                    <button type="button" @click="tahun = '{{ $i }}'; fetchAktivitas();" 
+                                        :class="tahun === '{{ $i }}' ? 'bg-[#6E5BC3] text-white font-bold' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
+                                        class="py-1.5 px-1 rounded-xl text-[11px] transition-all cursor-pointer text-center">
                                         {{ $i }}
                                     </button>
                                 @endfor
                             </div>
                         </div>
 
-                        <div class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest border-t border-gray-100 pt-3">PILIH BULAN</div>
-                        <div>
-                            <button @click="bulan = 'semua'; bulanOpen = false; fetchAktivitas();" 
-                                :class="bulan === 'semua' ? 'bg-[#6E5BC3] text-white shadow-sm' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
-                                class="w-full py-2 px-4 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-center mb-2">
-                                Semua Bulan
-                            </button>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2">
-                            <template x-for="(namaBulan, index) in ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']">
-                                <button @click="bulan = (index + 1).toString(); bulanOpen = false; fetchAktivitas();" 
-                                    :class="bulan === (index + 1).toString() ? 'bg-[#6E5BC3] text-white shadow-sm' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
-                                    class="py-2.5 px-2 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-center"
-                                    x-text="namaBulan">
+                        <div class="border-t border-purple-100/60 pt-3">
+                            <div class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest mb-2">PILIH BULAN</div>
+                            <div>
+                                <button type="button" @click="bulan = 'semua'; bulanOpen = false; fetchAktivitas();" 
+                                    :class="bulan === 'semua' ? 'bg-[#6E5BC3] text-white font-bold shadow-sm' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
+                                    class="w-full py-2 px-4 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-center mb-2">
+                                    Semua Bulan
                                 </button>
-                            </template>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                <template x-for="(namaBulan, index) in ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']">
+                                    <button type="button" @click="bulan = (index + 1).toString(); bulanOpen = false; fetchAktivitas();" 
+                                        :class="bulan === (index + 1).toString() ? 'bg-[#6E5BC3] text-white font-bold shadow-sm' : 'bg-purple-50/50 text-[#6E5BC3] hover:bg-purple-100'"
+                                        class="py-2.5 px-2 rounded-2xl text-xs font-semibold transition-all cursor-pointer text-center"
+                                        x-text="namaBulan">
+                                    </button>
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Filter Status Aktivitas --}}
-                <div class="relative group/filter ml-auto">
-                    <button @click="filterOpen = !filterOpen; bulanOpen = false;" @click.outside="filterOpen = false" type="button" 
-                        class="flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-2xl text-xs font-medium transition-all cursor-pointer min-w-[160px]">
-                        <div class="flex items-center gap-2">
+                {{-- 3. Filter Status Aktivitas --}}
+                <div class="relative w-full lg:w-auto group/filter lg:ml-auto" @click.outside="filterOpen = false">
+                    <button @click="filterOpen = !filterOpen; bulanOpen = false;" type="button" 
+                        class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs lg:min-w-40">
+                        <div class="flex items-center gap-2 truncate">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" />
                             </svg>
-                            <span>
-                                @if(request('status') == 'belum_dimulai') Belum Dimulai
-                                @elseif(request('status') == 'berjalan') Berjalan
-                                @elseif(request('status') == 'selesai') Selesai
-                                @elseif(request('status') == 'terlambat') Terlambat
-                                @else Semua Status
-                                @endif
-                            </span>
+                            <span class="truncate" x-text="{
+                                'belum_dimulai': 'Belum Dimulai',
+                                'berjalan': 'Sedang Berjalan',
+                                'selesai': 'Selesai',
+                                'terlambat': 'Terlambat'
+                            }[status] || 'Semua Status'"></span>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
 
-                    <div x-show="filterOpen" x-cloak class="absolute right-0 mt-2 w-56 bg-white border border-purple-100 rounded-[24px] shadow-xl p-3 z-50 space-y-1">
-                        <button @click="status = 'semua'; filterOpen = false; fetchAktivitas();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50">Semua Status</button>
-                        <button @click="status = 'belum_dimulai'; filterOpen = false; fetchAktivitas();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50">Belum Dimulai</button>
-                        <button @click="status = 'berjalan'; filterOpen = false; fetchAktivitas();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50">Berjalan</button>
-                        <button @click="status = 'selesai'; filterOpen = false; fetchAktivitas();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50">Selesai</button>
-                        <button @click="status = 'terlambat'; filterOpen = false; fetchAktivitas();" class="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E5BC3] hover:bg-purple-50">Terlambat</button>
+                    <div x-show="filterOpen" x-cloak class="absolute left-0 right-0 lg:left-auto lg:right-0 mt-2 w-full lg:w-56 bg-white border border-purple-100 rounded-3xl shadow-xl p-3 z-50 space-y-1">
+                        <button type="button" @click="status = 'semua'; filterOpen = false; fetchAktivitas();" 
+                            :class="status === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3]'"
+                            class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                            Semua Status
+                        </button>
+                        <button type="button" @click="status = 'belum_dimulai'; filterOpen = false; fetchAktivitas();" 
+                            :class="status === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3]'"
+                            class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                            Belum Dimulai
+                        </button>
+                        <button type="button" @click="status = 'berjalan'; filterOpen = false; fetchAktivitas();" 
+                            :class="status === 'berjalan' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3]'"
+                            class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                            Sedang Berjalan
+                        </button>
+                        <button type="button" @click="status = 'selesai'; filterOpen = false; fetchAktivitas();" 
+                            :class="status === 'selesai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3]'"
+                            class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                            Selesai
+                        </button>
+                        <button type="button" @click="status = 'terlambat'; filterOpen = false; fetchAktivitas();" 
+                            :class="status === 'terlambat' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3]'"
+                            class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                            Terlambat
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            {{-- Reset Filter Button --}}
+            <div x-show="status !== 'semua' || search !== '' || bulan !== 'semua' || tahun !== 'semua'" x-cloak class="flex justify-end pt-0.5">
+                <button type="button" 
+                    @click="status = 'semua'; search = ''; bulan = 'semua'; tahun = 'semua'; fetchAktivitas();"
+                    class="text-xs text-rose-500 hover:text-rose-700 hover:underline flex items-center gap-1 transition-all cursor-pointer font-medium py-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>Reset Filter</span>
+                </button>
             </div>
         </div>
 
@@ -322,31 +361,61 @@
             @endphp
 
             @if($totalAktivitasFiltered > 0)
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start mt-2">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-2">
                     @foreach($proyekTerlibat as $proyek)
                         @if($proyek->aktivitasProyek->count() > 0)
-                            <div class="bg-white border border-purple-100 rounded-[28px] p-5 flex flex-col gap-4 shadow-xs">
+                            @php
+                                $totalAktProyek = $proyek->aktivitasProyek->count();
+                                $isFiltering = request()->filled('search') || (request()->filled('status') && request()->status !== 'semua') || (request()->filled('bulan') && request()->bulan !== 'semua') || (request()->filled('tahun') && request()->tahun !== 'semua');
+                            @endphp
+                            <div class="bg-white border border-purple-100 rounded-[28px] p-5 flex flex-col gap-4 shadow-xs"
+                                 x-data="{ 
+                                     openAktivitas: {{ $isFiltering ? 'true' : 'false' }},
+                                     isLarge: window.innerWidth >= 1024
+                                 }"
+                                 @resize.window.debounce.100ms="isLarge = window.innerWidth >= 1024">
                                 
                                 {{-- Header Proyek --}}
-                                <div class="flex items-center justify-between pb-3 border-b border-purple-100/60 gap-4">
-                                    <h3 class="text-xs font-normal text-[#6E5BC3] tracking-wide whitespace-nowrap overflow-hidden text-ellipsis" title="{{ $proyek->nama_proyek }}">
+                                <div class="pb-3 border-b border-purple-100/60">
+                                    <h3 class="text-xs font-semibold text-[#6E5BC3] tracking-wide whitespace-nowrap overflow-hidden text-ellipsis" title="{{ $proyek->nama_proyek }}">
                                         {{ $proyek->nama_proyek }}
                                     </h3>
-                                    <span class="w-6 h-6 rounded-full bg-purple-50 border border-purple-100 text-[#6E5BC3] text-[11px] font-bold flex items-center justify-center shadow-xs shrink-0">
-                                        {{ $proyek->aktivitasProyek->count() }}
-                                    </span>
                                 </div>
 
-                                {{-- Daftar Aktivitas Penugasan --}}
-                                <div class="flex flex-col gap-3 max-h-[380px] overflow-y-auto pr-2 custom-scrollbar">
+                                {{-- Tombol Dropdown Aktivitas (Hanya tampil saat layar kecil / responsif < lg) --}}
+                                <div class="lg:hidden">
+                                    <button type="button" 
+                                        @click="openAktivitas = !openAktivitas"
+                                        class="flex items-center justify-between w-full px-4 py-2.5 bg-[#EEECFC] hover:bg-[#E5E2F9] rounded-2xl transition-all cursor-pointer group shadow-2xs">
+                                        <div class="flex items-center gap-2.5">
+                                            {{-- Icon 3-layer stack --}}
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l9.75 5.25 9.75-5.25-4.179-2.25m-11.142 0L12 12.75l4.179-2.25m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m-11.142 0L12 7.5l4.179 2.25" />
+                                            </svg>
+                                            <span class="text-xs font-bold text-[#4C3B9B]" x-text="openAktivitas ? 'Tutup Daftar Aktivitas' : 'Lihat {{ $totalAktProyek }} Aktivitas'">
+                                                Lihat {{ $totalAktProyek }} Aktivitas
+                                            </span>
+                                        </div>
+                                        
+                                        {{-- Chevron Panah Bawah Berotasi saat Terbuka --}}
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openAktivitas ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {{-- Daftar Aktivitas Penugasan: Langsung tampil pada layar besar (lg+), Dropdown pada layar kecil (< lg) --}}
+                                <div x-show="openAktivitas || isLarge"
+                                     x-cloak
+                                     class="flex flex-col gap-3 max-h-105 overflow-y-auto pr-1.5 custom-scrollbar lg:flex!">
                                     @foreach($proyek->aktivitasProyek as $akt)
                                         @php
                                             $statusAktif = $akt->status_aktivitas ?? 'belum_dimulai';
                                             $badgeClass = match($statusAktif) {
                                                 'selesai'   => 'bg-emerald-50 text-emerald-600 border-emerald-100',
-                                                'terlambat' => 'bg-rose-50 text-rose-600 border-emerald-100',
-                                                'berjalan'  => 'bg-blue-50 text-blue-600 border-emerald-100',
-                                                default     => 'bg-amber-50 text-amber-600 border-emerald-100'
+                                                'terlambat' => 'bg-rose-50 text-rose-600 border-rose-100',
+                                                'berjalan'  => 'bg-blue-50 text-blue-600 border-blue-100',
+                                                default     => 'bg-amber-50 text-amber-600 border-amber-100'
                                             };
                                             $statusLabel = match($statusAktif) {
                                                 'selesai'   => 'Selesai',
@@ -359,12 +428,25 @@
                                             $tglMulai = $akt->tanggal_mulai ? \Carbon\Carbon::parse($akt->tanggal_mulai)->translatedFormat('d M Y') : null;
                                             $tglSelesai = $akt->tanggal_target_selesai ? \Carbon\Carbon::parse($akt->tanggal_target_selesai)->translatedFormat('d M Y') : null;
                                             $rentangTanggal = ($tglMulai && $tglSelesai) ? ($tglMulai . ' - ' . $tglSelesai) : ($tglSelesai ?? '-');
+
+                                            $pjNama = $akt->penanggungJawab->nama ?? '-';
+                                            $pjInisial = strtoupper(substr($pjNama, 0, 2));
+
+                                            $formattedDocs = [];
+                                            foreach($akt->dokumenPendukung ?? [] as $docItem) {
+                                                $filePath = $docItem->file_path ?? $docItem->path ?? $docItem->url ?? '';
+                                                $urlDoc = filter_var($filePath, FILTER_VALIDATE_URL) ? $filePath : asset('storage/' . $filePath);
+                                                $formattedDocs[] = [
+                                                    'nama_dokumen' => $docItem->nama_dokumen ?? basename($filePath),
+                                                    'url' => $urlDoc
+                                                ];
+                                            }
                                         @endphp
 
                                         {{-- KARTU AKTIVITAS YANG BISA DIKLIK --}}
                                         <div @click="$dispatch('open-modal-detail-aktivitas', {
                                                 nama: '{{ addslashes($akt->nama_aktivitas) }}',
-                                                pj: '{{ addslashes($akt->penanggungJawab->nama ?? "-") }}',
+                                                pj: '{{ addslashes($pjNama) }}',
                                                 pm: '{{ addslashes($proyek->ketuaProyek->nama ?? "-") }}',
                                                 progress: '{{ $progressValue }}',
                                                 status: '{{ $statusLabel }}',
@@ -372,25 +454,37 @@
                                                 tglSelesai: '{{ $tglSelesai ?? "-" }}',
                                                 kendalaInternal: @js($akt->kendala_internal ?? []),
                                                 kendalaEksternal: @js($akt->kendala_eksternal ?? []),
-                                                dokumen: @js($akt->dokumenPendukung ?? [])
+                                                dokumen: @js($formattedDocs)
                                             })"
                                             class="bg-gray-50/60 rounded-2xl p-4 border border-purple-100 hover:border-[#6E5BC3]/40 hover:bg-purple-50/20 transition-all flex flex-col gap-3 cursor-pointer group">
                                             
-                                            <div class="flex items-start justify-between gap-2">
-                                                <div class="flex-1">
-                                                    <span class="inline-block px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-purple-50 text-[#6E5BC3] mb-1.5">
-                                                        Aktivitas
-                                                    </span>
-                                                    <h4 class="text-[11px] font-light text-gray-900 leading-snug break-words">
-                                                        {{ $akt->nama_aktivitas }}
-                                                    </h4>
-                                                </div>
-                                                <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase border shrink-0 {{ $badgeClass }}">
+                                            {{-- Baris 1: Label Aktivitas & Status Badge --}}
+                                            <div class="flex items-center justify-between gap-2">
+                                                <span class="inline-block px-2 py-0.5 rounded-md text-[9px] font-bold uppercase bg-purple-50 text-[#6E5BC3]">
+                                                    Aktivitas
+                                                </span>
+                                                <span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase border shrink-0 {{ $badgeClass }}">
                                                     {{ $statusLabel }}
                                                 </span>
                                             </div>
+
+                                            {{-- Baris 2: Judul Aktivitas --}}
+                                            <div>
+                                                <h4 class="text-[11px] font-normal text-gray-900 leading-snug wrap-break-word">
+                                                    {{ $akt->nama_aktivitas }}
+                                                </h4>
+                                            </div>
+
+                                            {{-- Baris 3: Anggota Terlibat (Penanggung Jawab Aktivitas) --}}
+                                            <div class="flex items-center gap-2 text-[11px] text-gray-700">
+                                                <span class="w-5 h-5 rounded-full bg-purple-100 border border-purple-200 text-[#6E5BC3] text-[9px] font-bold flex items-center justify-center shrink-0 shadow-2xs" title="Penanggung Jawab: {{ $pjNama }}">
+                                                    {{ $pjInisial }}
+                                                </span>
+                                                <span class="font-normal text-gray-700 truncate" title="{{ $pjNama }}">{{ $pjNama }}</span>
+                                            </div>
                                             
-                                            <div class="flex flex-col gap-1.5 pt-1">
+                                            {{-- Baris 4: Progress Bar --}}
+                                            <div class="flex flex-col gap-1.5 pt-0.5">
                                                 <div class="flex items-center justify-between text-[11px]">
                                                     <span class="text-gray-500 font-light">Progress</span>
                                                     <span class="font-light text-gray-700">{{ $progressValue }}%</span>
@@ -400,18 +494,47 @@
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center justify-between pt-2 border-t border-purple-100/60 mt-1">
-                                                <div class="flex items-center gap-1.5 text-[10px] text-gray-400 font-light">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                                    <span>{{ $rentangTanggal }}</span>
-                                                </div>
-                                                <button type="button" @click.stop="$dispatch('open-modal-lapor-progress', { id: '{{ $akt->id_aktivitas }}', nama: '{{ addslashes($akt->nama_aktivitas) }}', progress: '{{ $progressValue }}' })" 
-                                                    class="px-2.5 py-1 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all text-[10px] font-semibold cursor-pointer shadow-xs">
-                                                    Lapor Progress
+                                            {{-- Baris 5: Tanggal Kalender --}}
+                                            <div class="flex items-center gap-1.5 text-[10px] text-gray-400 font-light pt-2 border-t border-purple-100/60 mt-0.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                <span class="truncate">{{ $rentangTanggal }}</span>
+                                            </div>
+
+                                            {{-- Baris 6: Tombol Aksi (Lihat Detail & Lapor Progress) --}}
+                                            <div class="grid grid-cols-2 gap-2 pt-0.5">
+                                                <button type="button" 
+                                                    @click.stop="$dispatch('open-modal-detail-aktivitas', {
+                                                        nama: '{{ addslashes($akt->nama_aktivitas) }}',
+                                                        pj: '{{ addslashes($pjNama) }}',
+                                                        pm: '{{ addslashes($proyek->ketuaProyek->nama ?? "-") }}',
+                                                        progress: '{{ $progressValue }}',
+                                                        status: '{{ $statusLabel }}',
+                                                        tglMulai: '{{ $tglMulai ?? "-" }}',
+                                                        tglSelesai: '{{ $tglSelesai ?? "-" }}',
+                                                        kendalaInternal: @js($akt->kendala_internal ?? []),
+                                                        kendalaEksternal: @js($akt->kendala_eksternal ?? []),
+                                                        dokumen: @js($formattedDocs)
+                                                    })"
+                                                    class="w-full py-1.5 px-2 rounded-xl bg-white hover:bg-purple-50 border border-purple-200 text-[#6E5BC3] transition-all text-[10px] font-semibold cursor-pointer shadow-2xs flex items-center justify-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    <span class="truncate">Lihat Detail</span>
+                                                </button>
+                                                <button type="button" 
+                                                    @click.stop="$dispatch('open-modal-lapor-progress', { id: '{{ $akt->id_aktivitas }}', nama: '{{ addslashes($akt->nama_aktivitas) }}', progress: '{{ $progressValue }}' })" 
+                                                    class="w-full py-1.5 px-2 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all text-[10px] font-semibold cursor-pointer shadow-xs flex items-center justify-center">
+                                                    <span class="truncate">Lapor Progress</span>
                                                 </button>
                                             </div>
                                         </div>
                                     @endforeach
+                                </div>
+
+                                {{-- Footer Card: Total Aktivitas --}}
+                                <div class="pt-3 border-t border-purple-100/50 flex items-center justify-between">
+                                    <span class="text-[11px] text-gray-400 font-light">Total Aktivitas: {{ $totalAktProyek }}</span>
                                 </div>
 
                             </div>
@@ -433,16 +556,11 @@
                 @endif
             @else
                 {{-- TAMPILAN EMPTY STATE KETIKA HASIL FILTER KOSONG --}}
-                <div class="col-span-3 py-20 px-6 text-center bg-white rounded-[28px] border border-dashed border-purple-200 flex flex-col items-center justify-center gap-3 shadow-sm w-full">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-[#6E5BC3] mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                        </svg>
-                    </div>
-                    <h3 class="text-sm font-bold text-gray-800">Tidak Ada Aktivitas Ditemukan</h3>
-                    <p class="text-xs text-gray-400 max-w-sm font-normal">
-                        Tidak ada aktivitas yang sesuai dengan kata kunci pencarian atau filter yang Anda pilih.
-                    </p>
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
+                    <x-emptystate 
+                        title="Tidak Ada Aktivitas Ditemukan" 
+                        message="Tidak ada aktivitas yang sesuai dengan kata kunci pencarian atau filter yang Anda pilih." 
+                    />
                 </div>
             @endif
         </div>

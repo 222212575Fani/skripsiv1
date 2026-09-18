@@ -22,8 +22,8 @@
             {{-- Header Modal --}}
             <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-[#F8F7FF] border border-purple-100 rounded-xl flex items-center justify-center text-[#5C46F5] shadow-xs">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#5C46F5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-10 h-10 bg-[#F8F7FF] border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M12 4v16m8-8H4" />
                         </svg>
                     </div>
@@ -48,14 +48,14 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
                         <input type="text" name="nama_aktivitas" placeholder="Masukkan nama aktivitas..." required autocomplete="off"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-700 placeholder:font-normal">
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-700 placeholder:font-normal">
                     </div>
 
                     {{-- Deskripsi Aktivitas --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Aktivitas</label>
                         <textarea name="deskripsi_aktivitas" rows="3" placeholder="Tuliskan deskripsi atau ringkasan aktivitas..."
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-700 placeholder:font-normal resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-700 placeholder:font-normal resize-none"></textarea>
                     </div>
 
                     {{-- Penanggung Jawab --}}
@@ -108,7 +108,7 @@
                             <input type="date" name="tanggal_mulai" required x-model="tglMulai"
                                 min="{{ $minMulai }}"
                                 @if($maxMulai) max="{{ $maxMulai }}" @endif
-                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Selesai (Target) <span class="text-red-500">*</span></label>
@@ -118,7 +118,7 @@
                             <input type="date" name="tanggal_target_selesai" required 
                                 :min="tglMulai ? tglMulai : '{{ $minMulai }}'"
                                 @if($maxSelesai) max="{{ $maxSelesai }}" @endif
-                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5C46F5]/20 focus:border-[#5C46F5] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
                         </div>
                     </div>
 
@@ -129,7 +129,7 @@
                     <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/20 transition-all cursor-pointer">
                         Batal
                     </button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#5C46F5] hover:bg-[#4A38D4] text-white shadow-md shadow-[#5C46F5]/20 transition-all cursor-pointer">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white shadow-md shadow-[#6E5BC3]/20 transition-all cursor-pointer">
                         Simpan Aktivitas
                     </button>
                 </div>

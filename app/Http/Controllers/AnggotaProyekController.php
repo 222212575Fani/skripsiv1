@@ -7,6 +7,7 @@ use App\Models\Proyek;
 use App\Models\AktivitasProyek;
 use App\Models\ProgressAktivitas;
 use App\Models\Pengguna;
+use App\Models\TimKerja;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -62,6 +63,7 @@ class AnggotaProyekController extends Controller
 
     public function index(Request $request)
     {
+        Proyek::sinkronkanSemuaStatus();
         $userId = auth()->id();
 
         $proyekKetuaAll = Proyek::where('id_ketua_proyek', $userId)->get();
@@ -70,7 +72,7 @@ class AnggotaProyekController extends Controller
             return $this->aktivitasSaya($request);
         }
 
-        $queryKetua = Proyek::with(['ketuaProyek', 'aktivitasProyek.penanggungJawab'])
+        $queryKetua = Proyek::with(['ketuaProyek', 'anggotaProyek.pengguna', 'aktivitasProyek.penanggungJawab'])
             ->where('id_ketua_proyek', $userId);
         
         $totalProyek         = $proyekKetuaAll->count();
@@ -83,6 +85,62 @@ class AnggotaProyekController extends Controller
             ->whereIn('id_proyek', $proyekKetuaAll->pluck('id_proyek'))
             ->distinct('id_pengguna')
             ->count('id_pengguna');
+
+        $now = Carbon::now();
+
+        // 1. Perhitungan Pertumbuhan Total Proyek (Bulan ini vs Bulan lalu)
+        $proyekBulanIni = $proyekKetuaAll->filter(function ($p) use ($now) {
+            if (!$p->created_at) return false;
+            $created = Carbon::parse($p->created_at);
+            return $created->year == $now->year && $created->month == $now->month;
+        })->count();
+
+        $bulanLalu = $now->copy()->subMonth();
+        $proyekBulanLalu = $proyekKetuaAll->filter(function ($p) use ($bulanLalu) {
+            if (!$p->created_at) return false;
+            $created = Carbon::parse($p->created_at);
+            return $created->year == $bulanLalu->year && $created->month == $bulanLalu->month;
+        })->count();
+
+        if ($proyekBulanLalu > 0) {
+            $growthTotal = round((($proyekBulanIni - $proyekBulanLalu) / $proyekBulanLalu) * 100, 1);
+            $totalPersenText = ($growthTotal >= 0 ? "+{$growthTotal}%" : "{$growthTotal}%") . ' bulan ini';
+            $totalTrend = $growthTotal >= 0 ? 'up' : 'down';
+        } else {
+            if ($proyekBulanIni > 0) {
+                $totalPersenText = '+100% bulan ini';
+                $totalTrend = 'up';
+            } else {
+                $totalPersenText = '0% bulan ini';
+                $totalTrend = 'neutral';
+            }
+        }
+
+        // 2. Perhitungan Persentase Status terhadap Total Proyek
+        $formatPersen = function ($jumlah, $total) {
+            if ($total <= 0) return '0%';
+            $pct = round(($jumlah / $total) * 100, 1);
+            return (floor($pct) == $pct ? (int)$pct : $pct) . '%';
+        };
+
+        $persenBelumDimulai = $formatPersen($proyekBelumDimulai, $totalProyek) . ' dari total';
+        $persenBerjalan = $formatPersen($proyekBerjalan, $totalProyek) . ' dari total';
+        $persenSelesai = $formatPersen($proyekSelesai, $totalProyek) . ' dari total';
+        $persenTerlambat = $formatPersen($proyekTerlambat, $totalProyek) . ' dari total';
+
+        $statsProyek = [
+            'total'                 => $totalProyek,
+            'total_persen_text'     => $totalPersenText,
+            'total_trend'           => $totalTrend,
+            'belum_dimulai'         => $proyekBelumDimulai,
+            'belum_dimulai_persen'  => $persenBelumDimulai,
+            'berjalan'              => $proyekBerjalan,
+            'berjalan_persen'       => $persenBerjalan,
+            'selesai'               => $proyekSelesai,
+            'selesai_persen'        => $persenSelesai,
+            'terlambat'             => $proyekTerlambat,
+            'terlambat_persen'      => $persenTerlambat,
+        ];
 
         if ($request->filled('search')) {
             $queryKetua->where('nama_proyek', 'like', '%' . $request->search . '%');
@@ -108,12 +166,13 @@ class AnggotaProyekController extends Controller
         return view('anggota.proyek', compact(
             'semuaProyek',
             'totalProyek', 'proyekBelumDimulai', 'proyekBerjalan', 
-            'proyekSelesai', 'proyekTerlambat', 'jumlahAnggotaProyek'
+            'proyekSelesai', 'proyekTerlambat', 'jumlahAnggotaProyek', 'statsProyek'
         ));
     }
 
     public function aktivitasSaya(Request $request)
     {
+        Proyek::sinkronkanSemuaStatus();
         $userId = auth()->id();
 
         $proyekIds = DB::table('anggota_proyek')
@@ -127,19 +186,27 @@ class AnggotaProyekController extends Controller
 
         $totalProyekTerlibat = $proyekIds->count();
 
-        $proyekQuery = Proyek::with(['aktivitasProyek' => function($q) use ($userId, $request) {
-            $q->where('id_penanggung_jawab', $userId);
+        $tahun = $request->input('tahun', 'semua');
+
+        $proyekQuery = Proyek::with(['ketuaProyek', 'aktivitasProyek' => function($q) use ($userId, $request, $tahun) {
+            $q->where('id_penanggung_jawab', $userId)
+              ->with(['penanggungJawab', 'dokumenPendukung', 'kendalaAktivitas']);
             
             if ($request->filled('search')) {
-                $q->where('nama_aktivitas', 'like', '%' . $request->search . '%');
+                $q->where(function($sub) use ($request) {
+                    $sub->where('nama_aktivitas', 'like', '%' . $request->search . '%')
+                        ->orWhereHas('proyek', function($p) use ($request) {
+                            $p->where('nama_proyek', 'like', '%' . $request->search . '%');
+                        });
+                });
             }
             if ($request->filled('status') && $request->status !== 'semua') {
                 $q->where('status_aktivitas', $request->status);
             }
-            if ($request->filled('tahun') && $request->tahun !== 'semua') {
-                $q->where(function($sub) use ($request) {
-                    $sub->whereYear('tanggal_mulai', $request->tahun)
-                        ->orWhereYear('tanggal_target_selesai', $request->tahun);
+            if ($tahun && $tahun !== 'semua') {
+                $q->where(function($sub) use ($tahun) {
+                    $sub->whereYear('tanggal_mulai', $tahun)
+                        ->orWhereYear('tanggal_target_selesai', $tahun);
                 });
             }
             if ($request->filled('bulan') && $request->bulan !== 'semua') {
@@ -148,20 +215,35 @@ class AnggotaProyekController extends Controller
                         ->orWhereMonth('tanggal_target_selesai', $request->bulan);
                 });
             }
-        }])->whereIn('id_proyek', $proyekIds);
+        }])
+        ->whereIn('id_proyek', $proyekIds)
+        ->whereHas('aktivitasProyek', function($q) use ($userId, $request, $tahun) {
+            $q->where('id_penanggung_jawab', $userId);
 
-        if ($request->filled('search')) {
-            $proyekQuery->where(function($q) use ($request) {
-                $q->where('nama_proyek', 'like', '%' . $request->search . '%')
-                  ->orWhereHas('aktivitasProyek', function($sub) use ($request) {
-                      $sub->where('nama_aktivitas', 'like', '%' . $request->search . '%');
-                  });
-            });
-        }
-
-        if ($request->filled('status') && $request->status !== 'semua') {
-            $proyekQuery->where('status_proyek', $request->status);
-        }
+            if ($request->filled('search')) {
+                $q->where(function($sub) use ($request) {
+                    $sub->where('nama_aktivitas', 'like', '%' . $request->search . '%')
+                        ->orWhereHas('proyek', function($p) use ($request) {
+                            $p->where('nama_proyek', 'like', '%' . $request->search . '%');
+                        });
+                });
+            }
+            if ($request->filled('status') && $request->status !== 'semua') {
+                $q->where('status_aktivitas', $request->status);
+            }
+            if ($tahun && $tahun !== 'semua') {
+                $q->where(function($sub) use ($tahun) {
+                    $sub->whereYear('tanggal_mulai', $tahun)
+                        ->orWhereYear('tanggal_target_selesai', $tahun);
+                });
+            }
+            if ($request->filled('bulan') && $request->bulan !== 'semua') {
+                $q->where(function($sub) use ($request) {
+                    $sub->whereMonth('tanggal_mulai', $request->bulan)
+                        ->orWhereMonth('tanggal_target_selesai', $request->bulan);
+                });
+            }
+        });
 
         $proyekTerlibat = $proyekQuery->latest()->paginate(15)->withQueryString();
 
@@ -200,9 +282,9 @@ class AnggotaProyekController extends Controller
             $queryAktivitas->where('status_aktivitas', request('status'));
         }
 
-        // WAJIB ADA: Memuat relasi penanggungJawab dan dokumenPendukung
+        // WAJIB ADA: Memuat relasi penanggungJawab, dokumenPendukung, dan kendalaAktivitas
         $aktivitasProyek = $queryAktivitas
-            ->with(['penanggungJawab', 'dokumenPendukung'])
+            ->with(['penanggungJawab', 'dokumenPendukung', 'kendalaAktivitas'])
             ->latest('id_aktivitas')
             ->paginate(10)
             ->withQueryString();
@@ -255,11 +337,24 @@ class AnggotaProyekController extends Controller
 
         $this->tambahkanAnggotaProyek($proyek, (int) $request->id_penanggung_jawab);
 
+        $namaKetuaProyek = auth()->user()->nama ?? 'Ketua Proyek';
+
+        // 1. Notifikasi ke Ketua Tim bahwa aktivitas baru telah ditambahkan oleh Ketua Proyek
+        $timKerja = $proyek->timKerja ?? TimKerja::find($proyek->id_tim);
+        $ketuaTim = $timKerja?->ketuaTim ?? ($timKerja?->id_ketua_tim ? Pengguna::find($timKerja->id_ketua_tim) : null);
+        if ($ketuaTim && $ketuaTim->id_pengguna !== auth()->id()) {
+            $ketuaTim->notify(new GeneralNotification(
+                'Aktivitas Proyek Baru Ditambahkan',
+                "{$namaKetuaProyek} telah menambahkan aktivitas baru: '{$request->nama_aktivitas}' pada proyek {$proyek->nama_proyek}."
+            ));
+        }
+
+        // 2. Notifikasi ke Anggota yang ditugaskan sebagai Penanggung Jawab
         $targetPengguna = Pengguna::find($request->id_penanggung_jawab);
-        if ($targetPengguna) {
+        if ($targetPengguna && $targetPengguna->id_pengguna !== auth()->id()) {
             $targetPengguna->notify(new GeneralNotification(
-                'Tugas Aktivitas Baru',
-                "Anda mendapatkan penugasan aktivitas baru: '{$request->nama_aktivitas}' pada proyek {$proyek->nama_proyek}."
+                'Penugasan Aktivitas Baru',
+                "Anda telah ditugaskan untuk mengerjakan aktivitas '{$request->nama_aktivitas}' pada proyek {$proyek->nama_proyek}."
             ));
         }
 
@@ -316,11 +411,13 @@ class AnggotaProyekController extends Controller
             'uraian_progress'          => 'nullable|string|max:2000',
             'kendala_internal'         => 'nullable|string|max:2000',
             'kendala_eksternal'        => 'nullable|string|max:2000',
+            'dokumen_pendukung'        => 'nullable|array',
             'dokumen_pendukung.*'      => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:5120',
         ]);
 
         $userId = auth()->id();
 
+        // 1. Simpan Catatan Kendala Internal / Eksternal
         if (!empty($data['kendala_internal']) || !empty($data['kendala_eksternal'])) {
             DB::table('kendala_aktivitas')->insert([
                 'id_aktivitas'      => $aktivitas->id_aktivitas,
@@ -332,6 +429,7 @@ class AnggotaProyekController extends Controller
             ]);
         }
 
+        // 2. Simpan Riwayat Progress Aktivitas
         ProgressAktivitas::create([
             'id_aktivitas'             => $aktivitas->id_aktivitas,
             'id_pengguna'              => $userId,
@@ -339,8 +437,12 @@ class AnggotaProyekController extends Controller
             'uraian_progress'          => $data['uraian_progress'] ?? null,
         ]);
 
+        // 3. Simpan Dokumen Pendukung jika ada yang diunggah
+        $jumlahDokumen = 0;
         if ($request->hasFile('dokumen_pendukung')) {
-            foreach ($request->file('dokumen_pendukung') as $file) {
+            $files = $request->file('dokumen_pendukung');
+            $jumlahDokumen = count($files);
+            foreach ($files as $file) {
                 $filePath = $file->store('dokumen_progress', 'public');
                 
                 DB::table('dokumen_pendukung')->insert([
@@ -354,12 +456,66 @@ class AnggotaProyekController extends Controller
             }
         }
 
+        // 4. Update Target dan Status Aktivitas
         $aktivitas->update([
             'target'                   => $data['progress_minggu_berjalan'],
             'status_aktivitas'         => $data['progress_minggu_berjalan'] >= 100 ? 'selesai' : 'berjalan',
             'tanggal_selesai_aktual'   => $data['progress_minggu_berjalan'] >= 100 ? now()->toDateString() : null,
             'diperbarui_oleh'          => $userId,
         ]);
+
+        // 5. Sinkronisasi progress rata-rata dan status proyek secara otomatis
+        $proyek = $aktivitas->proyek ?? Proyek::find($aktivitas->id_proyek);
+        if ($proyek) {
+            $proyek->refresh();
+            $statusBaru = $proyek->hitungStatusOtomatis();
+            $proyek->updateQuietly([
+                'persen_progress'        => $proyek->persen_progress,
+                'status_proyek'          => $statusBaru,
+                'tanggal_selesai_aktual' => $statusBaru === 'selesai' ? ($proyek->tanggal_selesai_aktual ?? now()->toDateString()) : null,
+            ]);
+        }
+
+        // 6. Susun Notifikasi Informatif ke Ketua Proyek dan Ketua Tim
+        $namaPelapor = auth()->user()->nama ?? 'Anggota';
+        $adaDokumen = $jumlahDokumen > 0;
+        $adaKendala = !empty($data['kendala_internal']) || !empty($data['kendala_eksternal']);
+
+        $keteranganTambahan = '';
+        if ($adaDokumen && $adaKendala) {
+            $keteranganTambahan = " serta melampirkan {$jumlahDokumen} dokumen pendukung dan catatan kendala";
+        } elseif ($adaDokumen) {
+            $keteranganTambahan = " serta melampirkan {$jumlahDokumen} dokumen pendukung";
+        } elseif ($adaKendala) {
+            $keteranganTambahan = " serta mencantumkan catatan kendala";
+        }
+
+        $namaProyek = $proyek?->nama_proyek ?? 'Proyek';
+        $pesanNotifikasi = "{$namaPelapor} telah melaporkan progress {$data['progress_minggu_berjalan']}%{$keteranganTambahan} pada aktivitas '{$aktivitas->nama_aktivitas}' (Proyek: {$namaProyek}).";
+
+        // Daftar penerima: Ketua Proyek dan Ketua Tim (selain pelapor)
+        $penerimaNotifikasi = collect();
+
+        // Target 1: Ketua Proyek
+        $ketuaProyek = $proyek?->ketuaProyek ?? ($proyek?->id_ketua_proyek ? Pengguna::find($proyek->id_ketua_proyek) : null);
+        if ($ketuaProyek && $ketuaProyek->id_pengguna !== $userId) {
+            $penerimaNotifikasi->put($ketuaProyek->id_pengguna, $ketuaProyek);
+        }
+
+        // Target 2: Ketua Tim
+        $timKerja = $proyek?->timKerja ?? ($proyek?->id_tim ? TimKerja::find($proyek->id_tim) : null);
+        $ketuaTim = $timKerja?->ketuaTim ?? ($timKerja?->id_ketua_tim ? Pengguna::find($timKerja->id_ketua_tim) : null);
+        if ($ketuaTim && $ketuaTim->id_pengguna !== $userId) {
+            $penerimaNotifikasi->put($ketuaTim->id_pengguna, $ketuaTim);
+        }
+
+        // Kirim notifikasi
+        foreach ($penerimaNotifikasi as $penerima) {
+            $penerima->notify(new GeneralNotification(
+                'Laporan Progress Aktivitas',
+                $pesanNotifikasi
+            ));
+        }
 
         return redirect()->back()->with('success', 'Laporan progress, kendala, dan dokumen berhasil dikirim.');
     }

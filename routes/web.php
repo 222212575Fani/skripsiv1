@@ -7,8 +7,19 @@ use App\Http\Controllers\TimKerjaController;
 use App\Http\Controllers\AnggotaProyekController;
 use App\Http\Controllers\KetuaTimController;
 use App\Http\Controllers\DirekturController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        $role = auth()->user()->role?->nama_role;
+        return match ($role) {
+            'Admin' => redirect()->route('admin.manajemenpengguna'),
+            'Direktur' => redirect()->route('direktur.dashboard'),
+            'Ketua Tim' => redirect()->route('ketuatim.dashboard'),
+            'Anggota' => redirect()->route('anggota.proyekaktivitas'),
+            default => redirect()->route('login'),
+        };
+    }
     return redirect()->route('login');
 });
 
@@ -19,8 +30,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::middleware('auth')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Notifikasi Real-time
+    Route::get('/notifications/check', [NotificationController::class, 'check'])->name('notifications.check');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
 
     // Admin
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -37,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('direktur')->name('direktur.')->group(function () {
         Route::get('/dashboard', [DirekturController::class, 'dashboard'])->name('dashboard');
         Route::get('/dashboard/dataprogress', [DirekturController::class, 'getChartData'])->name('chart.data');
+        Route::get('/dashboard/databebankerja', [DirekturController::class, 'getBebanKerjaData'])->name('chart.bebankerja');
     });
 
     // Ketua Tim

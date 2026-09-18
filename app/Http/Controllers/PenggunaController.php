@@ -292,9 +292,12 @@ class PenggunaController extends Controller
 
             if ($isRoleGlobal) {
                 DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
-                DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
+                DB::table('anggota_tim')
+                    ->where('id_pengguna', $user->id_pengguna)
+                    ->whereNull('tanggal_keluar')
+                    ->update(['tanggal_keluar' => now()]);
             } else {
-                if ($request->filled('id_tim')) {
+                if ($request->filled('id_tim') && $request->status_akun === 'aktif') {
                     $timTarget = DB::table('tim_kerja')->where('id_tim', $request->id_tim)->first();
                     $namaTim = $timTarget ? $timTarget->nama_tim : null;
 
@@ -305,17 +308,37 @@ class PenggunaController extends Controller
                         ]);
                     }
 
-                    DB::table('anggota_tim')->updateOrInsert(
-                        ['id_pengguna' => $user->id_pengguna],
-                        [
+                    // Catat tanggal_keluar untuk tim lama yang masih aktif
+                    DB::table('anggota_tim')
+                        ->where('id_pengguna', $user->id_pengguna)
+                        ->where('id_tim', '!=', $request->id_tim)
+                        ->whereNull('tanggal_keluar')
+                        ->update(['tanggal_keluar' => now()]);
+
+                    // Aktifkan / tambahkan anggota di tim baru
+                    $keanggotaanAktif = DB::table('anggota_tim')
+                        ->where('id_pengguna', $user->id_pengguna)
+                        ->where('id_tim', $request->id_tim)
+                        ->whereNull('tanggal_keluar')
+                        ->first();
+
+                    if (!$keanggotaanAktif) {
+                        DB::table('anggota_tim')->insert([
+                            'id_pengguna'       => $user->id_pengguna,
                             'id_tim'            => $request->id_tim,
                             'tanggal_bergabung' => now(),
-                            'updated_at'        => now(),
+                            'tanggal_keluar'    => null,
                             'created_at'        => now(),
-                        ]
-                    );
+                            'updated_at'        => now(),
+                        ]);
+                    }
                 } else {
-                    DB::table('anggota_tim')->where('id_pengguna', $user->id_pengguna)->delete();
+                    // Jika akun dinonaktifkan atau tim dikosongkan (pensiun/mutasi keluar)
+                    DB::table('tim_kerja')->where('id_ketua_tim', $user->id_pengguna)->update(['id_ketua_tim' => null]);
+                    DB::table('anggota_tim')
+                        ->where('id_pengguna', $user->id_pengguna)
+                        ->whereNull('tanggal_keluar')
+                        ->update(['tanggal_keluar' => now()]);
                 }
             }
 

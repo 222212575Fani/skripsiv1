@@ -20,7 +20,7 @@ class Pengguna extends Authenticatable
         'nip',
         'email',
         'password',
-        'token_ingat_saya',
+        'remember_token',
         'id_role',
         'status_akun',
         'disetujui_pada',
@@ -28,7 +28,7 @@ class Pengguna extends Authenticatable
 
     protected $hidden = [
         'password',
-        'token_ingat_saya',
+        'remember_token',
     ];
 
     protected $casts = [

@@ -59,7 +59,7 @@
             
             <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#5C46F5] shadow-sm">
+                    <div class="w-10 h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
@@ -122,17 +122,17 @@
                             <input type="hidden" name="status_akun" x-model="status" required>
 
                             <button @click="openStatus = !openStatus; openRoleDropdown = false; openTimDropdown = false;" @click.outside="openStatus = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-xl text-xs font-medium transition-all cursor-pointer">
                                 <span x-text="status.charAt(0).toUpperCase() + status.slice(1)" class="text-gray-700 font-normal"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openStatus ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openStatus ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
 
                             <div x-show="openStatus" x-cloak class="absolute left-0 mt-2 w-full bg-white border border-purple-100 rounded-[20px] shadow-xl p-2 z-50 space-y-1">
-                                <button type="button" @click="status = 'aktif'; openStatus = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">Aktif</button>
-                                <button type="button" @click="status = 'pending'; openStatus = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">Pending</button>
-                                <button type="button" @click="status = 'nonaktif'; openStatus = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">Non-Aktif</button>
+                                <button type="button" @click="status = 'aktif'; openStatus = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">Aktif</button>
+                                <button type="button" @click="status = 'pending'; openStatus = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">Pending</button>
+                                <button type="button" @click="status = 'nonaktif'; openStatus = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">Non-Aktif</button>
                             </div>
                         </div>
 
@@ -142,22 +142,22 @@
                             <input type="hidden" name="id_role" x-model="role">
 
                             <button @click="openRoleDropdown = !openRoleDropdown; openStatus = false; openTimDropdown = false;" @click.outside="openRoleDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-xl text-xs font-medium transition-all cursor-pointer">
                                 <span x-text="roleName" :class="role === '' ? 'text-gray-400 font-normal' : 'text-gray-700 font-normal'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
 
                             <div x-show="openRoleDropdown" x-cloak class="absolute left-0 mt-2 w-full bg-white border border-purple-100 rounded-[20px] shadow-xl p-2 z-50 space-y-1 max-h-36 overflow-y-auto">
-                                <button type="button" @click="role = ''; roleName = 'Pilih Peran'; openRoleDropdown = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">Pilih Peran</button>
+                                <button type="button" @click="role = ''; roleName = 'Pilih Peran'; openRoleDropdown = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">Pilih Peran</button>
                                 @foreach($roles as $r)
                                     @if(strtolower($r->nama_role) !== 'admin')
                                         <button type="button" 
                                             data-role-id="{{ $r->id_role }}" 
                                             data-role-name="{{ $r->nama_role }}"
                                             @click="role = '{{ $r->id_role }}'; roleName = '{{ $r->nama_role }}'; openRoleDropdown = false;"
-                                            class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">
+                                            class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">
                                             {{ $r->nama_role }}
                                         </button>
                                     @endif
@@ -172,21 +172,21 @@
                         <input type="hidden" name="id_tim" x-model="tim">
 
                         <button @click="openTimDropdown = !openTimDropdown; openStatus = false; openRoleDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
-                            class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                            class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-xl text-xs font-medium transition-all cursor-pointer">
                             <span x-text="timName" :class="tim === '' ? 'text-gray-400 font-normal' : 'text-gray-700 font-normal'"></span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
 
                         <div x-show="openTimDropdown" x-cloak class="absolute left-0 mt-2 w-full bg-white border border-purple-100 rounded-[20px] shadow-xl p-2 z-50 space-y-1 max-h-36 overflow-y-auto">
-                            <button type="button" @click="tim = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">Pilih Tim Kerja</button>
+                            <button type="button" @click="tim = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;" class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">Pilih Tim Kerja</button>
                             @foreach($tims as $t)
                                 <button type="button" 
                                     data-tim-id="{{ $t->id_tim }}"
                                     data-tim-name="{{ $t->nama_tim }}"
                                     @click="tim = '{{ $t->id_tim }}'; timName = '{{ $t->nama_tim }}'; openTimDropdown = false;"
-                                    class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-normal transition-all cursor-pointer">
+                                    class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer">
                                     {{ $t->nama_tim }}
                                 </button>
                             @endforeach
@@ -206,7 +206,7 @@
                     <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">
                         Batal
                     </x-button>
-                    <x-button type="submit" color="bg-[#5C46F5] hover:bg-[#4b35e0] text-white" shadow="shadow-md shadow-[#5C46F5]/20">
+                    <x-button type="submit" color="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20">
                         Simpan Perubahan
                     </x-button>
                 </div>

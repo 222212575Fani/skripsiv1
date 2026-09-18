@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\GeneralNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -148,8 +149,16 @@ class AuthController extends Controller
         }
 
         // 5. LOGIN
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->boolean('remember'))) {
+        $remember = $request->boolean('remember');
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
             $request->session()->regenerate();
+
+            if ($remember) {
+                Cookie::queue('remember_email', $request->email, 60 * 24 * 30); // Simpan email selama 30 hari
+            } else {
+                Cookie::queue(Cookie::forget('remember_email'));
+            }
+
             return $this->redirectByRole($pengguna);
         }
 

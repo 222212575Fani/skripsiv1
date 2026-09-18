@@ -1,4 +1,4 @@
-<aside class="w-[280px] bg-[#F5F3FF] text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 min-h-screen justify-between border-r border-purple-100/60">
+<aside class="w-70 bg-[#F5F3FF] text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 min-h-screen justify-between border-r border-purple-100/60">
     <div class="flex flex-col">
         <!-- Logo / Brand -->
         <div class="p-8 mb-2">
@@ -10,12 +10,9 @@
                     </svg>
                 </button>
 
-                <div class="flex items-center gap-4 flex-1">
-                    <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-10 w-auto object-contain bg-transparent">
-                    <div>
-                        <h1 class="text-sm font-extrabold text-[#6E5BC3] leading-none uppercase tracking-tight">SIS Project</h1>
-                        <p class="text-[10px] font-bold text-[#6E5BC3]/70 uppercase mt-1.5 tracking-widest">BPS RI</p>
-                    </div>
+                <div class="flex items-center gap-3 flex-1">
+                    <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-7.5 w-auto object-contain bg-transparent">
+                    <h1 class="text-2xl font-black text-[#6E5BC3] leading-none uppercase tracking-tight">PROXIS</h1>
                 </div>
             </div>
         </div>
@@ -78,7 +75,7 @@
                 @endphp
                 
                 <a href="{{ route($menu['route']) }}" 
-                    wire:navigate
+                    wire:navigate.hover
                     class="group flex items-center justify-between px-4 py-3 text-xs rounded-2xl transition-all duration-200 font-bold {{ $isActive ? 'bg-[#6E5BC3] text-white shadow-md shadow-[#6E5BC3]/25 font-extrabold' : 'text-[#6E5BC3]/80 hover:bg-[#6E5BC3] hover:text-white hover:shadow-md hover:shadow-[#6E5BC3]/25' }}">
                     
                     <div class="flex items-center gap-3">

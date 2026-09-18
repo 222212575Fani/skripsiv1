@@ -1,6 +1,8 @@
 <div x-data="{ open: false, deleteUrl: '' }" 
      @open-modal-hapus-aktivitas.window="open = true; deleteUrl = $event.detail.url" 
+     @open-hapus-aktivitas.window="open = true; deleteUrl = $event.detail.url" 
      @close-modal-hapus-aktivitas.window="open = false"
+     @close-hapus-aktivitas.window="open = false"
      x-show="open" 
      x-cloak
      class="fixed inset-0 z-[999] overflow-y-auto" 

@@ -33,18 +33,16 @@
         default     => 'Belum Dimulai'
     };
 
-    // Logika Label & Styling Warna Samping Panah (Tanpa bold untuk warning)
+    // Logika Label & Styling Warna Samping Panah (Indikator Waktu Selalu Warna Ungu)
     $sekarang = Carbon::now();
     $badgeKeteranganWaktu = '';
-    $badgeWaktuStyle = 'bg-gray-50 border-gray-100 text-gray-500';
+    $badgeWaktuStyle = 'bg-purple-50 border-purple-200 text-[#6E5BC3] font-medium';
     
     if ($statusProj === 'selesai') {
         $badgeKeteranganWaktu = 'Proyek Selesai';
-        $badgeWaktuStyle = 'bg-emerald-50 border-emerald-100 text-emerald-600 font-medium';
     } elseif ($statusProj === 'terlambat') {
         $selisihHari = $tglSelesai ? $sekarang->diffInDays($tglSelesai, false) : 0;
         $badgeKeteranganWaktu = 'Terlambat ' . abs(round($selisihHari)) . ' hari';
-        $badgeWaktuStyle = 'bg-rose-50 border-rose-100 text-rose-600 font-normal';
     } elseif ($statusProj === 'belum_dimulai') {
         $selisihHari = $tglMulai ? $sekarang->diffInDays($tglMulai, false) : 0;
         if ($selisihHari > 0) {
@@ -52,30 +50,56 @@
         } else {
             $badgeKeteranganWaktu = 'Segera Dimulai';
         }
-        $badgeWaktuStyle = 'bg-rose-50 border-rose-100 text-rose-600 font-normal';
     } else { // Berjalan
         $sisaHari = $tglSelesai ? $sekarang->diffInDays($tglSelesai, false) : 0;
         if ($sisaHari >= 0) {
-            $badgeKeteranganWaktu = round($sisaHari) . ' days left';
-            if ($sisaHari <= 3) {
-                $badgeWaktuStyle = 'bg-rose-50 border-rose-100 text-rose-600 font-normal';
-            } else {
-                $badgeWaktuStyle = 'bg-gray-50 border-gray-100 text-gray-500';
-            }
+            $badgeKeteranganWaktu = round($sisaHari) . ' hari tersisa';
         } else {
             $badgeKeteranganWaktu = 'Lewat ' . abs(round($sisaHari)) . ' hari';
-            $badgeWaktuStyle = 'bg-rose-50 border-rose-100 text-rose-600 font-normal';
         }
     }
+
+    // Kumpulkan seluruh orang yang terlibat dalam proyek (Ketua, Anggota, dan Penanggung Jawab Aktivitas)
+    $orangTerlibat = collect();
+
+    // 1. Ketua Proyek
+    if ($proyek->ketuaProyek) {
+        $orangTerlibat->put($proyek->ketuaProyek->id_pengguna, $proyek->ketuaProyek);
+    }
+
+    // 2. Anggota Tim / Proyek
+    if (method_exists($proyek, 'anggotaProyek')) {
+        $anggotaList = $proyek->relationLoaded('anggotaProyek') 
+            ? $proyek->anggotaProyek 
+            : $proyek->anggotaProyek()->with('pengguna')->get();
+        foreach ($anggotaList as $ap) {
+            if ($ap->pengguna) {
+                $orangTerlibat->put($ap->pengguna->id_pengguna, $ap->pengguna);
+            }
+        }
+    }
+
+    // 3. Penanggung Jawab Aktivitas
+    foreach ($aktivitasList as $akt) {
+        if ($akt->penanggungJawab) {
+            $orangTerlibat->put($akt->penanggungJawab->id_pengguna, $akt->penanggungJawab);
+        }
+    }
+
+    $semuaOrang = $orangTerlibat->values();
+    $totalOrang = $semuaOrang->count();
+    $maksTampil = 8;
+    $tampilOrang = $semuaOrang->take($maksTampil);
+    $sisaOrang = $totalOrang - $maksTampil;
 @endphp
 
-<div class="bg-[#FBF9FE] border border-purple-100 hover:border-purple-300 rounded-[28px] p-6 h-full flex flex-col justify-between gap-6 shadow-2xs transition-all">
+<div class="bg-[#FBF9FE] border border-purple-100 hover:border-purple-300 rounded-[28px] p-6 w-full flex flex-col justify-between gap-6 shadow-2xs transition-all">
     
     {{-- BAGIAN ATAS --}}
     <div class="flex flex-col gap-4">
         
         <div class="flex items-start justify-between gap-3">
-            <h3 class="text-sm font-medium text-gray-900 tracking-tight flex-1">
+            <h3 class="text-sm font-semibold text-gray-900 tracking-tight flex-1">
                 {{ $proyek->nama_proyek }}
             </h3>
             <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase border tracking-wide shrink-0 {{ $statusProjBadge }}">
@@ -91,14 +115,14 @@
             <span>{{ $formatRentangTanggal }}</span>
         </div>
 
-        {{-- Progress Bar (Background Putih, Border Merah, Isi Merah, Persentase Tidak Bold) --}}
+        {{-- Progress Bar --}}
         <div class="flex flex-col gap-1.5 pt-1">
             <div class="flex items-center justify-between text-xs">
                 <span class="text-gray-400 font-medium">Progress</span>
                 <span class="font-normal text-gray-700">{{ $progressProyek }}%</span>
             </div>
-            <div class="w-full bg-white border border-rose-300 rounded-full h-2 overflow-hidden shadow-2xs">
-                <div class="bg-rose-500 h-full rounded-full transition-all duration-300" style="width: {{ $progressProyek }}%;"></div>
+            <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
+                <div class="bg-[#6E5BC3] h-full rounded-full transition-all duration-300" style="width: {{ $progressProyek }}%;"></div>
             </div>
         </div>
 
@@ -106,17 +130,41 @@
 
     {{-- BAGIAN BAWAH --}}
     <div class="flex items-center justify-between pt-2 border-t border-purple-100/50">
+        {{-- Avatar Profil Orang yang Terlibat (Maks 8 icon, sisanya +N) --}}
         <div class="flex items-center -space-x-2">
-            <span class="w-7 h-7 rounded-full bg-purple-100 border border-white text-[#6E5BC3] text-[10px] font-bold flex items-center justify-center shadow-2xs" title="{{ $ketuaNama }}">
-                {{ strtoupper(substr($ketuaNama, 0, 2)) }}
-            </span>
+            @forelse($tampilOrang as $orang)
+                @php
+                    $namaPerson = $orang->nama ?? 'Pengguna';
+                    $inisial = strtoupper(substr($namaPerson, 0, 2));
+                @endphp
+                <span class="w-7 h-7 rounded-full bg-purple-100 border-2 border-white text-[#6E5BC3] text-[10px] font-bold flex items-center justify-center shadow-2xs" 
+                      title="{{ $namaPerson }}">
+                    {{ $inisial }}
+                </span>
+            @empty
+                <span class="w-7 h-7 rounded-full bg-purple-100 border-2 border-white text-[#6E5BC3] text-[10px] font-bold flex items-center justify-center shadow-2xs" 
+                      title="{{ $ketuaNama }}">
+                    {{ strtoupper(substr($ketuaNama, 0, 2)) }}
+                </span>
+            @endforelse
+
+            @if($sisaOrang > 0)
+                <span class="w-7 h-7 rounded-full bg-purple-200 border-2 border-white text-[#6E5BC3] text-[9px] font-extrabold flex items-center justify-center shadow-2xs" 
+                      title="Dan {{ $sisaOrang }} orang lainnya terlibat">
+                    +{{ $sisaOrang }}
+                </span>
+            @endif
         </div>
 
         <div class="flex items-center gap-2.5">
             <span class="px-3 py-1.5 rounded-full border text-[11px] transition-all {{ $badgeWaktuStyle }}">
                 {{ $badgeKeteranganWaktu }}
             </span>
-            <a href="{{ route('anggota.proyek.aktivitas', $proyek->id_proyek ?? 1) }}" class="w-8 h-8 rounded-full border border-purple-200 hover:border-[#6E5BC3] text-gray-600 hover:text-[#6E5BC3] flex items-center justify-center transition-all bg-white shadow-2xs">
+            
+            {{-- Tombol Panah Mengarah ke Halaman Aktivitas Proyek --}}
+            <a href="{{ route('anggota.proyek.aktivitas', $proyek->id_proyek ?? 1) }}" 
+               class="w-8 h-8 rounded-full border border-purple-200 hover:border-[#6E5BC3] text-gray-600 hover:text-[#6E5BC3] flex items-center justify-center transition-all bg-white shadow-2xs" 
+               title="Detail Proyek">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                 </svg>

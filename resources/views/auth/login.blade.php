@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <x-authinput label="Email" id="email" name="email" type="email" placeholder="Masukkan email Anda" :value="old('email')">
+                <x-authinput label="Email" id="email" name="email" type="email" placeholder="Masukkan email Anda" :value="old('email', request()->cookie('remember_email'))">
                     <x-slot:icon>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px]" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 8a7 7 0 1114 0H3z" />
@@ -40,11 +40,11 @@
 
                 {{-- Fitur Remember Me --}}
                 <div class="mb-7 flex items-center gap-2">
-                    <input type="checkbox" id="remember" name="remember" class="w-4 h-4 rounded border border-[#BFBFBF] accent-[#5C46F5]">
-                    <label for="remember" class="text-[14px] text-[#666666]">Ingatkan Saya</label>
+                    <input type="checkbox" id="remember" name="remember" {{ old('remember', request()->hasCookie('remember_email')) ? 'checked' : '' }} class="w-4 h-4 rounded border border-[#BFBFBF] accent-[#6E5BC3] cursor-pointer">
+                    <label for="remember" class="text-[14px] text-[#666666] cursor-pointer select-none">Ingatkan Saya</label>
                 </div>
 
-                <button type="submit" class="w-full h-[48px] rounded-[10px] bg-[#5C46F5] text-white text-[14px] font-semibold shadow-[0_8px_18px_rgba(92,70,245,0.28)] hover:opacity-95 transition">
+                <button type="submit" class="w-full h-[48px] rounded-[10px] bg-[#6E5BC3] text-white text-[14px] font-semibold shadow-[0_8px_18px_rgba(110,91,195,0.28)] hover:opacity-95 transition">
                     Login
                 </button>
             </form>
@@ -52,9 +52,14 @@
             <div class="mt-8">
                 <p class="mt-5 text-center text-[13px] text-[#7A7A7A]">
                     Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-[#5C46F5] font-medium hover:underline">
+                    <a href="{{ route('register') }}" class="text-[#6E5BC3] font-medium hover:underline">
                         Daftar di sini
                     </a>
+                </p>
+
+                {{-- Copyright untuk layar kecil (Mobile / < md) di bagian putih --}}
+                <p class="md:hidden mt-6 text-center text-[12px] text-[#7A7A7A]">
+                    © 2026 Direktorat Sistem Informasi Statistik
                 </p>
             </div>
         </div>
@@ -69,7 +74,7 @@
                 icon: 'error',
                 title: 'Akses Ditolak',
                 text: "{{ session('error') }}",
-                confirmButtonColor: '#5C46F5',
+                confirmButtonColor: '#6E5BC3',
                 customClass: { popup: 'rounded-[20px]' }
             });
         @endif
@@ -79,7 +84,7 @@
                 icon: 'success',
                 title: 'Berhasil',
                 text: "{{ session('success') }}",
-                confirmButtonColor: '#5C46F5',
+                confirmButtonColor: '#6E5BC3',
                 customClass: { popup: 'rounded-[20px]' }
             });
         @endif

@@ -1,8 +1,8 @@
 <x-layoutauth title="Daftar Akun - Sistem Manajemen Proyek">
     
     <x-authsidepanel 
-        greeting="Halo!" 
-        title="Bergabung dan Kelola Proyek Lebih Terstruktur" 
+        greeting="Ayo!" 
+        title="Daftarkan Diri dan Mulai Kelola Proyek" 
     />
 
     <div class="flex items-center justify-center px-4 md:px-10 py-6">
@@ -76,16 +76,21 @@
                     </x-slot:icon>
                 </x-authinput>
 
-                <button type="submit" class="w-full h-[48px] mt-4 rounded-[10px] bg-[#5C46F5] text-white text-[14px] font-semibold shadow-lg hover:opacity-95 transition">
+                <button type="submit" class="w-full h-[48px] mt-4 rounded-[10px] bg-[#6E5BC3] text-white text-[14px] font-semibold shadow-lg hover:opacity-95 transition">
                     Daftar Sekarang
                 </button>
             </form>
 
             <p class="mt-8 text-center text-[13px] text-[#7A7A7A]">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-[#5C46F5] font-medium hover:underline">
+                <a href="{{ route('login') }}" class="text-[#6E5BC3] font-medium hover:underline">
                     Masuk ke akun
                 </a>
+            </p>
+
+            {{-- Copyright untuk layar kecil (Mobile / < md) di bagian putih --}}
+            <p class="md:hidden mt-6 text-center text-[12px] text-[#7A7A7A]">
+                © 2026 Direktorat Sistem Informasi Statistik
             </p>
         </div>
     </div>

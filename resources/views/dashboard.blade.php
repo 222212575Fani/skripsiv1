@@ -22,7 +22,7 @@
             </div>
             
         @elseif($role == 'ketuatim')
-            <div class="bg-gradient-to-r from-[#5C46F5] to-indigo-600 p-6 rounded-2xl text-white">
+            <div class="bg-gradient-to-r from-[#6E5BC3] to-indigo-600 p-6 rounded-2xl text-white">
                 <h2 class="font-bold text-lg">Tim: {{ auth()->user()->nama_tim ?? 'Belum ada tim' }}</h2>
                 <p class="text-indigo-100 text-sm">Ketua: {{ auth()->user()->nama }}</p>
             </div>

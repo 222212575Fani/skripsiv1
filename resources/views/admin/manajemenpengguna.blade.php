@@ -6,16 +6,19 @@
             <div class="bg-white rounded-[28px] shadow-xs border border-gray-100 overflow-hidden w-full p-6 flex flex-col gap-6">
                 
                 {{-- BARIS ATAS: JUDUL, SEARCH BAR, DAN TOMBOL TAMBAH --}}
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2">
+                <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 px-2">
                     <div>
                         <h1 class="text-xl font-bold text-gray-900">Daftar Pengguna</h1>
                     </div>
 
-                    <div class="flex items-center gap-3 w-full md:w-auto">
+                    {{-- KONTROL DESKTOP (Hanya Tampil di Layar >= xl): Search di Kiri, Tombol Tambah di Kanan --}}
+                    <div class="hidden xl:flex items-center gap-3">
                         {{-- Live Search --}}
-                        <div class="relative flex-1 md:w-64 group/search" x-data="{ search: '{{ request('search') }}' }">
-                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-hover/search:text-[#5C46F5] transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <div class="flex items-center gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] focus-within:bg-white border border-purple-200 hover:border-purple-300 focus-within:border-[#6E5BC3] rounded-full text-xs font-normal text-[#6E5BC3] transition-all shadow-2xs w-64" x-data="{ search: '{{ request('search') }}' }">
+                            <span class="text-[#6E5BC3] shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
                             </span>
                             <input type="text" x-model="search" 
                                 @input.debounce.300ms="
@@ -24,18 +27,47 @@
                                     window.location.href = url.toString();
                                 "
                                 placeholder="Cari Nama atau NIP..." 
-                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#5C46F5] rounded-2xl text-xs font-normal text-gray-700 focus:outline-none focus:border-[#5C46F5] transition-all">
+                                autocomplete="off"
+                                class="bg-transparent border-none focus:outline-none text-xs font-normal text-[#6E5BC3] placeholder:text-[#6E5BC3] w-full p-0 focus:ring-0">
                         </div>
 
+                        {{-- Tombol Tambah Pengguna --}}
                         <x-button @click="$dispatch('open-modal-tambah-pengguna')"> 
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                             <span>Tambah Pengguna</span>
                         </x-button>
                     </div>
+
+                    {{-- KONTROL MOBILE / TABLET (< xl): Berurutan ke Bawah: 1) Tambah Pengguna, 2) Cari Nama atau NIP --}}
+                    <div class="flex xl:hidden flex-col gap-3 w-full">
+                        {{-- 1. Tombol Tambah Pengguna (Full Width) --}}
+                        <x-button @click="$dispatch('open-modal-tambah-pengguna')" class="w-full justify-center py-2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                            <span>Tambah Pengguna</span>
+                        </x-button>
+
+                        {{-- 2. Cari Nama atau NIP (Full Width) --}}
+                        <div class="flex items-center gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] focus-within:bg-white border border-purple-200 hover:border-purple-300 focus-within:border-[#6E5BC3] rounded-full text-xs font-normal text-[#6E5BC3] transition-all shadow-2xs w-full" x-data="{ search: '{{ request('search') }}' }">
+                            <span class="text-[#6E5BC3] shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input type="text" x-model="search" 
+                                @input.debounce.300ms="
+                                    const url = new URL(window.location.href);
+                                    if (search) { url.searchParams.set('search', search); } else { url.searchParams.delete('search'); }
+                                    window.location.href = url.toString();
+                                "
+                                placeholder="Cari Nama atau NIP..." 
+                                autocomplete="off"
+                                class="bg-transparent border-none focus:outline-none text-xs font-normal text-[#6E5BC3] placeholder:text-[#6E5BC3] w-full p-0 focus:ring-0">
+                        </div>
+                    </div>
                 </div>
 
                 {{-- PEMBUNGKUS MANUAL HANYA UNTUK TABEL DENGAN BORDER UNGU TIPIS --}}
-                <div class="rounded-2xl border border-purple-100 overflow-hidden">
+                <div class="rounded-2xl border border-purple-100">
                     <x-datatable :paginator="$users" item-name="data pengguna">
                         
                         {{-- SLOT TAB FILTER STATUS --}}
@@ -44,16 +76,65 @@
                                 $currentStatus = request('status', 'semua'); 
                                 $statuses = ['semua' => 'Semua Pengguna', 'aktif' => 'Aktif', 'pending' => 'Pending', 'nonaktif' => 'Non-Aktif'];
                             @endphp
-                            <div class="flex items-center gap-3 px-2 flex-wrap mb-2 filter-tabs-container">
+
+                            {{-- TAB FILTER HORIZONTAL DESKTOP (Hanya Tampil di Layar >= xl) --}}
+                            <div class="hidden xl:flex items-center gap-3 px-2 flex-wrap mb-2 filter-tabs-container">
                                 @foreach($statuses as $key => $label)
                                     <a href="{{ route('admin.manajemenpengguna', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}" 
-                                       class="py-1.5 px-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap {{ $currentStatus == $key ? 'bg-[#5C46F5]/10 text-[#5C46F5]' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50' }}">
+                                       class="py-1.5 px-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap {{ $currentStatus == $key ? 'bg-[#6E5BC3]/10 text-[#6E5BC3]' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50' }}">
                                         {{ $label }}
-                                        <span class="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#5C46F5] text-white' : 'bg-gray-100 text-gray-600' }}">
+                                        <span class="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
                                             {{ $counts[$key] ?? 0 }}
                                         </span>
                                     </a>
                                 @endforeach
+                            </div>
+
+                            {{-- FILTER DROPDOWN MOBILE / TABLET (< xl): Berurutan ke Bawah setelah Cari --}}
+                            <div class="xl:hidden w-full relative" x-data="{ open: false }" @click.outside="open = false">
+                                <button @click="open = !open" 
+                                    type="button" 
+                                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs">
+                                    <div class="flex items-center gap-2 truncate">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                        </svg>
+                                        <span class="font-normal text-gray-700">Filter: <span class="text-[#6E5BC3] font-normal">{{ $statuses[$currentStatus] ?? 'Semua Pengguna' }}</span></span>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#6E5BC3] text-white">
+                                            {{ $counts[$currentStatus] ?? 0 }}
+                                        </span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                {{-- Dropdown Popup --}}
+                                <div x-show="open" x-cloak
+                                    x-transition:enter="transition ease-out duration-100"
+                                    x-transition:enter-start="transform opacity-0 scale-95"
+                                    x-transition:enter-end="transform opacity-100 scale-100"
+                                    x-transition:leave="transition ease-in duration-75"
+                                    x-transition:leave-start="transform opacity-100 scale-100"
+                                    x-transition:leave-end="transform opacity-0 scale-95"
+                                    class="absolute left-0 right-0 mt-2 w-full bg-white border border-purple-100 rounded-2xl shadow-xl py-1.5 z-50 overflow-hidden text-xs">
+                                    @foreach($statuses as $key => $label)
+                                        <a href="{{ route('admin.manajemenpengguna', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}"
+                                           class="flex items-center justify-between px-4 py-2.5 hover:bg-[#F8F7FF] transition-colors {{ $currentStatus == $key ? 'bg-[#6E5BC3]/10 text-[#6E5BC3] font-bold' : 'text-gray-700 font-medium' }}">
+                                            <div class="flex items-center gap-2">
+                                                @if($currentStatus == $key)
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-[#6E5BC3]"></span>
+                                                @else
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+                                                @endif
+                                                <span>{{ $label }}</span>
+                                            </div>
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
+                                                {{ $counts[$key] ?? 0 }}
+                                            </span>
+                                        </a>
+                                    @endforeach
+                                </div>
                             </div>
                         </x-slot>
 
@@ -77,7 +158,7 @@
                             };
                         @endphp
                         
-                        <tr class="bg-white hover:bg-[#F8F7FF] transition-colors align-top hidden md:table-row border-b border-gray-100 last:border-none">
+                        <tr class="bg-white hover:bg-[#F8F7FF] transition-colors align-top hidden xl:table-row border-b border-gray-100 last:border-none">
                             <td class="py-4 px-4 text-center text-gray-500 font-bold text-xs">
                                 {{ $users->firstItem() + $index }}
                             </td>
@@ -86,7 +167,7 @@
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-[#5C46F5] shrink-0 shadow-xs">
+                                    <div class="w-9 h-9 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-[#6E5BC3] shrink-0 shadow-xs">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
@@ -110,13 +191,13 @@
                                     @if($user->status_akun == 'pending')
                                         <button type="button" 
                                             @click="$dispatch('open-modal-aktivasi', { id: '{{ $user->id_pengguna }}', nama: '{{ $user->nama }}', nip: '{{ $user->nip }}' })"
-                                            class="px-4 py-1.5 bg-[#5C46F5] text-white text-[10px] font-black rounded-xl hover:bg-[#4A38D4] transition-all uppercase shadow-md shadow-[#5C46F5]/20">
+                                            class="px-4 py-1.5 bg-[#6E5BC3] text-white text-[10px] font-black rounded-xl hover:bg-[#5C4AB5] transition-all uppercase shadow-md shadow-[#6E5BC3]/20">
                                             Aktivasi
                                         </button>
                                     @else
                                         <button type="button"
                                             @click="$dispatch('open-modal-edit-pengguna', { id: '{{ $user->id_pengguna }}', nama: '{{ addslashes($user->nama) }}', nip: '{{ $user->nip }}', status: '{{ $user->status_akun }}', role: '{{ $user->id_role ?? '' }}', tim: '{{ $user->id_tim_aktif ?? '' }}' })" 
-                                            class="p-1.5 rounded-xl bg-purple-50 text-[#5C46F5] hover:bg-[#5C46F5] hover:text-white transition-all shadow-xs cursor-pointer" title="Edit Pengguna">
+                                            class="p-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all shadow-xs cursor-pointer" title="Edit Pengguna">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>
@@ -125,20 +206,71 @@
                                 </div>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="py-16 text-center bg-white">
-                                <div class="flex flex-col items-center justify-center gap-3">
-                                    <div class="w-12 h-12 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-[#5C46F5] shadow-xs">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
+
+                        {{-- BARIS KHUSUS CARD (Tampilan saat Layar Diperkecil < xl) --}}
+                        <tr class="xl:hidden border-b border-purple-100/40 last:border-none">
+                            <td colspan="6" class="p-2.5 sm:p-3 bg-white">
+                                <div class="bg-[#F8F7FF]/50 hover:bg-[#F8F7FF] border border-purple-100 rounded-[22px] p-4 flex flex-col gap-3.5 shadow-2xs transition-all">
+                                    {{-- Baris Atas: Indikator Status di Sisi Kiri Atas & Icon Aksi di Kanan Atas --}}
+                                    <div class="flex items-center justify-between gap-2">
+                                        {{-- Indikator Status di Kiri Atas --}}
+                                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase border tracking-wider {{ $statusClass }}">
+                                            {{ $user->status_akun }}
+                                        </span>
+
+                                        {{-- Icon Aksi di Kanan Atas --}}
+                                        <div class="flex items-center gap-1.5">
+                                            @if($user->status_akun == 'pending')
+                                                <button type="button" 
+                                                    @click="$dispatch('open-modal-aktivasi', { id: '{{ $user->id_pengguna }}', nama: '{{ $user->nama }}', nip: '{{ $user->nip }}' })"
+                                                    class="px-3.5 py-1 bg-[#6E5BC3] text-white text-[10px] font-black rounded-xl hover:bg-[#5C4AB5] transition-all uppercase shadow-xs cursor-pointer">
+                                                    Aktivasi
+                                                </button>
+                                            @else
+                                                <button type="button"
+                                                    @click="$dispatch('open-modal-edit-pengguna', { id: '{{ $user->id_pengguna }}', nama: '{{ addslashes($user->nama) }}', nip: '{{ $user->nip }}', status: '{{ $user->status_akun }}', role: '{{ $user->id_role ?? '' }}', tim: '{{ $user->id_tim_aktif ?? '' }}' })" 
+                                                    class="w-8 h-8 rounded-full bg-white text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white border border-purple-100 flex items-center justify-center transition-all shadow-xs cursor-pointer" title="Edit Pengguna">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                    </svg>
+                                                </button>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-xs font-bold text-gray-700">Data tidak ditemukan</span>
-                                        <span class="text-[11px] text-gray-400 font-normal mt-0.5">Belum ada data pengguna yang terdaftar pada sistem.</span>
+
+                                    {{-- Baris Utama: Ikon Orang di Sisi Kiri & Informasi di Sampingnya --}}
+                                    <div class="flex items-start gap-3.5">
+                                        {{-- Ikon Orang --}}
+                                        <div class="w-10 h-10 rounded-2xl bg-white border border-purple-100 flex items-center justify-center text-[#6E5BC3] shrink-0 shadow-2xs mt-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            </svg>
+                                        </div>
+
+                                        {{-- Samping Ikon: Nama, Judul NIP (angka hitam & lebih besar), dan Peran (tanpa efek ungu) --}}
+                                        <div class="flex-1 min-w-0 flex flex-col gap-1">
+                                            <h4 class="text-[15px] font-bold text-gray-900 wrap-break-word leading-snug">{{ $user->nama }}</h4>
+                                            <div class="flex items-center gap-1.5 text-xs">
+                                                <span class="text-gray-500 font-medium">NIP</span>
+                                                <span class="text-sm font-normal text-black tracking-wide">{{ $user->nip }}</span>
+                                            </div>
+                                            <div class="text-xs text-gray-600 font-medium">
+                                                {{ $user->role->nama_role ?? '-' }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="bg-white">
+                                <x-emptystate 
+                                    :border="false" 
+                                    padding="py-16 px-4" 
+                                    title="Tidak Ada Pengguna Ditemukan" 
+                                    message="Tidak ada data pengguna yang sesuai dengan kata kunci pencarian atau filter yang Anda pilih." 
+                                />
                             </td>
                         </tr>
                         @endforelse

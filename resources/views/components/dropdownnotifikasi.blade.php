@@ -1,6 +1,6 @@
 <div class="relative" x-data="{ notifOpen: false }">
     {{-- Tombol Lonceng --}}
-    <button @click="notifOpen = !notifOpen" class="relative text-gray-400 hover:text-[#5C46F5] transition-colors focus:outline-none p-2 rounded-xl hover:bg-gray-50">
+    <button @click="notifOpen = !notifOpen" class="relative text-gray-400 hover:text-[#6E5BC3] transition-colors focus:outline-none p-2 rounded-xl hover:bg-gray-50">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
@@ -15,7 +15,7 @@
         {{-- Header Dropdown --}}
         <div class="px-4 py-3.5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
             <h3 class="text-xs font-black uppercase tracking-wider text-gray-800">Notifikasi</h3>
-            <button class="text-[10px] font-bold text-[#5C46F5] hover:underline">Tandai sudah dibaca</button>
+            <button class="text-[10px] font-bold text-[#6E5BC3] hover:underline">Tandai sudah dibaca</button>
         </div>
 
         {{-- Daftar List Notifikasi --}}
@@ -31,7 +31,7 @@
                     <p class="text-[11px] text-gray-500 mt-0.5 leading-relaxed">Anda telah ditunjuk sebagai Ketua Tim pada proyek baru.</p>
                     <span class="text-[10px] text-gray-400 font-medium mt-1 block">10 menit yang lalu</span>
                 </div>
-                <span class="w-2 h-2 bg-[#5C46F5] rounded-full absolute top-4 right-3"></span>
+                <span class="w-2 h-2 bg-[#6E5BC3] rounded-full absolute top-4 right-3"></span>
             </div>
 
             {{-- Item Notifikasi 2 --}}
@@ -44,14 +44,14 @@
                     <p class="text-[11px] text-gray-500 mt-0.5 leading-relaxed">Proyek "Pembangunan Jembatan" mendekati tenggat waktu.</p>
                     <span class="text-[10px] text-gray-400 font-medium mt-1 block">1 jam yang lalu</span>
                 </div>
-                <span class="w-2 h-2 bg-[#5C46F5] rounded-full absolute top-4 right-3"></span>
+                <span class="w-2 h-2 bg-[#6E5BC3] rounded-full absolute top-4 right-3"></span>
             </div>
 
         </div>
 
         {{-- Footer Dropdown --}}
         <div class="p-2.5 border-t border-gray-100 bg-gray-50/50 text-center">
-            <a href="#" class="text-xs font-bold text-[#5C46F5] hover:underline">Lihat semua notifikasi</a>
+            <a href="#" class="text-xs font-bold text-[#6E5BC3] hover:underline">Lihat semua notifikasi</a>
         </div>
     </div>
 </div>

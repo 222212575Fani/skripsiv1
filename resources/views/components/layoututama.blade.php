@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Admin - SIS Project' }}</title>
+    <title>{{ $title ?? 'Admin - PROXIS' }}</title>
     
     <!-- Vite Assets (Alpine.js & CSS di-handle di sini) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts Preconnect & Optimized Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300..1000;1,300..1000&display=swap" rel="stylesheet">
     
     <!-- Livewire Styles -->
     @livewireStyles
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8F7FC; }
+        body { font-family: 'Mulish', sans-serif; background-color: #F8F7FC; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #9E8CE3; border-radius: 10px; }
         [x-cloak] { display: none !important; }
@@ -31,7 +34,7 @@
         <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#F8F7FC]">
             <header class="h-20 bg-[#F8F7FC] flex items-center justify-between px-6 md:px-10 border-b border-[#E3DCF9] relative z-30 shrink-0">
                 <div class="flex items-center gap-4 flex-1">
-                    <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-[#7B66EE] hover:text-[#5B4AE3] transition-colors focus:outline-none shrink-0">
+                    <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-[#6E5BC3] hover:text-[#5C4AB5] transition-colors focus:outline-none shrink-0">
                         <svg x-show="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -48,63 +51,9 @@
                 </div>
                 
                 <div class="flex items-center gap-6">
-                    <!-- Bagian Notifikasi & Profil -->
-                    <div class="flex items-center pr-6 border-r-2 border-[#D4C5F9]" 
-                         x-data="{ 
-                            openNotif: false, 
-                            hasUnread: {{ auth()->check() && auth()->user()->unreadNotifications->count() > 0 ? 'true' : 'false' }},
-                            markAsRead() {
-                                if (this.hasUnread) {
-                                    fetch('{{ url('/notifications/read-all') }}', {
-                                        method: 'POST',
-                                        headers: {
-                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                            'Content-Type': 'application/json',
-                                            'Accept': 'application/json'
-                                        }
-                                    }).then(response => {
-                                        if (response.ok) {
-                                            this.hasUnread = false;
-                                        }
-                                    }).catch(error => console.error('Error:', error));
-                                }
-                                this.openNotif = !this.openNotif;
-                            }
-                         }">
-                        <div class="relative">
-                            <button @click="markAsRead()" class="focus:outline-none flex items-center justify-center relative group cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#7B66EE] group-hover:text-[#5B4AE3] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                </svg>
-                                <span x-show="hasUnread" class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-[#F8F7FC] animate-pulse"></span>
-                            </button>
-
-                            <div x-show="openNotif" x-cloak @click.outside="openNotif = false" x-transition class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                                <div class="p-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
-                                    <p class="text-xs font-extrabold text-gray-900 uppercase tracking-wider">Notifikasi</p>
-                                    <span class="text-[10px] font-bold text-[#7B66EE] bg-[#7B66EE]/10 px-2 py-0.5 rounded-full">
-                                        {{ auth()->check() ? auth()->user()->unreadNotifications->count() : 0 }} Baru
-                                    </span>
-                                </div>
-                                <div class="p-4 max-h-64 overflow-y-auto space-y-3">
-                                    @if(auth()->check())
-                                        @forelse(auth()->user()->notifications as $notification)
-                                            <div class="p-3 rounded-xl bg-purple-50/50 border border-purple-100/40 flex flex-col gap-1">
-                                                <div class="flex items-center justify-between">
-                                                    <p class="text-xs font-bold text-gray-800">{{ $notification->data['name'] ?? 'Notifikasi' }}</p>
-                                                    <span class="text-[9px] text-gray-400">{{ $notification->created_at->diffForHumans() }}</span>
-                                                </div>
-                                                <p class="text-[11px] text-gray-500 mt-0.5">{{ $notification->data['message'] ?? '' }}</p>
-                                            </div>
-                                        @empty
-                                            <div class="py-4 text-center text-xs text-gray-400 italic">
-                                                Belum ada notifikasi baru.
-                                            </div>
-                                        @endforelse
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Bagian Notifikasi -->
+                    <div class="flex items-center pr-6 border-r-2 border-[#D4C5F9]">
+                        <x-notificationbell />
                     </div>
 
                     <!-- Dropdown Profil & Logout -->
@@ -112,20 +61,20 @@
                         <button @click="open = !open" class="flex items-center gap-4 focus:outline-none hover:opacity-80 transition-opacity">
                             <div class="text-right hidden md:block">
                                 <p class="text-sm font-bold text-gray-900 leading-tight">{{ Auth::user()?->nama ?? 'Guest' }}</p>
-                                <p class="text-[10px] font-bold text-[#7B66EE] uppercase tracking-widest mt-0.5">{{ Auth::user()?->role?->nama_role ?? 'Visitor' }}</p>
+                                <p class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest mt-0.5">{{ Auth::user()?->role?->nama_role ?? 'Visitor' }}</p>
                             </div>
-                            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-[#7B66EE] to-[#B3A6F8] flex items-center justify-center text-white font-bold shadow-md ring-2 ring-white shrink-0">
+                            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-[#6E5BC3] to-[#8470E5] flex items-center justify-center text-white font-bold shadow-md ring-2 ring-white shrink-0">
                                 {{ strtoupper(substr(Auth::user()?->nama ?? 'G', 0, 1)) }}
                             </div>
                         </button>
 
                         <div x-show="open" x-cloak @click.outside="open = false" x-transition class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
                             <div class="p-5 border-b border-gray-50 bg-gray-50/50 text-center">
-                                <div class="w-12 h-12 rounded-full bg-[#7B66EE] flex items-center justify-center text-white font-bold mx-auto mb-2 text-lg">
+                                <div class="w-12 h-12 rounded-full bg-[#6E5BC3] flex items-center justify-center text-white font-bold mx-auto mb-2 text-lg">
                                     {{ strtoupper(substr(Auth::user()?->nama ?? 'G', 0, 1)) }}
                                 </div>
                                 <p class="text-sm font-extrabold text-gray-900">{{ Auth::user()?->nama ?? 'Guest' }}</p>
-                                <p class="text-[10px] font-bold text-[#7B66EE] uppercase tracking-widest">{{ Auth::user()?->role?->nama_role ?? 'Visitor' }}</p>
+                                <p class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest">{{ Auth::user()?->role?->nama_role ?? 'Visitor' }}</p>
                             </div>
                             <div class="p-2">
                                 <form action="{{ route('logout') }}" method="POST">

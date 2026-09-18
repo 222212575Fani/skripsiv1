@@ -27,7 +27,7 @@
     @close-modal-detail-aktivitas.window="open = false"
     x-show="open" 
     x-cloak
-    class="fixed inset-0 z-[999] overflow-y-auto" 
+    class="fixed inset-0 z-999 overflow-y-auto" 
     style="display: none;"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0"

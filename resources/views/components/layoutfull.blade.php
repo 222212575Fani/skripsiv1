@@ -1,9 +1,10 @@
+@props(['title' => 'PROXIS', 'showNotification' => true])
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'SIS Project' }}</title>
+    <title>{{ $title ?? 'PROXIS' }}</title>
     
     <!-- Vite CSS & JS (Tanpa Alpine di app.js) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -11,14 +12,16 @@
     <!-- TAMBAHKAN ALPINE CDN KHUSUS DI SINI AGAR TIDAK BENTROK DENGAN SWAGGER DI FILE LAIN -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts Preconnect & Optimized Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300..1000;1,300..1000&display=swap" rel="stylesheet">
     
     <!-- Livewire Styles -->
     @livewireStyles
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8F7FF; }
+        body { font-family: 'Mulish', sans-serif; background-color: #F8F7FF; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #9E8CE3; border-radius: 10px; }
         [x-cloak] { display: none !important; }
@@ -35,10 +38,10 @@
                 <div>
                     {{ $headerAction ?? '' }}
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-white/40 inline-block"></span>
-                    <span class="w-3 h-3 rounded-full bg-white/40 inline-block"></span>
-                    <span class="w-3 h-3 rounded-full bg-white/40 inline-block"></span>
+                <div class="flex items-center gap-4">
+                    @if($showNotification)
+                        <x-notificationbell :white="true" />
+                    @endif
                 </div>
             </div>
         </div>

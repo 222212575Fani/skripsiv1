@@ -1,4 +1,4 @@
-@props(['paginator', 'itemName' => 'data'])
+@props(['paginator', 'itemName' => 'data', 'breakpoint' => 'xl'])
 
 {{-- KOTAK PUTIH LUAR UTAMA DENGAN SUDUT MELENGKUNG --}}
 <div class="bg-white rounded-[28px] shadow-xs border border-gray-100 overflow-hidden w-full p-6 flex flex-col gap-6">
@@ -11,9 +11,19 @@
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden md:table-row">
-                        {{ $header }}
-                    </tr>
+                    @if($breakpoint === 'md')
+                        <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden md:table-row">
+                            {{ $header }}
+                        </tr>
+                    @elseif($breakpoint === 'lg')
+                        <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden lg:table-row">
+                            {{ $header }}
+                        </tr>
+                    @else
+                        <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden xl:table-row">
+                            {{ $header }}
+                        </tr>
+                    @endif
                 </thead>
                 <tbody class="text-sm font-medium divide-y divide-gray-100">
                     {{ $slot }}
@@ -42,20 +52,20 @@
                     &lsaquo;
                 </span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-[#5C46F5] text-white hover:bg-[#4A38D4] flex items-center justify-center transition-all shadow-sm shadow-[#5C46F5]/30 font-bold">
+                <a href="{{ $paginator->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] flex items-center justify-center transition-all shadow-sm shadow-[#6E5BC3]/30 font-bold">
                     &lsaquo;
                 </a>
             @endif
 
-            {{-- Nomor Halaman (Kontainer Lonjong) --}}
-            <div class="bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-full flex items-center gap-2 text-xs font-semibold text-gray-600">
+            {{-- Nomor Halaman --}}
+            <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
                 @foreach ($paginator->getUrlRange(1, max(1, $paginator->lastPage())) as $page => $url)
                     @if ($page == $paginator->currentPage())
-                        <span class="w-7 h-7 rounded-full bg-white text-[#5C46F5] border border-[#5C46F5] flex items-center justify-center font-bold shadow-xs">
+                        <span class="w-7 h-7 rounded-full bg-white text-[#6E5BC3] border border-[#6E5BC3] flex items-center justify-center font-bold shadow-xs">
                             {{ $page }}
                         </span>
                     @else
-                        <a href="{{ $url }}" class="w-7 h-7 rounded-full hover:bg-gray-200/60 text-gray-600 flex items-center justify-center transition-all">
+                        <a href="{{ $url }}" class="w-7 h-7 rounded-full hover:bg-purple-50 hover:text-[#6E5BC3] text-gray-600 flex items-center justify-center transition-all">
                             {{ $page }}
                         </a>
                     @endif
@@ -64,7 +74,7 @@
 
             {{-- Tombol Next (Bulat Ungu) --}}
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-[#5C46F5] text-white hover:bg-[#4A38D4] flex items-center justify-center transition-all shadow-sm shadow-[#5C46F5]/30 font-bold">
+                <a href="{{ $paginator->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] flex items-center justify-center transition-all shadow-sm shadow-[#6E5BC3]/30 font-bold">
                     &rsaquo;
                 </a>
             @else

@@ -1,29 +1,29 @@
 @props(['title'])
 
 <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30">
-    <h2 class="text-xl font-extrabold text-[#5C46F5]">{{ $title }}</h2>
+    <h2 class="text-xl font-extrabold text-[#6E5BC3]">{{ $title }}</h2>
     
     <div class="relative">
         <button id="profileBtn" class="flex items-center gap-4 pl-6 border-l border-gray-200 focus:outline-none hover:opacity-80 transition-opacity">
             <div class="text-right">
                 <p class="text-sm font-bold text-gray-900 leading-tight">{{ Auth::user()->nama ?? 'Admin' }}</p>
-                <p class="text-[10px] font-bold text-[#5C46F5] uppercase tracking-widest text-right mt-0.5">
+                <p class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest text-right mt-0.5">
                     {{ Auth::user()->role->nama_role ?? 'Administrator' }}
                 </p>
             </div>
-            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-[#5C46F5] to-[#8FD0FF] flex items-center justify-center text-white font-bold shadow-lg shadow-[#5C46F5]/20">
+            <div class="w-11 h-11 rounded-full bg-linear-to-tr from-[#6E5BC3] to-[#8FD0FF] flex items-center justify-center text-white font-bold shadow-lg shadow-[#6E5BC3]/20">
                 {{ strtoupper(substr(Auth::user()->nama ?? 'A', 0, 1)) }}
             </div>
         </button>
 
         <div id="profileDropdown" class="hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-all transform origin-top-right">
             <div class="p-5 flex items-center gap-4 border-b border-gray-50 bg-gray-50/50">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#5C46F5] to-[#8FD0FF] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                <div class="w-12 h-12 rounded-full bg-linear-to-tr from-[#6E5BC3] to-[#8FD0FF] flex items-center justify-center text-white font-bold text-lg shadow-md">
                     {{ strtoupper(substr(Auth::user()->nama ?? 'A', 0, 1)) }}
                 </div>
                 <div>
                     <p class="text-sm font-extrabold text-gray-900 leading-tight">{{ Auth::user()->nama ?? 'Admin' }}</p>
-                    <p class="text-[10px] font-bold text-[#5C46F5] uppercase tracking-widest mt-0.5">{{ Auth::user()->role->nama_role ?? 'Administrator' }}</p>
+                    <p class="text-[10px] font-bold text-[#6E5BC3] uppercase tracking-widest mt-0.5">{{ Auth::user()->role->nama_role ?? 'Administrator' }}</p>
                 </div>
             </div>
             <div class="p-2">

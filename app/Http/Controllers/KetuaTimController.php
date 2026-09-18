@@ -9,13 +9,15 @@ use App\Models\AnggotaTim;
 use App\Models\Pengguna;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Notifications\GeneralNotification; // <-- Import GeneralNotification
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\GeneralNotification;
 
 class KetuaTimController extends Controller
 {
     // 1. Method untuk halaman Dashboard Monitoring Ketua Tim
     public function dashboard(Request $request)
     {
+        Proyek::sinkronkanSemuaStatus();
         $userId = auth()->id(); // ID Ketua Tim yang sedang login
 
         // Ambil data tim kerja yang dipimpin
@@ -26,9 +28,22 @@ class KetuaTimController extends Controller
 
         if (!$timKerja) {
             $totalProyek = $belumDimulai = $berjalan = $selesai = $terlambat = 0;
+            $statsTim = [
+                'total'                 => 0,
+                'total_persen_text'     => '0% bulan ini',
+                'total_trend'           => 'neutral',
+                'belum_dimulai'         => 0,
+                'belum_dimulai_persen'  => '0% dari total',
+                'berjalan'              => 0,
+                'berjalan_persen'       => '0% dari total',
+                'selesai'               => 0,
+                'selesai_persen'        => '0% dari total',
+                'terlambat'             => 0,
+                'terlambat_persen'      => '0% dari total',
+            ];
             $proyekTim = collect()->paginate(10);
             $anggotaTim = collect();
-            return view('ketuatim.dashboard', compact('timKerja', 'proyekTim', 'totalProyek', 'belumDimulai', 'berjalan', 'selesai', 'terlambat', 'anggotaTim', 'status'));
+            return view('ketuatim.dashboard', compact('timKerja', 'proyekTim', 'totalProyek', 'belumDimulai', 'berjalan', 'selesai', 'terlambat', 'statsTim', 'anggotaTim', 'status'));
         }
 
         // Ambil semua data proyek tim ini untuk kalkulasi card statistik secara akurat
@@ -41,8 +56,70 @@ class KetuaTimController extends Controller
         $selesai      = $semuaProyekTim->where('status_proyek', 'selesai')->count();
         $terlambat    = $semuaProyekTim->where('status_proyek', 'terlambat')->count();
 
-        // Query untuk card list proyek di dashboard (memuat relasi ketuaProyek dan anggotaProyek beserta pengguna)
-        $query = Proyek::where('id_tim', $timKerja->id_tim)->with(['ketuaProyek', 'anggotaProyek.pengguna', 'aktivitasProyek.penanggungJawab']);
+        $now = Carbon::now();
+
+        // 1. Perhitungan Pertumbuhan Total Proyek (Bulan ini vs Bulan lalu)
+        $proyekBulanIni = $semuaProyekTim->filter(function ($p) use ($now) {
+            if (!$p->created_at) return false;
+            $created = Carbon::parse($p->created_at);
+            return $created->year == $now->year && $created->month == $now->month;
+        })->count();
+
+        $bulanLalu = $now->copy()->subMonth();
+        $proyekBulanLalu = $semuaProyekTim->filter(function ($p) use ($bulanLalu) {
+            if (!$p->created_at) return false;
+            $created = Carbon::parse($p->created_at);
+            return $created->year == $bulanLalu->year && $created->month == $bulanLalu->month;
+        })->count();
+
+        if ($proyekBulanLalu > 0) {
+            $growthTotal = round((($proyekBulanIni - $proyekBulanLalu) / $proyekBulanLalu) * 100, 1);
+            $totalPersenText = ($growthTotal >= 0 ? "+{$growthTotal}%" : "{$growthTotal}%") . ' bulan ini';
+            $totalTrend = $growthTotal >= 0 ? 'up' : 'down';
+        } else {
+            if ($proyekBulanIni > 0) {
+                $totalPersenText = '+100% bulan ini';
+                $totalTrend = 'up';
+            } else {
+                $totalPersenText = '0% bulan ini';
+                $totalTrend = 'neutral';
+            }
+        }
+
+        // 2. Perhitungan Persentase Status terhadap Total Proyek
+        $formatPersen = function ($jumlah, $total) {
+            if ($total <= 0) return '0%';
+            $pct = round(($jumlah / $total) * 100, 1);
+            return (floor($pct) == $pct ? (int)$pct : $pct) . '%';
+        };
+
+        $persenBelumDimulai = $formatPersen($belumDimulai, $totalProyek) . ' dari total';
+        $persenBerjalan = $formatPersen($berjalan, $totalProyek) . ' dari total';
+        $persenSelesai = $formatPersen($selesai, $totalProyek) . ' dari total';
+        $persenTerlambat = $formatPersen($terlambat, $totalProyek) . ' dari total';
+
+        $statsTim = [
+            'total'                 => $totalProyek,
+            'total_persen_text'     => $totalPersenText,
+            'total_trend'           => $totalTrend,
+            'belum_dimulai'         => $belumDimulai,
+            'belum_dimulai_persen'  => $persenBelumDimulai,
+            'berjalan'              => $berjalan,
+            'berjalan_persen'       => $persenBerjalan,
+            'selesai'               => $selesai,
+            'selesai_persen'        => $persenSelesai,
+            'terlambat'             => $terlambat,
+            'terlambat_persen'      => $persenTerlambat,
+        ];
+
+        // Query untuk card list proyek di dashboard (memuat relasi ketuaProyek, anggotaProyek, aktivitasProyek beserta dokumen & kendala)
+        $query = Proyek::where('id_tim', $timKerja->id_tim)->with([
+            'ketuaProyek', 
+            'anggotaProyek.pengguna', 
+            'aktivitasProyek.penanggungJawab',
+            'aktivitasProyek.dokumenPendukung',
+            'aktivitasProyek.kendalaAktivitas'
+        ]);
 
         if ($status !== 'semua') {
             $query->where('status_proyek', $status);
@@ -55,20 +132,47 @@ class KetuaTimController extends Controller
         // Mengambil data proyek dengan pagination 10 card per halaman
         $proyekTim = $query->latest()->paginate(10)->withQueryString();
 
-        // AMBIL DATA KETUA PROYEK OTOMATIS BERDASARKAN TAHUN BERJALAN
-        $tahunBerjalan = now()->year;
+        // AMBIL DATA KETUA PROYEK BERDASARKAN FILTER TAHUN & BULAN
+        $filterTahun = $request->input('tahun', date('Y'));
+        $filterBulan = $request->input('bulan', 'semua');
 
-        $anggotaTim = Pengguna::whereHas('anggotaTim', function($q) use ($timKerja) {
-                $q->where('id_tim', $timKerja->id_tim)->whereNull('tanggal_keluar');
+        $tahunValid = is_numeric($filterTahun) ? (int)$filterTahun : (int)date('Y');
+
+        if ($filterBulan !== 'semua' && is_numeric($filterBulan) && (int)$filterBulan >= 1 && (int)$filterBulan <= 12) {
+            $bulanValid = str_pad((string)(int)$filterBulan, 2, '0', STR_PAD_LEFT);
+            $startPeriod = Carbon::createFromDate($tahunValid, (int)$bulanValid, 1)->startOfMonth()->toDateString();
+            $endPeriod = Carbon::createFromDate($tahunValid, (int)$bulanValid, 1)->endOfMonth()->toDateString();
+        } else {
+            $startPeriod = Carbon::createFromDate($tahunValid, 1, 1)->startOfYear()->toDateString();
+            $endPeriod = Carbon::createFromDate($tahunValid, 12, 31)->endOfYear()->toDateString();
+        }
+
+        $proyekFilter = function($q) use ($timKerja, $startPeriod, $endPeriod) {
+            $q->where('id_tim', $timKerja->id_tim)
+              ->where(function($dateQ) use ($startPeriod, $endPeriod) {
+                  $dateQ->where(function($sub) use ($startPeriod, $endPeriod) {
+                      $sub->whereNotNull('tanggal_mulai')
+                          ->where('tanggal_mulai', '<=', $endPeriod)
+                          ->where(function($targetQ) use ($startPeriod) {
+                              $targetQ->where('tanggal_target_selesai', '>=', $startPeriod)
+                                      ->orWhereNull('tanggal_target_selesai');
+                          });
+                  })->orWhere(function($sub) use ($startPeriod, $endPeriod) {
+                      $sub->whereDate('created_at', '<=', $endPeriod)
+                          ->whereDate('created_at', '>=', $startPeriod);
+                  });
+              });
+        };
+
+        $anggotaTim = Pengguna::where(function($pQuery) use ($timKerja) {
+                $pQuery->whereHas('anggotaTim', function($q) use ($timKerja) {
+                    $q->where('id_tim', $timKerja->id_tim)->whereNull('tanggal_keluar');
+                })->orWhereHas('proyekDipimpin', function($q) use ($timKerja) {
+                    $q->where('id_tim', $timKerja->id_tim);
+                });
             })
-            ->whereHas('proyekDipimpin', function($q) use ($timKerja, $tahunBerjalan) {
-                $q->where('id_tim', $timKerja->id_tim)
-                  ->whereYear('created_at', $tahunBerjalan);
-            })
-            ->withCount(['proyekDipimpin' => function($q) use ($timKerja, $tahunBerjalan) {
-                $q->where('id_tim', $timKerja->id_tim)
-                  ->whereYear('created_at', $tahunBerjalan);
-            }])
+            ->whereHas('proyekDipimpin', $proyekFilter)
+            ->withCount(['proyekDipimpin' => $proyekFilter])
             ->get()
             ->map(function ($member) {
                 $member->sub_teks = $member->role->nama_role ?? 'Ketua Proyek';
@@ -84,6 +188,7 @@ class KetuaTimController extends Controller
             'berjalan', 
             'selesai', 
             'terlambat',
+            'statsTim',
             'anggotaTim',
             'status'
         ));
@@ -92,6 +197,7 @@ class KetuaTimController extends Controller
     // 2. Method untuk halaman Manajemen Proyek Ketua Tim
     public function manajemenProyek(Request $request)
     {
+        Proyek::sinkronkanSemuaStatus();
         $userId = auth()->id();
 
         $timKerja = TimKerja::where('id_ketua_tim', $userId)->first();
@@ -189,10 +295,23 @@ class KetuaTimController extends Controller
 
             // 3. KIRIM NOTIFIKASI OTOMATIS KE KETUA PROYEK TERPILIH
             $ketuaProyek = Pengguna::find($request->id_ketua_proyek);
-            if ($ketuaProyek) {
+            if ($ketuaProyek && $ketuaProyek->id_pengguna !== $userId) {
                 $ketuaProyek->notify(new GeneralNotification(
                     'Penugasan Ketua Proyek',
                     "Anda telah ditunjuk sebagai Ketua Proyek untuk proyek '{$request->nama_proyek}' di bawah {$timKerja->nama_tim}."
+                ));
+            }
+
+            // 4. KIRIM NOTIFIKASI OTOMATIS KE DIREKTUR TENTANG PROYEK BARU DI TIM KERJA
+            $direkturList = Pengguna::whereHas('role', function($query) {
+                $query->where('nama_role', 'Direktur');
+            })->get();
+
+            if ($direkturList->isNotEmpty()) {
+                $namaKetuaTim = auth()->user()->nama ?? 'Ketua Tim';
+                Notification::send($direkturList, new GeneralNotification(
+                    'Proyek Baru Ditambahkan',
+                    "{$namaKetuaTim} ({$timKerja->nama_tim}) telah menambahkan proyek baru: '{$request->nama_proyek}'."
                 ));
             }
 

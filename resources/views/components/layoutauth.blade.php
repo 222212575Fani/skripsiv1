@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Autentikasi - SIS Project' }}</title>
+    <title>{{ $title ?? 'Autentikasi - PROXIS' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts Preconnect & Optimized Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300..1000;1,300..1000&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ECEAF7; }
+        body { font-family: 'Mulish', sans-serif; background-color: #ECEAF7; }
     </style>
 </head>
 <body class="m-0 p-0 antialiased">
@@ -29,7 +32,7 @@
                 icon: 'success',
                 title: 'Berhasil!',
                 text: "{{ session('success') }}",
-                confirmButtonColor: '#5C46F5',
+                confirmButtonColor: '#6E5BC3',
             });
         @endif
 
@@ -38,7 +41,7 @@
                 icon: 'error',
                 title: 'Akses Ditolak',
                 text: "{{ session('error') }}",
-                confirmButtonColor: '#5C46F5',
+                confirmButtonColor: '#6E5BC3',
             });
         @endif
     </script>

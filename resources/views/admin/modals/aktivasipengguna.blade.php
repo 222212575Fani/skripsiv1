@@ -108,9 +108,9 @@
                             <input type="hidden" name="id_role" x-model="roleId" required>
 
                             <button @click="openRoleDropdown = !openRoleDropdown; openTimDropdown = false;" @click.outside="openRoleDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-xl text-xs font-medium transition-all cursor-pointer">
                                 <span x-text="roleName" :class="roleId === '' ? 'text-gray-400 font-normal' : 'text-gray-700 font-bold'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -121,7 +121,7 @@
                                     @if(strtolower($role->nama_role) !== 'admin')
                                         <button type="button" 
                                             @click="roleId = '{{ $role->id_role }}'; roleName = '{{ $role->nama_role }}'; openRoleDropdown = false;"
-                                            class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-medium transition-all cursor-pointer">
+                                            class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-medium transition-all cursor-pointer">
                                             {{ $role->nama_role }}
                                         </button>
                                     @endif
@@ -136,9 +136,9 @@
                             <input type="hidden" name="id_tim" x-model="timId">
 
                             <button @click="openTimDropdown = !openTimDropdown; openRoleDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#5C46F5] rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-xl text-xs font-medium transition-all cursor-pointer">
                                 <span x-text="timName" :class="timId === '' ? 'text-gray-400 font-normal' : 'text-gray-700 font-bold'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#5C46F5] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -147,13 +147,13 @@
                             <div x-show="openTimDropdown" x-cloak class="absolute left-0 mt-2 w-full bg-white border border-purple-100 rounded-[20px] shadow-xl p-2 z-50 space-y-1 max-h-36 overflow-y-auto">
                                 <button type="button" 
                                     @click="timId = ''; timName = 'Pilih Tim Kerja (Opsional)'; openTimDropdown = false;"
-                                    class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#5C46F5] font-medium transition-all cursor-pointer">
+                                    class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-400 hover:bg-purple-50 hover:text-[#6E5BC3] font-medium transition-all cursor-pointer">
                                     Pilih Tim Kerja (Opsional)
                                 </button>
                                 @foreach($tims as $tim)
                                     <button type="button" 
                                         @click="timId = '{{ $tim->id_tim }}'; timName = '{{ $tim->nama_tim }}'; openTimDropdown = false;"
-                                        class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#5C46F5] font-medium transition-all cursor-pointer">
+                                        class="w-full text-left px-3 py-2 rounded-xl text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-medium transition-all cursor-pointer">
                                         {{ $tim->nama_tim }}
                                     </button>
                                 @endforeach
@@ -168,7 +168,7 @@
                     <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">
                         Batal
                     </x-button>
-                    <x-button type="submit" color="bg-[#5C46F5] hover:bg-[#4b35e0] text-white" shadow="shadow-md shadow-[#5C46F5]/20">
+                    <x-button type="submit" color="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20">
                         Aktifkan Sekarang
                     </x-button>
                 </div>
