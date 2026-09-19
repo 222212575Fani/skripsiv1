@@ -39,9 +39,9 @@
             </p>
         </div>
 
-        {{-- SECTION 2: KARTU STATISTIK (BERJAJAR KE BAWAH SATU PER SATU DENGAN PERSENTASE ALA DIREKTUR) --}}
+        {{-- SECTION 2: KARTU STATISTIK (3 MENYAMPING 2 BARIS PADA LAYAR LEBAR, 1 KOLOM PADA LAYAR KECIL) --}}
         @if($timKerja)
-        <div class="grid grid-cols-1 gap-3 sm:gap-3.5 xl:gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-3.5 xl:gap-4">
             <x-cardstatistikdashboard 
                 title="Total Proyek" 
                 value="{{ $statsTim['total'] ?? $totalProyek }}" 

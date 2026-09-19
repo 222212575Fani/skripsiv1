@@ -23,8 +23,8 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="m-0 p-0 text-[#2D2A4A] antialiased overflow-hidden" x-data="{ sidebarOpen: false }">
-    <div class="flex h-screen overflow-hidden relative">
+<body class="m-0 p-0 text-[#2D2A4A] antialiased overflow-hidden flex flex-col h-screen" x-data="{ sidebarOpen: false }">
+    <div class="flex flex-1 min-h-0 overflow-hidden relative">
         
         <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
              class="fixed inset-y-0 left-0 z-50 h-full flex-shrink-0 transition-transform duration-300 md:translate-x-0 md:static">
@@ -105,6 +105,11 @@
             </div>
         </main>
     </div>
+
+    {{-- FOOTER MEMANJANG GLOBAL (WARNA UNGU SERAGAM DENGAN SIDEBAR) --}}
+    <footer class="w-full bg-[#F5F3FF] border-t border-purple-200/60 py-3 px-6 text-center shrink-0 z-30">
+        <p class="text-[10px] md:text-[11px] font-bold text-[#6E5BC3]/70 uppercase tracking-widest">&copy; 2026 Badan Pusat Statistik</p>
+    </footer>
 
     <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/30 z-40 md:hidden" x-cloak></div>
     <x-toast />

@@ -45,30 +45,30 @@
         }
     }">
     
-    {{-- Header Card & Tombol Pill Filter Periode Memanjang di Bawah Judul --}}
-    <div class="flex flex-col gap-3">
+    {{-- Header Card & Tombol Pill Filter Periode --}}
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
             <h3 class="text-base font-bold text-gray-900 tracking-tight">{{ $title }}</h3>
         </div>
 
-        {{-- Tombol Pill Filter Periode Memanjang Penuh di Bawah Judul --}}
-        <div class="relative w-full">
+        {{-- Tombol Pill Filter Periode: Full-Width di Layar Kecil (< sm), Kompak di Sebelah Kanan saat Layar Lebar (sm+) --}}
+        <div class="relative w-full sm:w-auto">
             <button @click="openPeriodeDropdown = !openPeriodeDropdown" @click.outside="openPeriodeDropdown = false" type="button" 
-                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs">
+                class="w-full sm:w-auto flex items-center justify-between gap-2.5 px-4 py-2 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs">
                 <div class="flex items-center gap-2 truncate">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                     <span class="truncate" x-text="selectedMonth === 'semua' ? 'Periode ' + selectedYear : 'Bulan ' + ({'01':'Januari','02':'Februari','03':'Maret','04':'April','05':'Mei','06':'Juni','07':'Juli','08':'Agustus','09':'September','10':'Oktober','11':'November','12':'Desember'}[selectedMonth] || selectedMonth) + ' ' + selectedYear"></span>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openPeriodeDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0 ml-2" :class="openPeriodeDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                 </svg>
             </button>
 
-            {{-- Dropdown Popup Memanjang Selaras Card (mt-2, w-full) --}}
+            {{-- Dropdown Popup Memanjang di Mobile, Kompak di Sebelah Kanan saat Layar Lebar --}}
             <div x-show="openPeriodeDropdown" x-cloak 
-                class="absolute left-0 right-0 mt-2 w-full bg-white border border-purple-100 rounded-[24px] shadow-xl p-4 z-50 space-y-3 text-xs">
+                class="absolute left-0 sm:left-auto right-0 mt-2 w-full sm:w-72 bg-white border border-purple-100 rounded-[24px] shadow-xl p-4 z-50 space-y-3 text-xs">
                 
                 {{-- BAGIAN PILIH TAHUN (1990 s/d Tahun Sekarang secara Dinamis) --}}
                 <div>
@@ -117,14 +117,14 @@
         </div>
     </div>
 
-    {{-- List Ketua Proyek (1 Card 1 Baris Penuh) --}}
+    {{-- List Ketua Proyek (2 Card ke Samping pada Layar Lebar, 1 Card pada Layar Kecil) --}}
     <div id="cardmember-members-wrapper" 
-        class="grid grid-cols-1 gap-4 transition-opacity duration-200"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity duration-200"
         :class="{ 'opacity-40 pointer-events-none': isLoading }">
         @forelse($members as $member)
         <div class="flex items-center justify-between p-4 rounded-2xl bg-[#F8F7FF] border border-[#EDE9FE] hover:bg-[#EDE9FE] hover:border-[#DDD6FE] hover:shadow-sm transition-all duration-200 group">
             <div class="flex items-center gap-3.5 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6E5BC3] to-[#8470E5] flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
+                <div class="w-10 h-10 rounded-full bg-linear-to-tr from-[#6E5BC3] to-[#8470E5] flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
                     {{ strtoupper(substr($member->nama ?? 'U', 0, 2)) }}
                 </div>
                 <div class="min-w-0">
@@ -141,7 +141,7 @@
             </div>
         </div>
         @empty
-        <div class="col-span-1 w-full">
+        <div class="col-span-1 md:col-span-2 w-full">
             <x-emptystate 
                 padding="py-12 px-4"
                 title="Tidak Ada Ketua Proyek" 

@@ -524,7 +524,10 @@
                                                 </button>
                                                 <button type="button" 
                                                     @click.stop="$dispatch('open-modal-lapor-progress', { id: '{{ $akt->id_aktivitas }}', nama: '{{ addslashes($akt->nama_aktivitas) }}', progress: '{{ $progressValue }}' })" 
-                                                    class="w-full py-1.5 px-2 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all text-[10px] font-semibold cursor-pointer shadow-xs flex items-center justify-center">
+                                                    class="w-full py-1.5 px-2 rounded-xl bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] transition-all text-[10px] font-semibold cursor-pointer shadow-xs shadow-[#6E5BC3]/20 flex items-center justify-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
                                                     <span class="truncate">Lapor Progress</span>
                                                 </button>
                                             </div>

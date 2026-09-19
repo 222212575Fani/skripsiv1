@@ -51,6 +51,11 @@
             {{ $slot }}
         </div>
 
+        {{-- FOOTER MEMANJANG GLOBAL (WARNA UNGU SERAGAM DENGAN SIDEBAR) --}}
+        <footer class="w-full bg-[#F5F3FF] border-t border-purple-200/60 py-3 px-6 text-center shrink-0 z-20">
+            <p class="text-[10px] md:text-[11px] font-bold text-[#6E5BC3]/70 uppercase tracking-widest">&copy; 2026 Badan Pusat Statistik</p>
+        </footer>
+
     </div>
 
     <x-toast />

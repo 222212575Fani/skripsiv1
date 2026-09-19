@@ -303,7 +303,12 @@
                                         </svg>
                                     </button>
                                 @else
-                                    <button type="button" @click="$dispatch('open-modal-lapor-progress', { id: '{{ $item->id_aktivitas }}', nama: '{{ addslashes($item->nama_aktivitas) }}', progress: '{{ $item->target ?? 0 }}' })" class="px-2.5 py-1.5 rounded-xl bg-purple-50 text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white transition-all text-[10px] font-semibold shadow-xs cursor-pointer" title="Laporkan Progress">Lapor Progress</button>
+                                    <button type="button" @click="$dispatch('open-modal-lapor-progress', { id: '{{ $item->id_aktivitas }}', nama: '{{ addslashes($item->nama_aktivitas) }}', progress: '{{ $item->target ?? 0 }}' })" class="px-2.5 py-1.5 rounded-xl bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] transition-all text-[10px] font-semibold shadow-xs shadow-[#6E5BC3]/20 inline-flex items-center gap-1 cursor-pointer" title="Laporkan Progress">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        <span>Lapor Progress</span>
+                                    </button>
                                 @endif
                             </div>
                         </td>
@@ -382,9 +387,12 @@
                                         @else
                                             <button type="button" 
                                                 @click="$dispatch('open-modal-lapor-progress', { id: '{{ $item->id_aktivitas }}', nama: '{{ addslashes($item->nama_aktivitas) }}', progress: '{{ $item->target ?? 0 }}' })" 
-                                                class="px-3 py-1.5 rounded-full bg-white text-[#6E5BC3] hover:bg-[#6E5BC3] hover:text-white border border-purple-200 transition-all text-xs font-semibold shadow-xs cursor-pointer" 
+                                                class="px-3 py-1.5 rounded-full bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] transition-all text-xs font-semibold shadow-xs shadow-[#6E5BC3]/20 inline-flex items-center gap-1.5 cursor-pointer" 
                                                 title="Laporkan Progress">
-                                                Lapor Progress
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                                <span>Lapor Progress</span>
                                             </button>
                                         @endif
                                     </div>

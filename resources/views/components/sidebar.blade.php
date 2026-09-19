@@ -1,4 +1,4 @@
-<aside class="w-70 bg-[#F5F3FF] text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 min-h-screen justify-between border-r border-purple-100/60">
+<aside class="w-70 bg-[#F5F3FF] text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 h-full justify-between border-r border-purple-100/60">
     <div class="flex flex-col">
         <!-- Logo / Brand -->
         <div class="p-8 mb-2">
@@ -89,10 +89,5 @@
                 <p class="px-4 text-xs text-[#6E5BC3]/50 italic">Tidak ada menu tersedia.</p>
             @endforelse
         </nav>
-    </div>
-
-    <!-- Footer Sidebar -->
-    <div class="p-8 border-t border-purple-200/50">
-        <p class="text-[10px] font-bold text-[#6E5BC3]/60 uppercase tracking-widest">&copy; 2026 Badan Pusat Statistik</p>
     </div>
 </aside>

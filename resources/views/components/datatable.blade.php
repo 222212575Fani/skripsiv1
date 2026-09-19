@@ -1,7 +1,11 @@
-@props(['paginator', 'itemName' => 'data', 'breakpoint' => 'xl'])
+@props(['paginator', 'itemName' => 'data', 'breakpoint' => 'xl', 'card' => true])
 
+@if($card)
 {{-- KOTAK PUTIH LUAR UTAMA DENGAN SUDUT MELENGKUNG --}}
 <div class="bg-white rounded-[28px] shadow-xs border border-gray-100 overflow-hidden w-full p-6 flex flex-col gap-6">
+@else
+<div class="w-full flex flex-col gap-6">
+@endif
     
     {{-- Slot Atas (Judul, Search Bar, Tombol Tambah, & Tab Filter Status) --}}
     {{ $tabs ?? '' }}

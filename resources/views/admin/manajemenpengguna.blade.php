@@ -5,16 +5,21 @@
             {{-- KOTAK PUTIH LUAR UTAMA DENGAN SUDUT MELENGKUNG --}}
             <div class="bg-white rounded-[28px] shadow-xs border border-gray-100 overflow-hidden w-full p-6 flex flex-col gap-6">
                 
+                @php 
+                    $currentStatus = request('status', 'semua'); 
+                    $statuses = ['semua' => 'Semua Pengguna', 'aktif' => 'Aktif', 'pending' => 'Pending', 'nonaktif' => 'Non-Aktif'];
+                @endphp
+
                 {{-- BARIS ATAS: JUDUL, SEARCH BAR, DAN TOMBOL TAMBAH --}}
                 <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 px-2">
                     <div>
                         <h1 class="text-xl font-bold text-gray-900">Daftar Pengguna</h1>
                     </div>
 
-                    {{-- KONTROL DESKTOP (Hanya Tampil di Layar >= xl): Search di Kiri, Tombol Tambah di Kanan --}}
+                    {{-- KONTROL DESKTOP (Hanya Tampil di Layar >= xl): Search, Filter Status, Tombol Tambah --}}
                     <div class="hidden xl:flex items-center gap-3">
                         {{-- Live Search --}}
-                        <div class="flex items-center gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] focus-within:bg-white border border-purple-200 hover:border-purple-300 focus-within:border-[#6E5BC3] rounded-full text-xs font-normal text-[#6E5BC3] transition-all shadow-2xs w-64" x-data="{ search: '{{ request('search') }}' }">
+                        <div class="flex items-center gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] focus-within:bg-white border border-purple-200 hover:border-purple-300 focus-within:border-[#6E5BC3] rounded-full text-xs font-normal text-[#6E5BC3] transition-all shadow-2xs w-60" x-data="{ search: '{{ request('search') }}' }">
                             <span class="text-[#6E5BC3] shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -29,6 +34,47 @@
                                 placeholder="Cari Nama atau NIP..." 
                                 autocomplete="off"
                                 class="bg-transparent border-none focus:outline-none text-xs font-normal text-[#6E5BC3] placeholder:text-[#6E5BC3] w-full p-0 focus:ring-0">
+                            <button type="button" x-show="search" @click="search = ''; const url = new URL(window.location.href); url.searchParams.delete('search'); window.location.href = url.toString();" class="text-[#6E5BC3] hover:text-[#524397] transition-colors shrink-0 cursor-pointer" title="Hapus pencarian">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {{-- Filter Status Dropdown Desktop --}}
+                        <div class="relative" x-data="{ statusOpen: false }" @click.outside="statusOpen = false">
+                            <button @click="statusOpen = !statusOpen" type="button" 
+                                class="flex items-center justify-between gap-2.5 px-4 py-2 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 text-[#6E5BC3] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                                <span class="truncate text-gray-700">{{ $statuses[$currentStatus] ?? 'Semua Pengguna' }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="statusOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="statusOpen" x-cloak 
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95"
+                                class="absolute right-0 mt-2 w-48 bg-white border border-purple-100 rounded-2xl shadow-xl p-2 z-50 space-y-1">
+                                @foreach($statuses as $key => $label)
+                                    <a href="{{ route('admin.manajemenpengguna', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}"
+                                        class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer {{ $currentStatus == $key ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal' }}">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $currentStatus == $key ? 'bg-[#6E5BC3]' : 'bg-transparent' }}"></span>
+                                            <span>{{ $label }}</span>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
+                                            {{ $counts[$key] ?? 0 }}
+                                        </span>
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
 
                         {{-- Tombol Tambah Pengguna --}}
@@ -36,9 +82,21 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                             <span>Tambah Pengguna</span>
                         </x-button>
+
+                        {{-- Reset Filter Button Desktop --}}
+                        @if($currentStatus !== 'semua' || request('search'))
+                            <a href="{{ route('admin.manajemenpengguna') }}" 
+                               class="text-xs text-rose-500 hover:text-rose-700 hover:underline flex items-center gap-1 transition-all cursor-pointer font-medium whitespace-nowrap px-1" 
+                               title="Reset semua filter">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                <span>Reset</span>
+                            </a>
+                        @endif
                     </div>
 
-                    {{-- KONTROL MOBILE / TABLET (< xl): Berurutan ke Bawah: 1) Tambah Pengguna, 2) Cari Nama atau NIP --}}
+                    {{-- KONTROL MOBILE / TABLET (< xl): Berurutan ke Bawah 3: 1) Tambah Pengguna, 2) Cari Nama atau NIP, 3) Filter Status --}}
                     <div class="flex xl:hidden flex-col gap-3 w-full">
                         {{-- 1. Tombol Tambah Pengguna (Full Width) --}}
                         <x-button @click="$dispatch('open-modal-tambah-pengguna')" class="w-full justify-center py-2.5">
@@ -63,80 +121,58 @@
                                 autocomplete="off"
                                 class="bg-transparent border-none focus:outline-none text-xs font-normal text-[#6E5BC3] placeholder:text-[#6E5BC3] w-full p-0 focus:ring-0">
                         </div>
-                    </div>
-                </div>
 
-                {{-- PEMBUNGKUS MANUAL HANYA UNTUK TABEL DENGAN BORDER UNGU TIPIS --}}
-                <div class="rounded-2xl border border-purple-100">
-                    <x-datatable :paginator="$users" item-name="data pengguna">
-                        
-                        {{-- SLOT TAB FILTER STATUS --}}
-                        <x-slot name="tabs">
-                            @php 
-                                $currentStatus = request('status', 'semua'); 
-                                $statuses = ['semua' => 'Semua Pengguna', 'aktif' => 'Aktif', 'pending' => 'Pending', 'nonaktif' => 'Non-Aktif'];
-                            @endphp
+                        {{-- 3. Filter Dropdown Mobile / Tablet (< xl) --}}
+                        <div class="w-full relative" x-data="{ open: false }" @click.outside="open = false">
+                            <button @click="open = !open" 
+                                type="button" 
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs">
+                                <div class="flex items-center gap-2 truncate">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                    </svg>
+                                    <span class="font-normal text-gray-700">Filter: <span class="text-[#6E5BC3] font-normal">{{ $statuses[$currentStatus] ?? 'Semua Pengguna' }}</span></span>
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#6E5BC3] text-white">
+                                        {{ $counts[$currentStatus] ?? 0 }}
+                                    </span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
 
-                            {{-- TAB FILTER HORIZONTAL DESKTOP (Hanya Tampil di Layar >= xl) --}}
-                            <div class="hidden xl:flex items-center gap-3 px-2 flex-wrap mb-2 filter-tabs-container">
+                            {{-- Dropdown Popup --}}
+                            <div x-show="open" x-cloak
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95"
+                                class="absolute left-0 right-0 mt-2 w-full bg-white border border-purple-100 rounded-2xl shadow-xl py-1.5 z-50 overflow-hidden text-xs">
                                 @foreach($statuses as $key => $label)
-                                    <a href="{{ route('admin.manajemenpengguna', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}" 
-                                       class="py-1.5 px-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap {{ $currentStatus == $key ? 'bg-[#6E5BC3]/10 text-[#6E5BC3]' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50' }}">
-                                        {{ $label }}
-                                        <span class="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
+                                    <a href="{{ route('admin.manajemenpengguna', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}"
+                                       class="flex items-center justify-between px-4 py-2.5 hover:bg-[#F8F7FF] transition-colors {{ $currentStatus == $key ? 'bg-[#6E5BC3]/10 text-[#6E5BC3] font-bold' : 'text-gray-700 font-medium' }}">
+                                        <div class="flex items-center gap-2">
+                                            @if($currentStatus == $key)
+                                                <span class="w-1.5 h-1.5 rounded-full bg-[#6E5BC3]"></span>
+                                            @else
+                                                <span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+                                            @endif
+                                            <span>{{ $label }}</span>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
                                             {{ $counts[$key] ?? 0 }}
                                         </span>
                                     </a>
                                 @endforeach
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            {{-- FILTER DROPDOWN MOBILE / TABLET (< xl): Berurutan ke Bawah setelah Cari --}}
-                            <div class="xl:hidden w-full relative" x-data="{ open: false }" @click.outside="open = false">
-                                <button @click="open = !open" 
-                                    type="button" 
-                                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs">
-                                    <div class="flex items-center gap-2 truncate">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                                        </svg>
-                                        <span class="font-normal text-gray-700">Filter: <span class="text-[#6E5BC3] font-normal">{{ $statuses[$currentStatus] ?? 'Semua Pengguna' }}</span></span>
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#6E5BC3] text-white">
-                                            {{ $counts[$currentStatus] ?? 0 }}
-                                        </span>
-                                    </div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
-
-                                {{-- Dropdown Popup --}}
-                                <div x-show="open" x-cloak
-                                    x-transition:enter="transition ease-out duration-100"
-                                    x-transition:enter-start="transform opacity-0 scale-95"
-                                    x-transition:enter-end="transform opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-75"
-                                    x-transition:leave-start="transform opacity-100 scale-100"
-                                    x-transition:leave-end="transform opacity-0 scale-95"
-                                    class="absolute left-0 right-0 mt-2 w-full bg-white border border-purple-100 rounded-2xl shadow-xl py-1.5 z-50 overflow-hidden text-xs">
-                                    @foreach($statuses as $key => $label)
-                                        <a href="{{ route('admin.manajemenpengguna', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}"
-                                           class="flex items-center justify-between px-4 py-2.5 hover:bg-[#F8F7FF] transition-colors {{ $currentStatus == $key ? 'bg-[#6E5BC3]/10 text-[#6E5BC3] font-bold' : 'text-gray-700 font-medium' }}">
-                                            <div class="flex items-center gap-2">
-                                                @if($currentStatus == $key)
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-[#6E5BC3]"></span>
-                                                @else
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
-                                                @endif
-                                                <span>{{ $label }}</span>
-                                            </div>
-                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-[#6E5BC3] text-white' : 'bg-gray-100 text-gray-600' }}">
-                                                {{ $counts[$key] ?? 0 }}
-                                            </span>
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </x-slot>
+                {{-- TABEL PENGGUNA --}}
+                <x-datatable :paginator="$users" item-name="data pengguna" :card="false">
 
                         {{-- SLOT HEADER KOLOM --}}
                         <x-slot name="header">
@@ -276,8 +312,6 @@
                         @endforelse
 
                     </x-datatable>
-                </div>
-
             </div>
 
             {{-- Include Modals --}}
