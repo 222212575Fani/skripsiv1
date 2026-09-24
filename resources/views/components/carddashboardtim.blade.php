@@ -7,13 +7,13 @@
     // Menghitung rata-rata progress proyek
     $progressProyek = $proyek->progress ?? ($totalAkt > 0 ? round($aktivitasList->avg('target')) : 0);
     
-    $ketuaNama = $proyek->ketuaProyek->nama ?? $proyek->ketua_proyek_nama ?? '-';
+    $ketuaNama = $proyek->ketuaProyek->nama ?? $proyek->ketua_proyek_nama ?? 'Belum Ditunjuk';
     $statusProj = $proyek->status_proyek ?? $proyek->status ?? 'belum_dimulai';
 
     // Format Tanggal Mulai dan Selesai Proyek
     $tglMulaiProyek = $proyek->tanggal_mulai ? \Carbon\Carbon::parse($proyek->tanggal_mulai)->translatedFormat('d M Y') : null;
     $tglSelesaiProyek = ($proyek->tenggat_waktu ?? $proyek->tanggal_target_selesai) ? \Carbon\Carbon::parse($proyek->tenggat_waktu ?? $proyek->tanggal_target_selesai)->translatedFormat('d M Y') : null;
-    $rentangTanggalProyek = ($tglMulaiProyek && $tglSelesaiProyek) ? ($tglMulaiProyek . ' - ' . $tglSelesaiProyek) : ($tglSelesaiProyek ?? '-');
+    $rentangTanggalProyek = ($tglMulaiProyek && $tglSelesaiProyek) ? ($tglMulaiProyek . ' - ' . $tglSelesaiProyek) : ($tglSelesaiProyek ?? 'Belum diatur');
 
     $statusProjBadge = match($statusProj) {
         'selesai'   => 'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -62,7 +62,7 @@
     $sisaOrang = $totalOrang - $maksTampil;
 @endphp
 
-<div class="bg-white border border-purple-100/80 hover:border-purple-200 rounded-[28px] p-6 h-full flex flex-col justify-between gap-5 shadow-xs transition-all"
+<div class="bg-white border border-purple-100/80 hover:border-purple-200 rounded-2xl sm:rounded-[28px] p-4 sm:p-6 h-full flex flex-col justify-between gap-4 sm:gap-5 shadow-xs transition-all"
      x-data="{ 
          openAktivitas: false,
          isLarge: window.innerWidth >= 1024 
@@ -72,9 +72,9 @@
     {{-- BAGIAN ATAS CARD (PROYEK) --}}
     <div class="flex flex-col gap-4">
         
-        {{-- Baris 1: Judul Proyek --}}
-        <div>
-            <h3 class="text-sm font-bold text-[#6E5BC3] leading-snug tracking-tight">
+        {{-- Baris 1: Judul Proyek (Tinggi seragam 2 baris agar seluruh elemen di bawahnya lurus sejajar) --}}
+        <div class="min-h-[2.625rem] flex items-start">
+            <h3 class="text-sm font-bold text-[#6E5BC3] leading-snug tracking-tight line-clamp-2" title="{{ $proyek->nama_proyek }}">
                 {{ $proyek->nama_proyek }}
             </h3>
         </div>
@@ -87,7 +87,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
-                <span class="text-xs text-gray-800 font-medium">{{ $ketuaNama }}</span>
+                @if($proyek->ketuaProyek)
+                    <span class="text-xs text-gray-800 font-medium">{{ $proyek->ketuaProyek->nama }}</span>
+                @else
+                    <span class="inline-flex items-center gap-1.5 text-amber-600 font-normal text-xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+                        <span>Belum Ditunjuk</span>
+                    </span>
+                @endif
             </div>
             
             <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase border tracking-wide {{ $statusProjBadge }}">
@@ -100,17 +107,24 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            <span>{{ $rentangTanggalProyek }}</span>
+            @if($tglMulaiProyek && $tglSelesaiProyek)
+                <span>{{ $rentangTanggalProyek }}</span>
+            @else
+                <span class="inline-flex items-center gap-1.5 text-amber-600 font-normal text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+                    <span>Belum diatur</span>
+                </span>
+            @endif
         </div>
 
         {{-- Baris 4: Progress Proyek Keseluruhan --}}
         <div class="flex flex-col gap-1.5 pt-1">
             <div class="flex items-center justify-between text-xs">
-                <span class="text-gray-900 font-normal">Progress Proyek</span>
-                <span class="font-normal text-gray-900">{{ $progressProyek }}%</span>
+                <span class="text-gray-500 font-medium">Progress Proyek</span>
+                <span class="font-normal text-gray-700">{{ $progressProyek }}%</span>
             </div>
-            <div class="w-full bg-purple-100/60 rounded-full h-2 overflow-hidden">
-                <div class="bg-[#6E5BC3] h-full rounded-full transition-all duration-300" style="width: {{ $progressProyek }}%;"></div>
+            <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
+                <div class="bg-[#604EE6] h-full rounded-full transition-all duration-300" style="width: {{ min(100, max(0, floatval($progressProyek ?? 0))) }}%;"></div>
             </div>
         </div>
 
@@ -197,19 +211,20 @@
                     
                     $tglMulai = $akt->tanggal_mulai ? \Carbon\Carbon::parse($akt->tanggal_mulai)->translatedFormat('d M Y') : null;
                     $tglSelesai = $akt->tanggal_target_selesai ? \Carbon\Carbon::parse($akt->tanggal_target_selesai)->translatedFormat('d M Y') : null;
-                    $rentangTanggal = ($tglMulai && $tglSelesai) ? ($tglMulai . ' - ' . $tglSelesai) : ($tglSelesai ?? '-');
+                    $rentangTanggal = ($tglMulai && $tglSelesai) ? ($tglMulai . ' - ' . $tglSelesai) : ($tglSelesai ?? 'Belum diatur');
 
                     // Siapkan payload data dalam bentuk array bersih
                     $payloadArray = [
                         'nama' => $akt->nama_aktivitas,
-                        'pj' => $akt->penanggungJawab->nama ?? '-',
-                        'pm' => $proyek->ketuaProyek->nama ?? $proyek->ketua_proyek_nama ?? '-',
+                        'pj' => $akt->penanggungJawab->nama ?? 'Belum Ditunjuk',
+                        'pm' => $proyek->ketuaProyek->nama ?? $proyek->ketua_proyek_nama ?? 'Belum Ditunjuk',
                         'progress' => $progressValue,
                         'status' => $statusAktif,
                         'tglMulai' => $tglMulai,
                         'tglSelesai' => $tglSelesai,
                         'kendalaInternal' => $akt->kendalaInternal ?? [],
                         'kendalaEksternal' => $akt->kendalaEksternal ?? [],
+                        'riwayatProgress' => $akt->riwayat_progress ?? [],
                         'dokumen' => ($akt->dokumenPendukung ?? collect())->map(fn($d) => [
                             'nama' => $d->nama_dokumen,
                             'url' => str_replace('\\', '/', asset('storage/' . $d->file_path))
@@ -246,23 +261,28 @@
                     @php
                         $pjNamaTim = $akt->penanggungJawab->nama ?? $akt->pj ?? null;
                     @endphp
-                    @if(!empty($pjNamaTim) && $pjNamaTim !== '-')
                     <div class="flex items-center gap-2 text-[11px] text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span class="font-medium truncate">{{ $pjNamaTim }}</span>
+                        @if(!empty($pjNamaTim) && $pjNamaTim !== '-' && $pjNamaTim !== 'Belum Ditunjuk')
+                            <span class="font-medium truncate">{{ $pjNamaTim }}</span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 text-amber-600 font-normal text-[11px]">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+                                <span>Belum Ditunjuk</span>
+                            </span>
+                        @endif
                     </div>
-                    @endif
 
                     {{-- Baris 4: Progress Bar Memanjang Penuh --}}
                     <div class="flex flex-col gap-1.5 pt-0.5">
                         <div class="flex items-center justify-between text-[11px]">
-                            <span class="text-gray-600 font-normal">Progress Aktivitas</span>
-                            <span class="font-normal text-gray-900">{{ $progressValue }}%</span>
+                            <span class="text-gray-500 font-medium">Progress Aktivitas</span>
+                            <span class="font-normal text-gray-700">{{ $progressValue }}%</span>
                         </div>
-                        <div class="w-full bg-purple-100/60 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-[#6E5BC3] h-full rounded-full transition-all duration-300" style="width: {{ $progressValue }}%;"></div>
+                        <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
+                            <div class="bg-[#604EE6] h-full rounded-full transition-all duration-300" style="width: {{ min(100, max(0, floatval($progressValue ?? 0))) }}%;"></div>
                         </div>
                     </div>
 
@@ -272,7 +292,14 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            <span>{{ $rentangTanggal }}</span>
+                            @if(!empty($tglMulai) && !empty($tglSelesai) && $rentangTanggal !== 'Belum diatur')
+                                <span>{{ $rentangTanggal }}</span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 text-amber-600 font-normal text-[11px]">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+                                    <span>Belum diatur</span>
+                                </span>
+                            @endif
                         </div>
 
                         <div class="flex items-center gap-1 text-[#6E5BC3] font-bold text-[11px] group-hover:underline whitespace-nowrap">

@@ -1,26 +1,26 @@
 <x-layoututama title="Dashboard Monitoring Direktur">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4 sm:gap-6">
 
         {{-- 1. HEADER CONTAINER UNGU ESTETIK --}}
-        <div class="bg-gradient-to-r from-[#6E5BC3] to-[#8470E5] rounded-[28px] shadow-sm p-6 text-white">
-            <h2 class="text-base font-bold">Halo, {{ auth()->user()->nama ?? 'Direktur' }}! 👋</h2>
+        <div class="bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-2xl sm:rounded-[28px] shadow-sm p-4 sm:p-6 text-white">
+            <h2 class="text-sm sm:text-base font-bold">Halo, {{ $sapaanWaktu }}, {{ auth()->user()->nama ?? 'Direktur' }}! 👋</h2>
             <p class="text-xs text-purple-100 mt-1">Selamat Datang di Dashboard Monitoring Direktorat Sistem Informasi Statistik</p>
         </div>
 
         {{-- 2. CARD STATISTIK PROYEK DALAM DIREKTORAT SIS (GLOBAL) --}}
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-3.5 xl:gap-4">
+        <div class="grid grid-cols-1 xl:grid-cols-5 gap-3 sm:gap-3.5 xl:gap-4">
             <x-cardstatistikdashboard 
                 title="Total Proyek" 
                 value="{{ $statsDirektorat['total'] ?? 0 }}" 
-                percent="{{ $statsDirektorat['total_persen_text'] ?? '+0% bulan ini' }}" 
-                percentColor="text-teal-600" 
-                trend="{{ $statsDirektorat['total_trend'] ?? 'up' }}" 
+                percent="{{ $statsDirektorat['total_persen_text'] ?? 'Total proyek terdaftar' }}" 
+                percentColor="text-indigo-600" 
+                trend="chart" 
                 color="text-indigo-600" 
                 bg="bg-indigo-50" 
                 svgPath="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
 
             <x-cardstatistikdashboard 
-                title="Proyek Belum Dimulai" 
+                title="Belum Dimulai" 
                 value="{{ $statsDirektorat['belum_dimulai'] ?? 0 }}" 
                 percent="{{ $statsDirektorat['belum_dimulai_persen'] ?? '0% dari total' }}" 
                 percentColor="text-amber-600" 
@@ -61,7 +61,7 @@
         </div>
 
         {{-- 3. KOTAK UTAMA (CARD PUTIH BESAR) UNTUK DAFTAR PROYEK DARI DATABASE --}}
-        <div class="bg-white rounded-[28px] shadow-sm border border-gray-100 p-6 flex flex-col gap-6"
+        <div class="bg-white rounded-2xl sm:rounded-[28px] shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col gap-4 sm:gap-6"
              x-data="{ 
                  searchProyek: '', 
                  statusFilter: 'semua', 
@@ -108,13 +108,13 @@
                 <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 w-full lg:w-auto">
                     {{-- 1. Input Search Proyek --}}
                     <div class="relative w-full lg:w-60">
-                        <div class="flex items-center gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] focus-within:bg-white border border-purple-200 hover:border-purple-300 focus-within:border-[#6E5BC3] rounded-full text-xs font-normal text-[#6E5BC3] transition-all shadow-2xs w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <div class="flex items-center gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] focus-within:bg-white border border-purple-200 hover:border-purple-300 focus-within:border-[#604EE6] focus-within:ring-2 focus-within:ring-purple-100 rounded-full text-xs font-normal text-[#604EE6] transition-all shadow-2xs w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                             <input type="text" x-model="searchProyek" placeholder="Cari proyek..." 
-                                class="bg-transparent border-none focus:outline-none text-xs font-normal text-gray-800 placeholder:text-[#6E5BC3]/70 w-full p-0 focus:ring-0">
-                            <button type="button" x-show="searchProyek" @click="searchProyek = ''" class="text-[#6E5BC3] hover:text-[#524397] transition-colors shrink-0 cursor-pointer" title="Hapus pencarian">
+                                class="bg-transparent border-none focus:outline-none text-xs font-light text-gray-800 placeholder:text-gray-400 placeholder:font-light w-full p-0 focus:ring-0">
+                            <button type="button" x-show="searchProyek" @click="searchProyek = ''" class="text-[#604EE6] hover:text-[#524397] transition-colors shrink-0 cursor-pointer" title="Hapus pencarian">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -125,14 +125,15 @@
                     {{-- 2. Custom Dropdown Filter Tim Kerja --}}
                     <div class="relative w-full lg:w-auto shrink-0">
                         <button @click="openTimDropdown = !openTimDropdown; openStatusDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
-                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs w-full lg:w-auto">
+                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white border rounded-full text-xs font-normal text-[#604EE6] transition-all cursor-pointer shadow-2xs w-full lg:w-auto focus:outline-none"
+                            :class="openTimDropdown ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-1.5 truncate">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span class="truncate max-w-[200px]" x-text="timFilterName"></span>
+                                <span class="truncate max-w-[200px]" :class="timFilter === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-normal'" x-text="timFilterName"></span>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -160,12 +161,13 @@
                     {{-- 3. Custom Dropdown Filter Status Proyek --}}
                     <div class="relative w-full lg:w-auto shrink-0">
                         <button @click="openStatusDropdown = !openStatusDropdown; openTimDropdown = false;" @click.outside="openStatusDropdown = false" type="button" 
-                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 rounded-full text-xs font-normal text-[#6E5BC3] transition-all cursor-pointer shadow-2xs w-full lg:w-auto">
+                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white border rounded-full text-xs font-normal text-[#604EE6] transition-all cursor-pointer shadow-2xs w-full lg:w-auto focus:outline-none"
+                            :class="openStatusDropdown ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-1.5 truncate">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="truncate max-w-[140px]" x-text="statusFilterName"></span>
+                                <span class="truncate max-w-[140px]" :class="statusFilter === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-normal'" x-text="statusFilterName"></span>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -210,18 +212,6 @@
                             </button>
                         </div>
                     </div>
-
-                    {{-- 4. Tombol Reset Filter jika ada filter/pencarian yang aktif --}}
-                    <button type="button" 
-                        x-show="timFilter !== 'semua' || statusFilter !== 'semua' || searchProyek !== ''" 
-                        x-cloak
-                        @click="timFilter = 'semua'; timFilterName = 'Semua Tim Kerja'; statusFilter = 'semua'; statusFilterName = 'Semua Status'; searchProyek = '';"
-                        class="text-xs text-rose-500 hover:text-rose-700 hover:underline flex items-center justify-center lg:justify-start gap-1 transition-all cursor-pointer font-medium shrink-0 py-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <span>Reset Filter</span>
-                    </button>
                 </div>
             </div>
 
@@ -262,12 +252,12 @@
 
             {{-- DOT PAGINATION (15 Proyek Per Halaman Sesuai Standar) --}}
             @if(isset($semuaProyek) && method_exists($semuaProyek, 'hasPages') && $semuaProyek->hasPages())
-                <div class="flex items-center justify-center gap-2 mt-6 mb-2">
+                <div class="flex items-center justify-center gap-2 sm:gap-2.5 mt-6 mb-2">
                     @foreach ($semuaProyek->getUrlRange(1, $semuaProyek->lastPage()) as $page => $url)
                         @if ($page == $semuaProyek->currentPage())
-                            <a href="{{ $url }}" class="h-2.5 w-8 bg-[#6E5BC3] rounded-full transition-all"></a>
+                            <span class="h-2.5 w-8 sm:w-10 bg-[#6E5BC3] rounded-full transition-all duration-300 shadow-xs cursor-default" title="Halaman {{ $page }}" aria-current="page"></span>
                         @else
-                            <a href="{{ $url }}" class="h-2.5 w-2.5 bg-[#6E5BC3]/30 hover:bg-[#6E5BC3]/60 rounded-full transition-all"></a>
+                            <a href="{{ $url }}" class="h-2.5 w-2.5 bg-[#6E5BC3]/25 hover:bg-[#6E5BC3]/60 rounded-full transition-all duration-300 cursor-pointer" title="Ke Halaman {{ $page }}" aria-label="Ke Halaman {{ $page }}"></a>
                         @endif
                     @endforeach
                 </div>

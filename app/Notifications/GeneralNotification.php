@@ -11,12 +11,14 @@ class GeneralNotification extends Notification
 
     protected $title;
     protected $message;
+    protected $category;
 
-    // Konstruktor menerima Judul dan Pesan secara dinamis
-    public function __construct($title, $message)
+    // Konstruktor menerima Judul, Pesan, dan Kategori opsional
+    public function __construct($title, $message, $category = 'PROXIS')
     {
         $this->title = $title;
         $this->message = $message;
+        $this->category = $category;
     }
 
     public function via($notifiable)
@@ -27,8 +29,9 @@ class GeneralNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'name'    => $this->title,
-            'message' => $this->message,
+            'name'     => $this->title,
+            'message'  => $this->message,
+            'category' => $this->category ?? 'PROXIS',
         ];
     }
 }

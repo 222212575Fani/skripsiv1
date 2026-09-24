@@ -25,9 +25,10 @@ class NotificationController extends Controller
         $notifications = $user->notifications()->latest()->take(15)->get()->map(function ($n) {
             return [
                 'id'        => $n->id,
+                'category'  => $n->data['category'] ?? 'PROXIS',
                 'title'     => $n->data['name'] ?? 'Notifikasi',
                 'message'   => $n->data['message'] ?? '',
-                'time'      => $n->created_at->diffForHumans(),
+                'time'      => $n->created_at->locale('id')->diffForHumans(),
                 'is_unread' => is_null($n->read_at),
             ];
         });

@@ -40,33 +40,9 @@ class DirekturController extends Controller
             }
         }
 
-        // 1. Perhitungan Pertumbuhan Total Proyek (Bulan ini vs Bulan lalu)
-        $proyekBulanIni = $semuaProyekData->filter(function ($p) use ($now) {
-            if (!$p->created_at) return false;
-            $created = Carbon::parse($p->created_at);
-            return $created->year == $now->year && $created->month == $now->month;
-        })->count();
-
-        $bulanLalu = $now->copy()->subMonth();
-        $proyekBulanLalu = $semuaProyekData->filter(function ($p) use ($bulanLalu) {
-            if (!$p->created_at) return false;
-            $created = Carbon::parse($p->created_at);
-            return $created->year == $bulanLalu->year && $created->month == $bulanLalu->month;
-        })->count();
-
-        if ($proyekBulanLalu > 0) {
-            $growthTotal = round((($proyekBulanIni - $proyekBulanLalu) / $proyekBulanLalu) * 100, 1);
-            $totalPersenText = ($growthTotal >= 0 ? "+{$growthTotal}%" : "{$growthTotal}%") . ' bulan ini';
-            $totalTrend = $growthTotal >= 0 ? 'up' : 'down';
-        } else {
-            if ($proyekBulanIni > 0) {
-                $totalPersenText = '+100% bulan ini';
-                $totalTrend = 'up';
-            } else {
-                $totalPersenText = '0% bulan ini';
-                $totalTrend = 'neutral';
-            }
-        }
+        // 1. Keterangan Subtitle Total Proyek
+        $totalPersenText = 'Total proyek terdaftar';
+        $totalTrend = 'chart';
 
         // 2. Perhitungan Persentase Status terhadap Total Proyek
         $formatPersen = function ($jumlah, $total) {

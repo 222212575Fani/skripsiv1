@@ -1,10 +1,10 @@
-<aside class="w-70 bg-[#F5F3FF] text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 h-full justify-between border-r border-purple-100/60">
+<aside class="w-70 bg-white text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 h-full justify-between border-r border-purple-100/70 shadow-xl md:shadow-none">
     <div class="flex flex-col">
         <!-- Logo / Brand -->
         <div class="p-8 mb-2">
             <div class="flex items-center gap-4">
                 {{-- Tombol X untuk mobile --}}
-                <button @click="sidebarOpen = false" class="md:hidden text-[#6E5BC3]/70 hover:text-[#6E5BC3] transition-colors focus:outline-none shrink-0">
+                <button @click="sidebarOpen = false" class="md:hidden text-gray-400 hover:text-[#6E5BC3] transition-colors focus:outline-none shrink-0 p-1 rounded-lg hover:bg-purple-50">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Menu Navigasi -->
-        <nav class="flex-1 px-4 space-y-1.5 overflow-y-auto">
+        <nav class="flex-1 py-2 space-y-1 overflow-y-auto">
             @php
                 $user = auth()->user();
                 $role = $user->role->nama_role ?? '';
@@ -67,7 +67,7 @@
                 }
 
                 $isSingleMenu = count($menus) === 1;
-            @endphp <!-- DIPERBAIKI: Menggunakan @endphp yang benar -->
+            @endphp
 
             @forelse($menus as $menu)
                 @php 
@@ -76,17 +76,25 @@
                 
                 <a href="{{ route($menu['route']) }}" 
                     wire:navigate.hover
-                    class="group flex items-center justify-between px-4 py-3 text-xs rounded-2xl transition-all duration-200 font-bold {{ $isActive ? 'bg-[#6E5BC3] text-white shadow-md shadow-[#6E5BC3]/25 font-extrabold' : 'text-[#6E5BC3]/80 hover:bg-[#6E5BC3] hover:text-white hover:shadow-md hover:shadow-[#6E5BC3]/25' }}">
+                    class="group relative flex items-center justify-between px-6 py-2.5 text-xs sm:text-[13px] transition-all duration-200 {{ $isActive ? 'bg-[#F2EDFD] text-[#6E5BC3] font-bold' : 'text-gray-600 hover:text-[#6E5BC3] hover:bg-[#F8F6FF] font-medium' }}">
                     
-                    <div class="flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-[#6E5BC3]/80 group-hover:text-white' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="{{ $menu['icon'] }}" />
-                        </svg>
-                        <span>{{ $menu['label'] }}</span>
+                    {{-- Garis Indikator Aktif Kotak Lurus di Sisi Kiri Tanpa Terpotong --}}
+                    @if($isActive)
+                        <span class="absolute left-0 inset-y-0 w-1 bg-[#6E5BC3]"></span>
+                    @endif
+
+                    <div class="flex items-center gap-3 min-w-0">
+                        {{-- Icon Badge Kotak Melengkung Sesuai Referensi --}}
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 {{ $isActive ? 'bg-[#6E5BC3] text-white shadow-xs' : 'bg-gray-100/80 text-gray-400 group-hover:bg-purple-100 group-hover:text-[#6E5BC3]' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $menu['icon'] }}" />
+                            </svg>
+                        </div>
+                        <span class="truncate">{{ $menu['label'] }}</span>
                     </div>
                 </a>
             @empty
-                <p class="px-4 text-xs text-[#6E5BC3]/50 italic">Tidak ada menu tersedia.</p>
+                <p class="px-4 text-xs text-gray-400 italic">Tidak ada menu tersedia.</p>
             @endforelse
         </nav>
     </div>

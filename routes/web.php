@@ -20,8 +20,12 @@ Route::get('/', function () {
             default => redirect()->route('login'),
         };
     }
-    return redirect()->route('login');
-});
+    return view('welcome');
+})->name('home');
+
+Route::get('/portal', function () {
+    return view('welcome');
+})->name('portal');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

@@ -28,7 +28,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:100',
-            'nip' => 'required|string|size:18|unique:pengguna,nip',
+            'nip' => 'required|string|size:18|regex:/^[0-9]{18}$/|unique:pengguna,nip',
             'email' => [
                 'required',
                 'email',
@@ -36,20 +36,23 @@ class AuthController extends Controller
                 'unique:pengguna,email',
                 'regex:/^[A-Za-z0-9._%+-]+@bps\.go\.id$/'
             ],
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|max:100|confirmed',
         ], [
-            'nama.required' => 'Nama lengkap wajib diisi',
-            'nip.required' => 'NIP wajib diisi',
-            'nip.size' => 'NIP harus terdiri dari 18 digit',
-            'nip.unique' => 'NIP sudah terdaftar',
-            'email.required' => 'Email wajib diisi',
-            'email.email' => 'Format email tidak valid',
-            'email.max' => 'Email maksimal 100 karakter',
-            'email.unique' => 'Email sudah terdaftar',
-            'email.regex' => 'Email harus menggunakan domain @bps.go.id',
-            'password.required' => 'Password wajib diisi',
-            'password.min' => 'Password minimal 8 karakter',
-            'password.confirmed' => 'Konfirmasi password tidak sesuai',
+            'nama.required' => 'Nama lengkap wajib diisi.',
+            'nama.max' => 'Nama lengkap maksimal 100 karakter.',
+            'nip.required' => 'NIP wajib diisi.',
+            'nip.size' => 'NIP harus terdiri dari tepat 18 digit angka.',
+            'nip.regex' => 'NIP hanya boleh berupa angka (18 digit).',
+            'nip.unique' => 'NIP ini sudah terdaftar di sistem BPS.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Alamat email maksimal 100 karakter.',
+            'email.unique' => 'Email ini sudah terdaftar di sistem.',
+            'email.regex' => 'Email wajib menggunakan domain resmi kantor @bps.go.id.',
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.min' => 'Kata sandi minimal 8 karakter.',
+            'password.max' => 'Kata sandi maksimal 100 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ]);
 
         $user = Pengguna::create([
@@ -76,7 +79,9 @@ class AuthController extends Controller
 
         return redirect()
             ->route('login')
-            ->with('success', 'Akun berhasil didaftarkan. Silakan menunggu proses aktivasi dan penempatan tim oleh admin.');
+            ->with('register_success', true)
+            ->with('registered_name', $user->nama)
+            ->with('registered_email', $user->email);
     }
 
     /**
@@ -93,12 +98,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email|max:100',
             'password' => 'required|string',
         ], [
-            'email.required' => 'Email wajib diisi',
-            'email.email' => 'Format email tidak valid',
-            'password.required' => 'Password wajib diisi',
+            'email.required'    => 'Alamat email wajib diisi.',
+            'email.email'       => 'Format alamat email tidak valid.',
+            'email.max'         => 'Alamat email maksimal 100 karakter.',
+            'password.required' => 'Kata sandi wajib diisi.',
         ]);
 
         $pengguna = Pengguna::with('role')->where('email', $request->email)->first();
@@ -107,14 +113,15 @@ class AuthController extends Controller
         if (!$pengguna || !Hash::check($request->password, $pengguna->password)) {
             return back()
                 ->withInput()
-                ->with('error', 'Email atau password salah');
+                ->with('error', 'Email atau kata sandi yang Anda masukkan salah. Silakan periksa kembali.');
         }
 
         // 2. Validasi Status Akun
         if ($pengguna->status_akun === 'pending') {
             return back()
                 ->withInput()
-                ->with('error', 'Akun Anda belum diaktivasi oleh admin.');
+                ->with('account_pending', true)
+                ->with('pending_name', $pengguna->nama);
         }
 
         if ($pengguna->status_akun === 'nonaktif') {

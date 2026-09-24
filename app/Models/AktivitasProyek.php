@@ -209,4 +209,29 @@ class AktivitasProyek extends Model
             ->pluck('kendala_eksternal')
             ->all();
     }
+
+    /**
+     * Accessor untuk riwayat pelaporan progress beserta tanggal pelaporan, pelapor, dan uraian
+     */
+    public function getRiwayatProgressAttribute(): array
+    {
+        if ($this->relationLoaded('progressAktivitas')) {
+            $list = $this->progressAktivitas;
+        } else {
+            $list = $this->progressAktivitas()->with('pelapor')->orderByDesc('created_at')->get();
+        }
+
+        return $list->sortByDesc('created_at')->map(function ($item) {
+            $carbon = $item->created_at ? Carbon::parse($item->created_at)->locale('id') : null;
+            return [
+                'id'              => $item->id_progress ?? null,
+                'progress'        => (float) ($item->progress_minggu_berjalan ?? 0),
+                'uraian'          => $item->uraian_progress ?? '',
+                'pelapor'         => $item->pelapor->nama ?? 'Anggota Tim',
+                'tanggal'         => $carbon ? $carbon->translatedFormat('d M Y, H:i') : '-',
+                'tanggal_lengkap' => $carbon ? $carbon->translatedFormat('l, d F Y - H:i') . ' WIB' : '-',
+                'waktu_lalu'      => $carbon ? $carbon->diffForHumans() : '',
+            ];
+        })->values()->all();
+    }
 }

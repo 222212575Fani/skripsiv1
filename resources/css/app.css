@@ -11,7 +11,80 @@
 }
 
 @layer base {
+  [x-cloak] {
+    display: none !important;
+  }
   *, html, body, button, input, select, textarea {
     font-family: 'Mulish', sans-serif !important;
-    }
+  }
+
+  /* Seragamkan ketebalan dan gaya semua placeholder input & textarea agar selalu tipis (font-weight: 300 / font-light) */
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder,
+  ::placeholder,
+  ::-webkit-input-placeholder,
+  ::-moz-placeholder,
+  :-ms-input-placeholder {
+    font-weight: 300 !important;
+    font-family: 'Mulish', sans-serif !important;
+    color: #9ca3af !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Global Scrollbar Ungu Khas PROXIS */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8C78E6 #F1EEFF;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1EEFF;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8C78E6;
+  border-radius: 9999px;
+  border: 1.5px solid #F1EEFF;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #604EE6;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #8C78E6 transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #8C78E6;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #604EE6;
+}
+
+/* Utilitas Sembunyikan Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }

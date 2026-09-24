@@ -59,32 +59,9 @@ class KetuaTimController extends Controller
         $now = Carbon::now();
 
         // 1. Perhitungan Pertumbuhan Total Proyek (Bulan ini vs Bulan lalu)
-        $proyekBulanIni = $semuaProyekTim->filter(function ($p) use ($now) {
-            if (!$p->created_at) return false;
-            $created = Carbon::parse($p->created_at);
-            return $created->year == $now->year && $created->month == $now->month;
-        })->count();
-
-        $bulanLalu = $now->copy()->subMonth();
-        $proyekBulanLalu = $semuaProyekTim->filter(function ($p) use ($bulanLalu) {
-            if (!$p->created_at) return false;
-            $created = Carbon::parse($p->created_at);
-            return $created->year == $bulanLalu->year && $created->month == $bulanLalu->month;
-        })->count();
-
-        if ($proyekBulanLalu > 0) {
-            $growthTotal = round((($proyekBulanIni - $proyekBulanLalu) / $proyekBulanLalu) * 100, 1);
-            $totalPersenText = ($growthTotal >= 0 ? "+{$growthTotal}%" : "{$growthTotal}%") . ' bulan ini';
-            $totalTrend = $growthTotal >= 0 ? 'up' : 'down';
-        } else {
-            if ($proyekBulanIni > 0) {
-                $totalPersenText = '+100% bulan ini';
-                $totalTrend = 'up';
-            } else {
-                $totalPersenText = '0% bulan ini';
-                $totalTrend = 'neutral';
-            }
-        }
+        // 1. Keterangan Subtitle Total Proyek
+        $totalPersenText = 'Total proyek tim';
+        $totalTrend = 'chart';
 
         // 2. Perhitungan Persentase Status terhadap Total Proyek
         $formatPersen = function ($jumlah, $total) {
@@ -129,8 +106,8 @@ class KetuaTimController extends Controller
             $query->where('nama_proyek', 'like', '%' . $request->search . '%');
         }
 
-        // Mengambil data proyek dengan pagination 10 card per halaman
-        $proyekTim = $query->latest()->paginate(10)->withQueryString();
+        // Mengambil data proyek dengan pagination 15 card per halaman (3 kolom x 5 baris)
+        $proyekTim = $query->latest()->paginate(15)->withQueryString();
 
         // AMBIL DATA KETUA PROYEK BERDASARKAN FILTER TAHUN & BULAN
         $filterTahun = $request->input('tahun', date('Y'));
@@ -251,16 +228,23 @@ class KetuaTimController extends Controller
     public function storeProyek(Request $request)
     {
         $request->validate([
-            'nama_proyek'     => 'required|string|max:255',
-            'deskripsi'       => 'nullable|string',
+            'nama_proyek'     => 'required|string|max:200',
+            'deskripsi'       => 'nullable|string|max:2000',
             'id_ketua_proyek' => 'required|exists:pengguna,id_pengguna',
             'status'          => 'required|in:belum_dimulai,berjalan,selesai,terlambat',
             'tanggal_mulai'   => 'nullable|date',
-            'tenggat_waktu'   => 'nullable|date',
+            'tenggat_waktu'   => 'nullable|date|after_or_equal:tanggal_mulai',
         ], [
-            'nama_proyek.required'    => 'Nama proyek wajib diisi.',
-            'id_ketua_proyek.required' => 'Pilih salah satu Ketua Proyek dari anggota tim.',
-            'status.required'          => 'Status proyek wajib ditentukan.',
+            'nama_proyek.required'         => 'Nama proyek wajib diisi.',
+            'nama_proyek.max'              => 'Nama proyek maksimal 200 karakter.',
+            'deskripsi.max'                => 'Deskripsi proyek maksimal 2000 karakter.',
+            'id_ketua_proyek.required'     => 'Pilih salah satu Ketua Proyek dari anggota tim.',
+            'id_ketua_proyek.exists'       => 'Ketua proyek yang dipilih tidak valid.',
+            'status.required'              => 'Status proyek wajib ditentukan.',
+            'status.in'                    => 'Status proyek tidak valid.',
+            'tanggal_mulai.date'           => 'Format tanggal mulai tidak valid.',
+            'tenggat_waktu.date'           => 'Format target tanggal selesai tidak valid.',
+            'tenggat_waktu.after_or_equal' => 'Target tanggal selesai tidak boleh mendahului tanggal mulai proyek.',
         ]);
 
         try {
@@ -353,12 +337,23 @@ class KetuaTimController extends Controller
     public function updateProyek(Request $request, $id)
     {
         $request->validate([
-            'nama_proyek'     => 'required|string|max:255',
-            'deskripsi'       => 'nullable|string',
+            'nama_proyek'     => 'required|string|max:200',
+            'deskripsi'       => 'nullable|string|max:2000',
             'id_ketua_proyek' => 'required|exists:pengguna,id_pengguna',
             'status'          => 'required|in:belum_dimulai,berjalan,selesai,terlambat',
             'tanggal_mulai'   => 'nullable|date',
-            'tenggat_waktu'   => 'nullable|date',
+            'tenggat_waktu'   => 'nullable|date|after_or_equal:tanggal_mulai',
+        ], [
+            'nama_proyek.required'         => 'Nama proyek wajib diisi.',
+            'nama_proyek.max'              => 'Nama proyek maksimal 200 karakter.',
+            'deskripsi.max'                => 'Deskripsi proyek maksimal 2000 karakter.',
+            'id_ketua_proyek.required'     => 'Pilih salah satu Ketua Proyek dari anggota tim.',
+            'id_ketua_proyek.exists'       => 'Ketua proyek yang dipilih tidak valid.',
+            'status.required'              => 'Status proyek wajib ditentukan.',
+            'status.in'                    => 'Status proyek tidak valid.',
+            'tanggal_mulai.date'           => 'Format tanggal mulai tidak valid.',
+            'tenggat_waktu.date'           => 'Format target tanggal selesai tidak valid.',
+            'tenggat_waktu.after_or_equal' => 'Target tanggal selesai tidak boleh mendahului tanggal mulai proyek.',
         ]);
 
         try {

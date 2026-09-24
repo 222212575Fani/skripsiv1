@@ -88,33 +88,9 @@ class AnggotaProyekController extends Controller
 
         $now = Carbon::now();
 
-        // 1. Perhitungan Pertumbuhan Total Proyek (Bulan ini vs Bulan lalu)
-        $proyekBulanIni = $proyekKetuaAll->filter(function ($p) use ($now) {
-            if (!$p->created_at) return false;
-            $created = Carbon::parse($p->created_at);
-            return $created->year == $now->year && $created->month == $now->month;
-        })->count();
-
-        $bulanLalu = $now->copy()->subMonth();
-        $proyekBulanLalu = $proyekKetuaAll->filter(function ($p) use ($bulanLalu) {
-            if (!$p->created_at) return false;
-            $created = Carbon::parse($p->created_at);
-            return $created->year == $bulanLalu->year && $created->month == $bulanLalu->month;
-        })->count();
-
-        if ($proyekBulanLalu > 0) {
-            $growthTotal = round((($proyekBulanIni - $proyekBulanLalu) / $proyekBulanLalu) * 100, 1);
-            $totalPersenText = ($growthTotal >= 0 ? "+{$growthTotal}%" : "{$growthTotal}%") . ' bulan ini';
-            $totalTrend = $growthTotal >= 0 ? 'up' : 'down';
-        } else {
-            if ($proyekBulanIni > 0) {
-                $totalPersenText = '+100% bulan ini';
-                $totalTrend = 'up';
-            } else {
-                $totalPersenText = '0% bulan ini';
-                $totalTrend = 'neutral';
-            }
-        }
+        // 1. Keterangan Subtitle Total Proyek
+        $totalPersenText = 'Total proyek dipimpin';
+        $totalTrend = 'chart';
 
         // 2. Perhitungan Persentase Status terhadap Total Proyek
         $formatPersen = function ($jumlah, $total) {
@@ -161,7 +137,7 @@ class AnggotaProyekController extends Controller
             });
         }
 
-        $semuaProyek = $queryKetua->latest()->paginate(10)->withQueryString();
+        $semuaProyek = $queryKetua->latest()->paginate(15)->withQueryString();
 
         return view('anggota.proyek', compact(
             'semuaProyek',
@@ -315,12 +291,28 @@ class AnggotaProyekController extends Controller
         }
 
         $request->validate([
-            'nama_aktivitas'         => 'required|string|max:150',
-            'deskripsi_aktivitas'    => 'nullable|string',
+            'nama_aktivitas'         => 'required|string|min:3|max:150',
+            'deskripsi_aktivitas'    => 'nullable|string|max:2000',
             'id_penanggung_jawab'    => $this->penanggungJawabRules($proyek),
             'tanggal_mulai'          => ['required', 'date', 'after_or_equal:' . $tanggalMulaiMinimum->toDateString(), 'before_or_equal:' . $proyek->tanggal_target_selesai],
             'tanggal_target_selesai' => ['required', 'date', 'after_or_equal:tanggal_mulai', 'before_or_equal:' . $proyek->tanggal_target_selesai],
             'status_aktivitas'       => 'nullable|in:belum_dimulai,berjalan,selesai,terlambat',
+        ], [
+            'nama_aktivitas.required'              => 'Nama aktivitas wajib diisi.',
+            'nama_aktivitas.min'                   => 'Nama aktivitas minimal 3 karakter.',
+            'nama_aktivitas.max'                   => 'Nama aktivitas maksimal 150 karakter.',
+            'deskripsi_aktivitas.max'              => 'Deskripsi aktivitas maksimal 2000 karakter.',
+            'id_penanggung_jawab.required'         => 'Penanggung jawab aktivitas wajib dipilih.',
+            'id_penanggung_jawab.exists'           => 'Penanggung jawab yang dipilih tidak valid.',
+            'tanggal_mulai.required'               => 'Tanggal mulai aktivitas wajib ditentukan.',
+            'tanggal_mulai.date'                   => 'Format tanggal mulai tidak valid.',
+            'tanggal_mulai.after_or_equal'         => 'Tanggal mulai aktivitas tidak boleh mendahului hari ini atau tanggal mulai proyek.',
+            'tanggal_mulai.before_or_equal'        => 'Tanggal mulai tidak boleh melebihi batas target selesai proyek.',
+            'tanggal_target_selesai.required'      => 'Tanggal target selesai wajib ditentukan.',
+            'tanggal_target_selesai.date'          => 'Format tanggal target selesai tidak valid.',
+            'tanggal_target_selesai.after_or_equal' => 'Tanggal target selesai tidak boleh lebih awal dari tanggal mulai aktivitas.',
+            'tanggal_target_selesai.before_or_equal'=> 'Tanggal target selesai tidak boleh melebihi batas target selesai proyek.',
+            'status_aktivitas.in'                  => 'Status aktivitas yang dipilih tidak valid.',
         ]);
 
         AktivitasProyek::create([
@@ -374,11 +366,26 @@ class AnggotaProyekController extends Controller
         }
 
         $data = $request->validate([
-            'nama_aktivitas' => 'required|string|max:150',
-            'deskripsi_aktivitas' => 'nullable|string',
-            'id_penanggung_jawab' => $this->penanggungJawabRules($proyek),
-            'tanggal_mulai' => ['required', 'date', 'after_or_equal:' . $tanggalMulaiMinimum->toDateString(), 'before_or_equal:' . $proyek->tanggal_target_selesai],
+            'nama_aktivitas'         => 'required|string|min:3|max:150',
+            'deskripsi_aktivitas'    => 'nullable|string|max:2000',
+            'id_penanggung_jawab'    => $this->penanggungJawabRules($proyek),
+            'tanggal_mulai'          => ['required', 'date', 'after_or_equal:' . $tanggalMulaiMinimum->toDateString(), 'before_or_equal:' . $proyek->tanggal_target_selesai],
             'tanggal_target_selesai' => ['required', 'date', 'after_or_equal:tanggal_mulai', 'before_or_equal:' . $proyek->tanggal_target_selesai],
+        ], [
+            'nama_aktivitas.required'              => 'Nama aktivitas wajib diisi.',
+            'nama_aktivitas.min'                   => 'Nama aktivitas minimal 3 karakter.',
+            'nama_aktivitas.max'                   => 'Nama aktivitas maksimal 150 karakter.',
+            'deskripsi_aktivitas.max'              => 'Deskripsi aktivitas maksimal 2000 karakter.',
+            'id_penanggung_jawab.required'         => 'Penanggung jawab aktivitas wajib dipilih.',
+            'id_penanggung_jawab.exists'           => 'Penanggung jawab yang dipilih tidak valid.',
+            'tanggal_mulai.required'               => 'Tanggal mulai aktivitas wajib ditentukan.',
+            'tanggal_mulai.date'                   => 'Format tanggal mulai tidak valid.',
+            'tanggal_mulai.after_or_equal'         => 'Tanggal mulai aktivitas tidak boleh mendahului hari ini atau tanggal mulai proyek.',
+            'tanggal_mulai.before_or_equal'        => 'Tanggal mulai tidak boleh melebihi batas target selesai proyek.',
+            'tanggal_target_selesai.required'      => 'Tanggal target selesai wajib ditentukan.',
+            'tanggal_target_selesai.date'          => 'Format tanggal target selesai tidak valid.',
+            'tanggal_target_selesai.after_or_equal' => 'Tanggal target selesai tidak boleh lebih awal dari tanggal mulai aktivitas.',
+            'tanggal_target_selesai.before_or_equal'=> 'Tanggal target selesai tidak boleh melebihi batas target selesai proyek.',
         ]);
 
         $data['diperbarui_oleh'] = auth()->id();
@@ -407,15 +414,41 @@ class AnggotaProyekController extends Controller
         abort_unless($aktivitas->id_penanggung_jawab == auth()->id(), 403);
 
         $data = $request->validate([
-            'progress_minggu_berjalan' => 'required|numeric|min:0|max:100',
-            'uraian_progress'          => 'nullable|string|max:2000',
-            'kendala_internal'         => 'nullable|string|max:2000',
-            'kendala_eksternal'        => 'nullable|string|max:2000',
-            'dokumen_pendukung'        => 'nullable|array',
-            'dokumen_pendukung.*'      => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:5120',
+            'progress_minggu_berjalan'          => 'required|numeric|min:0|max:100',
+            'progress_minggu_berjalan_tambahan' => 'nullable|numeric|min:0|max:100',
+            'uraian_progress'                   => 'nullable|string|max:2000',
+            'kendala_internal'                  => 'nullable|string|max:2000',
+            'kendala_eksternal'                 => 'nullable|string|max:2000',
+            'dokumen_pendukung'                 => 'nullable|array',
+            'dokumen_pendukung.*'               => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:5120',
+        ], [
+            'progress_minggu_berjalan.required' => 'Nilai persentase progress wajib diisi.',
+            'progress_minggu_berjalan.numeric'  => 'Nilai progress harus berupa angka.',
+            'progress_minggu_berjalan.min'      => 'Nilai progress minimal adalah 0%.',
+            'progress_minggu_berjalan.max'      => 'Nilai progress tidak boleh melebihi 100%.',
+            'progress_minggu_berjalan_tambahan.numeric' => 'Nilai tambahan progress harus berupa angka.',
+            'progress_minggu_berjalan_tambahan.min'     => 'Nilai tambahan progress minimal adalah 0%.',
+            'progress_minggu_berjalan_tambahan.max'     => 'Nilai tambahan progress tidak boleh melebihi 100%.',
+            'uraian_progress.max'               => 'Uraian pekerjaan progress maksimal 2000 karakter.',
+            'kendala_internal.max'              => 'Catatan kendala internal maksimal 2000 karakter.',
+            'kendala_eksternal.max'             => 'Catatan kendala eksternal maksimal 2000 karakter.',
+            'dokumen_pendukung.*.mimes'         => 'Format berkas dokumen pendukung harus berupa PDF, DOC, DOCX, XLS, XLSX, PNG, JPG, atau JPEG.',
+            'dokumen_pendukung.*.max'           => 'Ukuran setiap berkas dokumen pendukung maksimal 5 MB.',
         ]);
 
         $userId = auth()->id();
+        $progressSebelumnya = (float) ($aktivitas->target ?? 0);
+        $tambahan = $request->input('progress_minggu_berjalan_tambahan');
+
+        // Angka murni yang diinputkan anggota untuk laporan saat ini (BUKAN angka kumulatif)
+        if ($tambahan !== null && $tambahan !== '') {
+            $progressInputan = (float) $tambahan;
+            $totalAkhir = min(100, $progressSebelumnya + $progressInputan);
+        } else {
+            $totalSubmitted = (float) $data['progress_minggu_berjalan'];
+            $progressInputan = max(0, $totalSubmitted - $progressSebelumnya);
+            $totalAkhir = min(100, $totalSubmitted);
+        }
 
         // 1. Simpan Catatan Kendala Internal / Eksternal
         if (!empty($data['kendala_internal']) || !empty($data['kendala_eksternal'])) {
@@ -429,11 +462,11 @@ class AnggotaProyekController extends Controller
             ]);
         }
 
-        // 2. Simpan Riwayat Progress Aktivitas
+        // 2. Simpan Riwayat Progress Aktivitas (Angka yang diinputkan oleh anggota, bukan kumulatif)
         ProgressAktivitas::create([
             'id_aktivitas'             => $aktivitas->id_aktivitas,
             'id_pengguna'              => $userId,
-            'progress_minggu_berjalan' => $data['progress_minggu_berjalan'],
+            'progress_minggu_berjalan' => $progressInputan,
             'uraian_progress'          => $data['uraian_progress'] ?? null,
         ]);
 
@@ -456,11 +489,11 @@ class AnggotaProyekController extends Controller
             }
         }
 
-        // 4. Update Target dan Status Aktivitas
+        // 4. Update Target dan Status Aktivitas (Kumulatif total)
         $aktivitas->update([
-            'target'                   => $data['progress_minggu_berjalan'],
-            'status_aktivitas'         => $data['progress_minggu_berjalan'] >= 100 ? 'selesai' : 'berjalan',
-            'tanggal_selesai_aktual'   => $data['progress_minggu_berjalan'] >= 100 ? now()->toDateString() : null,
+            'target'                   => $totalAkhir,
+            'status_aktivitas'         => $totalAkhir >= 100 ? 'selesai' : 'berjalan',
+            'tanggal_selesai_aktual'   => $totalAkhir >= 100 ? now()->toDateString() : null,
             'diperbarui_oleh'          => $userId,
         ]);
 
@@ -491,7 +524,7 @@ class AnggotaProyekController extends Controller
         }
 
         $namaProyek = $proyek?->nama_proyek ?? 'Proyek';
-        $pesanNotifikasi = "{$namaPelapor} telah melaporkan progress {$data['progress_minggu_berjalan']}%{$keteranganTambahan} pada aktivitas '{$aktivitas->nama_aktivitas}' (Proyek: {$namaProyek}).";
+        $pesanNotifikasi = "{$namaPelapor} telah melaporkan progress {$progressInputan}% (Total Capaian: {$totalAkhir}%){$keteranganTambahan} pada aktivitas '{$aktivitas->nama_aktivitas}' (Proyek: {$namaProyek}).";
 
         // Daftar penerima: Ketua Proyek dan Ketua Tim (selain pelapor)
         $penerimaNotifikasi = collect();

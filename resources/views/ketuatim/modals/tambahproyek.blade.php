@@ -1,5 +1,6 @@
 <div x-data="{ 
         open: false, 
+        namaProyek: '',
         ketua: '', 
         ketuaNama: '', 
         ketuaOpen: false, 
@@ -7,7 +8,7 @@
         statusLabel: 'Belum Dimulai', 
         statusOpen: false 
     }" 
-     @open-modal-tambah-proyek.window="open = true" 
+     @open-modal-tambah-proyek.window="open = true; namaProyek = '';" 
      @close-modal-tambah-proyek.window="open = false"
      x-show="open" 
      x-cloak
@@ -40,27 +41,27 @@
     {{-- Backdrop --}}
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px] transition-opacity" @click="open = false"></div>
 
-    <div class="flex min-h-full items-center justify-center p-4">
+    <div class="flex min-h-full items-center justify-center p-3 sm:p-4">
         <div @click.away="open = false" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-             class="relative w-full max-w-2xl transform overflow-visible rounded-3xl bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
+             class="relative w-full max-w-2xl transform overflow-visible rounded-xl sm:rounded-2xl bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
             
             {{-- Header Modal dengan Ikon Folder Proyek --}}
-            <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-500 shadow-sm relative">
+            <div class="flex items-center justify-between px-4 py-4 sm:px-8 sm:py-6 border-b border-gray-100">
+                <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-500 shadow-sm relative shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900 tracking-tight">Tambah Proyek Baru</h3>
-                        <p class="text-xs font-medium text-gray-400">Lengkapi data proyek baru di bawah ini.</p>
+                    <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-bold text-gray-900 tracking-tight truncate">Tambah Proyek Baru</h3>
+                        <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Lengkapi data proyek baru di bawah ini.</p>
                     </div>
                 </div>
-                <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer">
+                <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -70,44 +71,45 @@
             <form action="{{ route('ketuatim.manajemenproyek.store') ?? '#' }}" method="POST" autocomplete="off">
                 @csrf
 
-                <div class="p-8 space-y-5">
+                <div class="p-4 sm:p-8 space-y-4 sm:space-y-5">
                     
                     {{-- Nama Proyek --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Nama Proyek <span class="text-red-500">*</span></label>
-                        <input type="text" name="nama_proyek" placeholder="Masukkan nama proyek..." required autocomplete="off"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-normal">
+                        <input type="text" name="nama_proyek" placeholder="Masukkan nama proyek..." maxlength="200" required autocomplete="off"
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                     </div>
 
                     {{-- Deskripsi Proyek --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Proyek</label>
-                        <textarea name="deskripsi" rows="3" placeholder="Tuliskan deskripsi atau ringkasan proyek..." 
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-normal resize-none"></textarea>
+                        <textarea name="deskripsi" rows="3" maxlength="2000" placeholder="Tuliskan deskripsi atau ringkasan proyek..." 
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
-                    {{-- Grid 2 Kolom (Ketua Proyek & Status Proyek) --}}
+                    {{-- Grid 2 Kolom (Ketua Proyek & Status Proyek) dengan Dropdown Buka ke Atas --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         
-                        {{-- Dropdown Kustom Ketua Proyek --}}
+                        {{-- Dropdown Kustom Ketua Proyek (Buka ke Atas) --}}
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Ketua Proyek <span class="text-red-500">*</span></label>
                             <div class="relative" @click.outside="ketuaOpen = false">
                                 <input type="hidden" name="id_ketua_proyek" x-model="ketua" required>
                                 <button type="button" @click="ketuaOpen = !ketuaOpen; statusOpen = false;"
-                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-medium transition-all cursor-pointer">
-                                    <span :class="ketuaNama ? 'text-gray-700' : 'text-gray-400'" x-text="ketuaNama || 'Pilih Ketua Proyek'"></span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200" :class="ketuaOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                    <span :class="ketuaNama ? 'text-gray-700 font-medium' : 'text-gray-400 font-light'" x-text="ketuaNama || 'Pilih Ketua Proyek'"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="ketuaOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
 
-                                <div x-show="ketuaOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-purple-100 rounded-3xl shadow-xl p-2 z-1000 space-y-1 max-h-44 overflow-y-auto">
+                                <div x-show="ketuaOpen" x-cloak 
+                                    class="custom-scrollbar absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
                                     @forelse($anggotaTim ?? [] as $anggota)
                                         <button type="button" 
                                             @click="ketua = '{{ $anggota->id_pengguna }}'; ketuaNama = '{{ addslashes($anggota->nama ?? $anggota->pengguna->nama) }}'; ketuaOpen = false"
-                                            class="w-full flex items-center px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer text-left"
-                                            :class="ketua == '{{ $anggota->id_pengguna }}' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-gray-50'">
+                                            class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
+                                            :class="ketua == '{{ $anggota->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
                                             <span>{{ $anggota->nama ?? $anggota->pengguna->nama }}</span>
                                         </button>
                                     @empty
@@ -117,32 +119,33 @@
                             </div>
                         </div>
 
-                        {{-- Dropdown Kustom Status Proyek --}}
+                        {{-- Dropdown Kustom Status Proyek (Buka ke Atas) --}}
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Status Proyek <span class="text-red-500">*</span></label>
                             <div class="relative" @click.outside="statusOpen = false">
                                 <input type="hidden" name="status" x-model="status" required>
                                 <button type="button" @click="statusOpen = !statusOpen; ketuaOpen = false;"
-                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-medium transition-all cursor-pointer">
-                                    <span class="text-gray-700" x-text="statusLabel"></span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200" :class="statusOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                    <span class="text-gray-700 font-medium" x-text="statusLabel"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="statusOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
 
-                                <div x-show="statusOpen" x-cloak x-transition class="absolute left-0 right-0 mt-2 bg-white border border-purple-100 rounded-3xl shadow-xl p-2 z-1000 space-y-1">
+                                <div x-show="statusOpen" x-cloak 
+                                    class="custom-scrollbar absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
                                     <button type="button" @click="status = 'belum_dimulai'; statusLabel = 'Belum Dimulai'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-gray-50'">Belum Dimulai</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
+                                        :class="status === 'belum_dimulai' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Belum Dimulai</button>
                                     <button type="button" @click="status = 'berjalan'; statusLabel = 'Berjalan'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'berjalan' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-gray-50'">Berjalan</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
+                                        :class="status === 'berjalan' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Berjalan</button>
                                     <button type="button" @click="status = 'selesai'; statusLabel = 'Selesai'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'selesai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-gray-50'">Selesai</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
+                                        :class="status === 'selesai' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Selesai</button>
                                     <button type="button" @click="status = 'terlambat'; statusLabel = 'Terlambat'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'terlambat' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-gray-50'">Terlambat</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
+                                        :class="status === 'terlambat' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Terlambat</button>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +169,7 @@
                 </div>
 
                 {{-- Footer Action --}}
-                <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
+                <div class="px-4 py-3 sm:px-8 sm:py-4.5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/60 rounded-b-xl sm:rounded-b-2xl">
                     <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600" shadow="shadow-md shadow-rose-500/20">
                         Batal
                     </x-button>

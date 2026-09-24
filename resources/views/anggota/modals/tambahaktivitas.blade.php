@@ -15,24 +15,24 @@
     {{-- Backdrop --}}
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px] transition-opacity" @click="open = false"></div>
 
-    <div class="flex min-h-full items-center justify-center p-4">
+    <div class="flex min-h-full items-center justify-center p-3 sm:p-4">
         <div @click.away="open = false" 
-             class="relative w-full max-w-2xl transform overflow-visible rounded-[24px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
+             class="relative w-full max-w-2xl transform overflow-visible rounded-xl sm:rounded-2xl bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
             
             {{-- Header Modal --}}
-            <div class="flex items-center justify-between px-8 py-6 border-b border-gray-100">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-[#F8F7FF] border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-xs">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="flex items-center justify-between px-4 py-4 sm:px-8 sm:py-6 border-b border-gray-100">
+                <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-[#F8F7FF] border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-xs shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M12 4v16m8-8H4" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900 tracking-tight">Tambah Aktivitas Baru</h3>
-                        <p class="text-xs font-medium text-gray-400">Buat aktivitas baru dan tambahkan ke dalam proyek ini.</p>
+                    <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-bold text-gray-900 tracking-tight truncate">Tambah Aktivitas Baru</h3>
+                        <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Buat aktivitas baru dan tambahkan ke dalam proyek ini.</p>
                     </div>
                 </div>
-                <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer">
+                <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -42,23 +42,23 @@
             <form action="{{ route('anggota.aktivitas.store', $proyek->id_proyek) }}" method="POST" autocomplete="off">
                 @csrf
 
-                <div class="p-8 space-y-5">
+                <div class="p-4 sm:p-8 space-y-4 sm:space-y-5">
                     
                     {{-- Nama Aktivitas --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
-                        <input type="text" name="nama_aktivitas" placeholder="Masukkan nama aktivitas..." required autocomplete="off"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-700 placeholder:font-normal">
+                        <input type="text" name="nama_aktivitas" placeholder="Masukkan nama aktivitas..." minlength="3" maxlength="150" required autocomplete="off"
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                     </div>
 
                     {{-- Deskripsi Aktivitas --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Aktivitas</label>
-                        <textarea name="deskripsi_aktivitas" rows="3" placeholder="Tuliskan deskripsi atau ringkasan aktivitas..."
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-700 placeholder:font-normal resize-none"></textarea>
+                        <textarea name="deskripsi_aktivitas" rows="3" maxlength="2000" placeholder="Tuliskan deskripsi atau ringkasan aktivitas..."
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
-                    {{-- Penanggung Jawab --}}
+                    {{-- Penanggung Jawab (Buka ke Atas agar TIDAK Keluar Container Modal) --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Penanggung Jawab <span class="text-red-500">*</span></label>
                         @php
@@ -70,28 +70,30 @@
                                 ->filter(fn ($member) => $member->id_pengguna != $idKetuaTim);
                         @endphp
                         <div class="relative group/filter" @click.outside="pjOpen = false">
-                            <input type="hidden" name="id_penanggung_jawab" x-model="pj">
+                            <input type="hidden" name="id_penanggung_jawab" x-model="pj" required>
                             <button type="button" @click="pjOpen = !pjOpen"
-                                class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-normal transition-all cursor-pointer"
-                                :class="pj ? 'text-gray-700' : 'text-gray-700'">
-                                <span x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 group-hover/filter:text-[#6E5BC3] transition-all duration-200" :class="pjOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
+                                <span :class="pj ? 'text-gray-700 font-medium' : 'text-gray-400 font-light'" x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="pjOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                             </button>
-                            <div x-show="pjOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-[28px] shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2.5 z-[1000] space-y-1.5 max-h-80 overflow-y-auto">
-                                <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#6E5BC3] text-xs font-normal">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" /></svg>
+
+                            {{-- Buka ke atas (bottom-full mb-1.5) agar tidak menonjol di luar container modal --}}
+                            <div x-show="pjOpen" x-cloak 
+                                class="custom-scrollbar absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
+                                <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#6E5BC3] text-xs font-semibold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     <span>Pilih Penanggung Jawab</span>
                                 </div>
                                 @forelse($listAnggotaTim as $member)
                                     @if($member->pengguna)
                                         <button type="button" @click="pj = '{{ $member->pengguna->id_pengguna }}'; pjNama = '{{ addslashes($member->pengguna->nama) }}'; pjOpen = false"
-                                            class="w-full flex items-center px-3.5 py-3 rounded-xl text-xs font-normal transition-all cursor-pointer"
-                                            :class="pj == '{{ $member->pengguna->id_pengguna }}' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
+                                            class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs font-normal transition-all cursor-pointer text-left"
+                                            :class="pj == '{{ $member->pengguna->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3]'">
                                             <span>{{ $member->pengguna->nama }}</span>
                                         </button>
                                     @endif
                                 @empty
-                                    <p class="px-3.5 py-2.5 text-xs text-gray-400">Tidak ada anggota tim yang dapat dipilih.</p>
+                                    <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center">Tidak ada anggota tim yang dapat dipilih.</p>
                                 @endforelse
                             </div>
                         </div>
@@ -125,13 +127,13 @@
                 </div>
 
                 {{-- Footer Action --}}
-                <div class="px-8 py-5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
-                    <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white shadow-md shadow-rose-500/20 transition-all cursor-pointer">
+                <div class="px-4 py-3 sm:px-8 sm:py-4.5 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/60 rounded-b-xl sm:rounded-b-2xl">
+                    <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">
                         Batal
-                    </button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white shadow-md shadow-[#6E5BC3]/20 transition-all cursor-pointer">
+                    </x-button>
+                    <x-button type="submit" color="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20">
                         Simpan Aktivitas
-                    </button>
+                    </x-button>
                 </div>
             </form>
         </div>

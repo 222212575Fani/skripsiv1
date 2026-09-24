@@ -38,8 +38,8 @@
         filterOpen: false,
         bulanOpen: false,
         weekOffset: 0,
-        fetchAktivitas() {
-            let url = `{{ route('anggota.aktivitassaya') }}?search=${encodeURIComponent(this.search)}&status=${this.status}&tahun=${this.tahun}&bulan=${this.bulan}`;
+        fetchAktivitas(customUrl = null) {
+            let url = customUrl || `{{ route('anggota.aktivitassaya') }}?search=${encodeURIComponent(this.search)}&status=${this.status}&tahun=${this.tahun}&bulan=${this.bulan}`;
             
             fetch(url, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -48,62 +48,63 @@
             .then(html => {
                 let parser = new DOMParser();
                 let doc = parser.parseFromString(html, 'text/html');
-                let newWrapper = doc.getElementById('aktivitas-kanban-wrapper').innerHTML;
-                
-                let wrapper = document.getElementById('aktivitas-kanban-wrapper');
-                wrapper.innerHTML = newWrapper;
-                if (window.Alpine) {
-                    window.Alpine.initTree(wrapper);
+                let newWrapper = doc.getElementById('aktivitas-kanban-wrapper');
+                let curWrapper = document.getElementById('aktivitas-kanban-wrapper');
+                if (newWrapper && curWrapper) {
+                    curWrapper.innerHTML = newWrapper.innerHTML;
+                    if (window.Alpine) {
+                        window.Alpine.initTree(curWrapper);
+                    }
                 }
                 window.history.pushState({}, '', url);
             })
             .catch(error => console.error('Error:', error));
         }
-    }" class="flex flex-col gap-6 w-full">
+    }" class="flex flex-col gap-4 sm:gap-6 w-full">
 
         {{-- ================= 1. BAGIAN ATAS: 2 KOLOM (KIRI: CONTAINER UNGU + STATISTIK, KANAN: SIDEBAR KALENDER 7 HARI) ================= --}}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
             
             {{-- SISI KIRI: CONTAINER UNGU BESAR --}}
-            <div class="lg:col-span-2 bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-4xl shadow-sm p-8 text-white flex flex-col justify-between gap-6">
+            <div class="lg:col-span-2 bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-2xl sm:rounded-3xl lg:rounded-4xl shadow-sm p-4 sm:p-6 lg:p-8 text-white flex flex-col justify-between gap-5 sm:gap-6">
                 
                 {{-- Header Banner --}}
-                <div class="flex flex-col gap-2.5">
-                    <h1 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+                <div class="flex flex-col gap-2">
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">
                         Periksa tugas dan jadwal harianmu
                     </h1>
-                    <p class="text-sm text-purple-100 font-normal leading-relaxed">
-                        Halo, <span class="font-bold text-white">{{ auth()->user()->nama ?? auth()->user()->name }}</span> 👋✨!<br> 
+                    <p class="text-xs sm:text-sm text-purple-100 font-normal leading-relaxed">
+                        Halo, {{ $sapaanWaktu }}, <span class="font-bold text-white">{{ auth()->user()->nama ?? auth()->user()->name }}</span>! 👋✨<br> 
                         Pantau dan kelola aktivitas proyekmu dengan mudah di sini. Pastikan untuk selalu memperbarui progress pekerjaan dan melaporkan hasil tugas tepat waktu.
                     </p>
                 </div>
 
                 {{-- 2 Card Statistik di Dalam Container Ungu --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     
                     {{-- Sub-Card 1: Total Proyek --}}
-                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl py-5 px-6 flex items-center justify-between">
-                        <div class="flex flex-col gap-1">
-                            <span class="text-[11px] font-medium text-purple-200 uppercase tracking-wider">Total Proyek</span>
-                            <h3 class="text-2xl font-bold text-white">{{ $totalProyekTerlibat ?? 0 }}</h3>
-                            <span class="text-xs text-purple-200">Proyek yang Anda ikuti</span>
+                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-xl sm:rounded-2xl py-3.5 px-4 sm:py-5 sm:px-6 flex items-center justify-between">
+                        <div class="flex flex-col gap-0.5 sm:gap-1">
+                            <span class="text-[10px] sm:text-[11px] font-medium text-purple-200 uppercase tracking-wider">Total Proyek</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white">{{ $totalProyekTerlibat ?? 0 }}</h3>
+                            <span class="text-[11px] sm:text-xs text-purple-200">Proyek yang Anda ikuti</span>
                         </div>
-                        <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-white shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/15 flex items-center justify-center text-white shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
                         </div>
                     </div>
 
                     {{-- Sub-Card 2: Total Aktivitas --}}
-                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl py-5 px-6 flex items-center justify-between">
-                        <div class="flex flex-col gap-1">
-                            <span class="text-[11px] font-medium text-purple-200 uppercase tracking-wider">Total Aktivitas</span>
-                            <h3 class="text-2xl font-bold text-white">{{ $totalAktivitasSaya ?? 0 }}</h3>
-                            <span class="text-xs text-purple-200">Tugas dari semua proyek</span>
+                    <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-xl sm:rounded-2xl py-3.5 px-4 sm:py-5 sm:px-6 flex items-center justify-between">
+                        <div class="flex flex-col gap-0.5 sm:gap-1">
+                            <span class="text-[10px] sm:text-[11px] font-medium text-purple-200 uppercase tracking-wider">Total Aktivitas</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white">{{ $totalAktivitasSaya ?? 0 }}</h3>
+                            <span class="text-[11px] sm:text-xs text-purple-200">Tugas dari semua proyek</span>
                         </div>
-                        <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center text-white shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/15 flex items-center justify-center text-white shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                             </svg>
                         </div>
@@ -115,7 +116,7 @@
 
 
             {{-- SISI KANAN: SIDEBAR KALENDER 7 HARI & PENGINGAT --}}
-            <div class="bg-white border border-purple-100 rounded-[28px] p-5 flex flex-col justify-between shadow-xs"
+            <div class="bg-white border border-purple-100 rounded-2xl sm:rounded-[28px] p-4 sm:p-5 flex flex-col justify-between shadow-xs"
                  x-data="{
                     currentDate: new Date(),
                     get formattedMonth() {
@@ -209,19 +210,19 @@
 
 
         {{-- ================= 2. BAGIAN BAWAH: KOTAK PENCARIAN & FILTER BAR ================= --}}
-        <div class="bg-white rounded-[28px] shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col gap-3 w-full">
+        <div class="bg-white rounded-2xl sm:rounded-[28px] shadow-sm border border-gray-100 p-3.5 sm:p-5 flex flex-col gap-3 w-full">
             <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 w-full">
                 {{-- 1. Input Search Memanjang Penuh saat Layar Diperkecil --}}
                 <div class="relative w-full lg:flex-1 group/search">
-                    <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6E5BC3] transition-colors">
+                    <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#604EE6] transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </span>
                     
                     <input type="text" x-model="search" @input.debounce.400ms="fetchAktivitas()" placeholder="Cari aktivitas..." 
-                        class="w-full pl-10 pr-9 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] rounded-full text-xs font-normal text-gray-800 placeholder:text-[#6E5BC3] focus:outline-none focus:border-[#6E5BC3] transition-all shadow-2xs">
+                        class="w-full pl-10 pr-9 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-purple-300 focus:outline-none focus:border-[#604EE6] focus:ring-2 focus:ring-purple-100 focus:bg-white rounded-full text-xs font-light text-gray-800 placeholder:text-gray-400 placeholder:font-light transition-all shadow-2xs">
 
                     <template x-if="search">
-                        <button @click="search = ''; fetchAktivitas();" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E5BC3] hover:text-[#5C4AB5] cursor-pointer">
+                        <button @click="search = ''; fetchAktivitas();" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#604EE6] hover:text-[#5C4AB5] cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -232,17 +233,18 @@
                 {{-- 2. Filter Bulan & Tahun --}}
                 <div class="relative w-full lg:w-auto group/bulan" @click.outside="bulanOpen = false">
                     <button @click="bulanOpen = !bulanOpen; filterOpen = false;" type="button" 
-                        class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs lg:min-w-42.5">
+                        class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs lg:min-w-42.5 focus:outline-none"
+                        :class="bulanOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                         <div class="flex items-center gap-2 truncate">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            <span class="truncate" x-text="
+                            <span class="truncate" :class="(bulan === 'semua' && tahun === 'semua') ? 'text-gray-400 font-light' : 'text-gray-700 font-normal'" x-text="
                                 (bulan === 'semua' ? 'Semua Bulan' : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][parseInt(bulan) - 1]) + 
                                 (tahun === 'semua' ? '' : ' ' + tahun)
                             "></span>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
 
                     <div x-show="bulanOpen" x-cloak class="absolute left-0 right-0 lg:right-auto mt-2 w-full lg:w-80 bg-white border border-purple-100 rounded-[28px] shadow-xl p-4 z-50 space-y-4">
@@ -293,19 +295,20 @@
                 {{-- 3. Filter Status Aktivitas --}}
                 <div class="relative w-full lg:w-auto group/filter lg:ml-auto" @click.outside="filterOpen = false">
                     <button @click="filterOpen = !filterOpen; bulanOpen = false;" type="button" 
-                        class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-purple-200 hover:border-[#6E5BC3] text-[#6E5BC3] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs lg:min-w-40">
+                        class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-normal transition-all cursor-pointer shadow-2xs lg:min-w-40 focus:outline-none"
+                        :class="filterOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                         <div class="flex items-center gap-2 truncate">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" />
                             </svg>
-                            <span class="truncate" x-text="{
+                            <span class="truncate" :class="status === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-normal'" x-text="{
                                 'belum_dimulai': 'Belum Dimulai',
                                 'berjalan': 'Sedang Berjalan',
                                 'selesai': 'Selesai',
                                 'terlambat': 'Terlambat'
                             }[status] || 'Semua Status'"></span>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
 
                     <div x-show="filterOpen" x-cloak class="absolute left-0 right-0 lg:left-auto lg:right-0 mt-2 w-full lg:w-56 bg-white border border-purple-100 rounded-3xl shadow-xl p-3 z-50 space-y-1">
@@ -337,18 +340,6 @@
                     </div>
                 </div>
             </div>
-
-            {{-- Reset Filter Button --}}
-            <div x-show="status !== 'semua' || search !== '' || bulan !== 'semua' || tahun !== 'semua'" x-cloak class="flex justify-end pt-0.5">
-                <button type="button" 
-                    @click="status = 'semua'; search = ''; bulan = 'semua'; tahun = 'semua'; fetchAktivitas();"
-                    class="text-xs text-rose-500 hover:text-rose-700 hover:underline flex items-center gap-1 transition-all cursor-pointer font-medium py-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span>Reset Filter</span>
-                </button>
-            </div>
         </div>
 
 
@@ -361,14 +352,14 @@
             @endphp
 
             @if($totalAktivitasFiltered > 0)
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mt-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start mt-2">
                     @foreach($proyekTerlibat as $proyek)
                         @if($proyek->aktivitasProyek->count() > 0)
                             @php
                                 $totalAktProyek = $proyek->aktivitasProyek->count();
                                 $isFiltering = request()->filled('search') || (request()->filled('status') && request()->status !== 'semua') || (request()->filled('bulan') && request()->bulan !== 'semua') || (request()->filled('tahun') && request()->tahun !== 'semua');
                             @endphp
-                            <div class="bg-white border border-purple-100 rounded-[28px] p-5 flex flex-col gap-4 shadow-xs"
+                            <div class="bg-white border border-purple-100 rounded-2xl sm:rounded-[28px] p-4 sm:p-5 flex flex-col gap-3.5 sm:gap-4 shadow-xs"
                                  x-data="{ 
                                      openAktivitas: {{ $isFiltering ? 'true' : 'false' }},
                                      isLarge: window.innerWidth >= 1024
@@ -427,9 +418,9 @@
                                             
                                             $tglMulai = $akt->tanggal_mulai ? \Carbon\Carbon::parse($akt->tanggal_mulai)->translatedFormat('d M Y') : null;
                                             $tglSelesai = $akt->tanggal_target_selesai ? \Carbon\Carbon::parse($akt->tanggal_target_selesai)->translatedFormat('d M Y') : null;
-                                            $rentangTanggal = ($tglMulai && $tglSelesai) ? ($tglMulai . ' - ' . $tglSelesai) : ($tglSelesai ?? '-');
+                                            $rentangTanggal = ($tglMulai && $tglSelesai) ? ($tglMulai . ' - ' . $tglSelesai) : ($tglSelesai ?? 'Belum diatur');
 
-                                            $pjNama = $akt->penanggungJawab->nama ?? '-';
+                                            $pjNama = $akt->penanggungJawab->nama ?? 'Belum Ditunjuk';
                                             $pjInisial = strtoupper(substr($pjNama, 0, 2));
 
                                             $formattedDocs = [];
@@ -447,13 +438,14 @@
                                         <div @click="$dispatch('open-modal-detail-aktivitas', {
                                                 nama: '{{ addslashes($akt->nama_aktivitas) }}',
                                                 pj: '{{ addslashes($pjNama) }}',
-                                                pm: '{{ addslashes($proyek->ketuaProyek->nama ?? "-") }}',
+                                                pm: '{{ addslashes($proyek->ketuaProyek->nama ?? "Belum Ditunjuk") }}',
                                                 progress: '{{ $progressValue }}',
                                                 status: '{{ $statusLabel }}',
-                                                tglMulai: '{{ $tglMulai ?? "-" }}',
-                                                tglSelesai: '{{ $tglSelesai ?? "-" }}',
+                                                tglMulai: '{{ $tglMulai ?? "Belum diatur" }}',
+                                                tglSelesai: '{{ $tglSelesai ?? "Belum diatur" }}',
                                                 kendalaInternal: @js($akt->kendala_internal ?? []),
                                                 kendalaEksternal: @js($akt->kendala_eksternal ?? []),
+                                                riwayatProgress: @js($akt->riwayat_progress ?? []),
                                                 dokumen: @js($formattedDocs)
                                             })"
                                             class="bg-gray-50/60 rounded-2xl p-4 border border-purple-100 hover:border-[#6E5BC3]/40 hover:bg-purple-50/20 transition-all flex flex-col gap-3 cursor-pointer group">
@@ -486,11 +478,11 @@
                                             {{-- Baris 4: Progress Bar --}}
                                             <div class="flex flex-col gap-1.5 pt-0.5">
                                                 <div class="flex items-center justify-between text-[11px]">
-                                                    <span class="text-gray-500 font-light">Progress</span>
-                                                    <span class="font-light text-gray-700">{{ $progressValue }}%</span>
+                                                    <span class="text-gray-500 font-medium">Progress</span>
+                                                    <span class="font-normal text-gray-700">{{ $progressValue }}%</span>
                                                 </div>
-                                                <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                                                    <div class="bg-[#2EBD85] h-2 rounded-full transition-all duration-300" style="width: {{ $progressValue }}%;"></div>
+                                                <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
+                                                    <div class="bg-[#604EE6] h-full rounded-full transition-all duration-300" style="width: {{ min(100, max(0, floatval($progressValue ?? 0))) }}%;"></div>
                                                 </div>
                                             </div>
 
@@ -513,6 +505,7 @@
                                                         tglSelesai: '{{ $tglSelesai ?? "-" }}',
                                                         kendalaInternal: @js($akt->kendala_internal ?? []),
                                                         kendalaEksternal: @js($akt->kendala_eksternal ?? []),
+                                                        riwayatProgress: @js($akt->riwayat_progress ?? []),
                                                         dokumen: @js($formattedDocs)
                                                     })"
                                                     class="w-full py-1.5 px-2 rounded-xl bg-white hover:bg-purple-50 border border-purple-200 text-[#6E5BC3] transition-all text-[10px] font-semibold cursor-pointer shadow-2xs flex items-center justify-center gap-1">
@@ -545,21 +538,25 @@
                     @endforeach
                 </div>
 
-                {{-- DOT PAGINATION --}}
+                {{-- DOT PAGINATION DENGAN INDIKATOR PILL & BULAT --}}
                 @if ($proyekTerlibat->hasPages())
-                    <div class="flex items-center justify-center gap-2 mt-8 mb-4">
+                    <div class="flex items-center justify-center gap-2 sm:gap-2.5 mt-8 mb-4">
                         @foreach ($proyekTerlibat->getUrlRange(1, $proyekTerlibat->lastPage()) as $page => $url)
                             @if ($page == $proyekTerlibat->currentPage())
-                                <a href="{{ $url }}" class="h-2.5 w-8 bg-[#6E5BC3] rounded-full transition-all"></a>
+                                <span class="h-2.5 w-8 sm:w-10 bg-[#6E5BC3] rounded-full transition-all duration-300 shadow-xs cursor-default" title="Halaman {{ $page }}" aria-current="page"></span>
                             @else
-                                <a href="{{ $url }}" class="h-2.5 w-2.5 bg-[#6E5BC3]/30 hover:bg-[#6E5BC3]/60 rounded-full transition-all"></a>
+                                <a href="{{ $url }}" 
+                                   @click.prevent="fetchAktivitas('{{ $url }}')"
+                                   class="h-2.5 w-2.5 bg-[#6E5BC3]/25 hover:bg-[#6E5BC3]/60 rounded-full transition-all duration-300 cursor-pointer" 
+                                   title="Ke Halaman {{ $page }}" 
+                                   aria-label="Ke Halaman {{ $page }}"></a>
                             @endif
                         @endforeach
                     </div>
                 @endif
             @else
                 {{-- TAMPILAN EMPTY STATE KETIKA HASIL FILTER KOSONG --}}
-                <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
+                <div class="col-span-1 lg:col-span-3 w-full">
                     <x-emptystate 
                         title="Tidak Ada Aktivitas Ditemukan" 
                         message="Tidak ada aktivitas yang sesuai dengan kata kunci pencarian atau filter yang Anda pilih." 

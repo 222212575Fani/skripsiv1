@@ -74,28 +74,28 @@
 
     <div class="fixed inset-0 bg-gray-900/20 backdrop-blur-[1.5px]" @click="open = false"></div>
 
-    <div class="flex min-h-full items-center justify-center p-4">
-        <div @click.away="open = false" class="relative w-full max-w-xl rounded-[28px] bg-white text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden">
+    <div class="flex min-h-full items-center justify-center p-3 sm:p-4">
+        <div @click.away="open = false" class="relative w-full max-w-xl rounded-xl sm:rounded-2xl bg-white text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden">
             
             {{-- Header Modal --}}
-            <div class="flex items-center justify-between px-7 py-5 border-b border-gray-100">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-purple-50 flex items-center justify-center text-[#6E5BC3]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="flex items-center justify-between px-4 py-4 sm:px-7 sm:py-5 border-b border-gray-100">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-purple-50 flex items-center justify-center text-[#6E5BC3] shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-gray-900">Laporkan Progress Aktivitas</h3>
-                        <p class="text-[11px] font-normal text-gray-400 truncate max-w-xs" x-text="nama"></p>
+                    <div class="min-w-0">
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 truncate">Laporkan Progress Aktivitas</h3>
+                        <p class="text-[10px] sm:text-[11px] font-normal text-gray-400 truncate max-w-xs" x-text="nama"></p>
                     </div>
                 </div>
-                <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 rounded-full transition-all cursor-pointer">✕</button>
+                <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-gray-500 rounded-full transition-all cursor-pointer shrink-0">✕</button>
             </div>
 
             <form :action="'{{ url('anggota/aktivitas') }}/' + id + '/progress'" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="p-7 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div class="custom-scrollbar p-4 sm:p-7 space-y-4 max-h-[70vh] overflow-y-auto">
                     
                     {{-- INPUT PROGRESS --}}
                     <div class="bg-purple-50/40 border border-purple-100 rounded-2xl p-4 space-y-3">
@@ -108,7 +108,7 @@
                             <label class="block text-xs font-bold text-gray-700 mb-1.5">Tambahan Progress Baru (%) <span class="text-red-500">*</span></label>
                             <input type="number" name="progress_minggu_berjalan_tambahan" x-model.number="progressTambahan" min="0" :max="100 - progressSebelumnya" step="0.01" required
                                 placeholder="Contoh: 30"
-                                class="w-full px-4 py-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-bold text-gray-800">
+                                class="w-full px-4 py-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-light">
                         </div>
 
                         <input type="hidden" name="progress_minggu_berjalan" :value="totalProgress">
@@ -122,17 +122,17 @@
                     {{-- Uraian Progress --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Uraian Progress</label>
-                        <textarea name="uraian_progress" rows="3" placeholder="Jelaskan pekerjaan yang telah diselesaikan pada periode ini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-normal text-gray-700 resize-none"></textarea>
+                        <textarea name="uraian_progress" rows="3" maxlength="2000" placeholder="Jelaskan pekerjaan yang telah diselesaikan pada periode ini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-normal text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
                     {{-- Kendala Internal & Eksternal --}}
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Kendala Internal</label>
-                        <textarea name="kendala_internal" rows="2" placeholder="Hambatan dari dalam tim..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-normal text-gray-700 resize-none"></textarea>
+                        <textarea name="kendala_internal" rows="2" maxlength="2000" placeholder="Hambatan dari dalam tim..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-normal text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Kendala Eksternal</label>
-                        <textarea name="kendala_eksternal" rows="2" placeholder="Hambatan dari luar tim/pihak lain..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-normal text-gray-700 resize-none"></textarea>
+                        <textarea name="kendala_eksternal" rows="2" maxlength="2000" placeholder="Hambatan dari luar tim/pihak lain..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-normal text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
                     {{-- Area Upload Multi-File dengan Progress Bar & Ikon Sampah --}}
@@ -182,8 +182,8 @@
                                     </div>
 
                                     {{-- Progress Bar Animasi --}}
-                                    <div class="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                                        <div class="bg-gradient-to-r from-[#6E5BC3] to-[#8470E5] h-1.5 rounded-full transition-all duration-300" :style="'width: ' + fileItem.progress + '%'"></div>
+                                    <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
+                                        <div class="bg-[#604EE6] h-full rounded-full transition-all duration-300" :style="'width: ' + (fileItem.progress || 0) + '%'"></div>
                                     </div>
                                 </div>
                             </template>
@@ -192,9 +192,9 @@
 
                 </div>
 
-                <div class="px-7 py-4 border-t border-gray-100 flex justify-end gap-3 bg-gray-50/50">
-                    <button type="button" @click="open = false" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white transition-all cursor-pointer shadow-sm shadow-rose-500/20">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white transition-all cursor-pointer shadow-sm shadow-[#6E5BC3]/30">Kirim Laporan</button>
+                <div class="px-4 py-3 sm:px-7 sm:py-4 border-t border-gray-100 flex justify-end gap-2.5 sm:gap-3 bg-gray-50/60 rounded-b-xl sm:rounded-b-2xl">
+                    <x-button type="button" @click="open = false" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20">Batal</x-button>
+                    <x-button type="submit" color="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20">Kirim Laporan</x-button>
                 </div>
             </form>
         </div>

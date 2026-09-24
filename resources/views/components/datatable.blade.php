@@ -1,93 +1,132 @@
-@props(['paginator', 'itemName' => 'data', 'breakpoint' => 'xl', 'card' => true])
+@props([
+    'paginator' => null,
+    'itemName' => 'data',
+    'breakpoint' => 'xl',
+    'card' => false,
+])
 
-@if($card)
-{{-- KOTAK PUTIH LUAR UTAMA DENGAN SUDUT MELENGKUNG --}}
-<div class="bg-white rounded-[28px] shadow-xs border border-gray-100 overflow-hidden w-full p-6 flex flex-col gap-6">
-@else
-<div class="w-full flex flex-col gap-6">
-@endif
+@php
+    $breakpoint = $breakpoint ?? 'xl';
+@endphp
+
+<div class="w-full flex flex-col gap-4 sm:gap-6">
     
     {{-- Slot Atas (Judul, Search Bar, Tombol Tambah, & Tab Filter Status) --}}
     {{ $tabs ?? '' }}
 
-    {{-- KOTAK KEDUA: KOTAK ROUNDED DENGAN BORDER GARIS PINGGIR UNGU UNTUK TABEL --}}
-    <div class="bg-white border border-[#DDD6FE] rounded-[22px] overflow-hidden shadow-xs">
+    {{-- KARTU UTAMA TABEL SESUAI REFERENSI GAMBAR: SATU KARTU UTUH BERISI THEAD, TBODY, & PAGINASI DI DALAMNYA --}}
+    <div class="bg-white border border-gray-200/80 rounded-2xl overflow-hidden shadow-xs">
+        @if(isset($cardHeader))
+            <div class="border-b border-gray-100 bg-white">
+                {{ $cardHeader }}
+            </div>
+        @endif
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     @if($breakpoint === 'md')
-                        <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden md:table-row">
+                        <tr class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider border-b border-gray-200/80 bg-[#FAF9FF] hidden md:table-row">
                             {{ $header }}
                         </tr>
                     @elseif($breakpoint === 'lg')
-                        <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden lg:table-row">
+                        <tr class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider border-b border-gray-200/80 bg-[#FAF9FF] hidden lg:table-row">
                             {{ $header }}
                         </tr>
                     @else
-                        <tr class="text-gray-900 text-xs font-semibold border-b border-[#DDD6FE] bg-[#F8F7FF]/50 hidden xl:table-row">
+                        <tr class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider border-b border-gray-200/80 bg-[#FAF9FF] hidden xl:table-row">
                             {{ $header }}
                         </tr>
                     @endif
                 </thead>
-                <tbody class="text-sm font-medium divide-y divide-gray-100">
+                <tbody class="text-xs font-light divide-y divide-gray-100 bg-white">
                     {{ $slot }}
                 </tbody>
             </table>
         </div>
-    </div>
 
-    {{-- BAGIAN PAGINASI DI DALAM KOTAK PUTIH LUAR --}}
-    @if(isset($paginator))
-    <div class="px-2 pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-gray-500">
-        <div>
-            Menampilkan 
-            <span class="font-bold text-gray-700">{{ $paginator->firstItem() ?? 0 }}</span> 
-            sampai 
-            <span class="font-bold text-gray-700">{{ $paginator->lastItem() ?? 0 }}</span> 
-            dari 
-            <span class="font-bold text-gray-700">{{ $paginator->total() }}</span> 
-            {{ $itemName }}
-        </div>
-
-        <div class="flex items-center gap-2">
-            {{-- Tombol Previous (Bulat Ungu) --}}
-            @if ($paginator->onFirstPage())
-                <span class="w-9 h-9 rounded-full bg-purple-100 text-purple-300 flex items-center justify-center cursor-not-allowed shadow-xs font-bold">
-                    &lsaquo;
-                </span>
-            @else
-                <a href="{{ $paginator->previousPageUrl() }}" class="w-9 h-9 rounded-full bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] flex items-center justify-center transition-all shadow-sm shadow-[#6E5BC3]/30 font-bold">
-                    &lsaquo;
-                </a>
-            @endif
-
-            {{-- Nomor Halaman --}}
-            <div class="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
-                @foreach ($paginator->getUrlRange(1, max(1, $paginator->lastPage())) as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <span class="w-7 h-7 rounded-full bg-white text-[#6E5BC3] border border-[#6E5BC3] flex items-center justify-center font-bold shadow-xs">
-                            {{ $page }}
-                        </span>
-                    @else
-                        <a href="{{ $url }}" class="w-7 h-7 rounded-full hover:bg-purple-50 hover:text-[#6E5BC3] text-gray-600 flex items-center justify-center transition-all">
-                            {{ $page }}
-                        </a>
-                    @endif
-                @endforeach
+        {{-- BAGIAN PAGINASI BERSATU DI DALAM KARTU TABEL (SEPERTI PADA GAMBAR REFERENSI) --}}
+        @if(isset($paginator))
+        <div class="px-4 sm:px-6 py-3.5 border-t border-gray-200/70 bg-white flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-light text-gray-500">
+            <div class="text-xs text-gray-500 font-light">
+                Halaman <span class="font-normal text-gray-700">{{ $paginator->currentPage() }}</span> dari <span class="font-normal text-gray-700">{{ max(1, $paginator->lastPage()) }}</span>
             </div>
 
-            {{-- Tombol Next (Bulat Ungu) --}}
-            @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" class="w-9 h-9 rounded-full bg-[#6E5BC3] text-white hover:bg-[#5C4AB5] flex items-center justify-center transition-all shadow-sm shadow-[#6E5BC3]/30 font-bold">
-                    &rsaquo;
-                </a>
-            @else
-                <span class="w-9 h-9 rounded-full bg-purple-100 text-purple-300 flex items-center justify-center cursor-not-allowed shadow-xs font-bold">
-                    &rsaquo;
-                </span>
-            @endif
+            <div class="flex items-center gap-1.5 sm:gap-2 max-w-full overflow-x-auto py-1">
+                {{-- Tombol Previous (Kotak dengan border abu-abu) --}}
+                @if ($paginator->onFirstPage())
+                    <span class="w-8 h-8 rounded-lg border border-gray-200 text-gray-300 flex items-center justify-center cursor-not-allowed text-xs shrink-0 font-normal">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </span>
+                @else
+                    <a href="{{ $paginator->previousPageUrl() }}" class="w-8 h-8 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300 flex items-center justify-center transition-all text-xs shrink-0 shadow-2xs font-normal">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
+                @endif
+
+                {{-- Nomor Halaman (Kotak modern sesuai referensi) --}}
+                <div class="flex items-center gap-1 text-xs font-light text-gray-600 max-w-[220px] sm:max-w-none overflow-x-auto py-0.5">
+                    @php
+                        $currentPage = $paginator->currentPage();
+                        $lastPage = max(1, $paginator->lastPage());
+                        
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+                        if ($currentPage <= 3) {
+                            $end = min($lastPage, 5);
+                        }
+                        if ($currentPage >= $lastPage - 2) {
+                            $start = max(1, $lastPage - 4);
+                        }
+                    @endphp
+
+                    @if($start > 1)
+                        <a href="{{ $paginator->url(1) }}" class="w-8 h-8 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 flex items-center justify-center transition-all shrink-0">1</a>
+                        @if($start > 2)
+                            <span class="w-6 h-8 text-gray-400 flex items-center justify-center shrink-0">...</span>
+                        @endif
+                    @endif
+
+                    @for($page = $start; $page <= $end; $page++)
+                        @if ($page == $currentPage)
+                            <span class="w-8 h-8 rounded-lg bg-[#6E5BC3] text-white flex items-center justify-center font-normal shadow-xs shrink-0">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $paginator->url($page) }}" class="w-8 h-8 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 flex items-center justify-center transition-all shrink-0">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endfor
+
+                    @if($end < $lastPage)
+                        @if($end < $lastPage - 1)
+                            <span class="w-6 h-8 text-gray-400 flex items-center justify-center shrink-0">...</span>
+                        @endif
+                        <a href="{{ $paginator->url($lastPage) }}" class="w-8 h-8 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 flex items-center justify-center transition-all shrink-0">{{ $lastPage }}</a>
+                    @endif
+                </div>
+
+                {{-- Tombol Next (Kotak dengan border abu-abu) --}}
+                @if ($paginator->hasMorePages())
+                    <a href="{{ $paginator->nextPageUrl() }}" class="w-8 h-8 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300 flex items-center justify-center transition-all text-xs shrink-0 shadow-2xs font-normal">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                @else
+                    <span class="w-8 h-8 rounded-lg border border-gray-200 text-gray-300 flex items-center justify-center cursor-not-allowed text-xs shrink-0 font-normal">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                @endif
+            </div>
         </div>
+        @endif
     </div>
-    @endif
 
 </div>

@@ -20,7 +20,7 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-             class="relative w-full max-w-sm transform overflow-hidden rounded-[24px] bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
+             class="relative w-full max-w-sm transform overflow-hidden rounded-xl sm:rounded-2xl bg-white p-0 text-left shadow-[0_25px_80px_-15px_rgba(0,0,0,0.15)] transition-all border border-gray-100">
             
             {{-- Header Modal dengan Ikon Peringatan Sampah --}}
             <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
@@ -52,14 +52,11 @@
             <form :action="deleteUrl" method="POST">
                 @csrf
                 @method('DELETE')
-                <div class="px-6 py-4 border-t border-gray-100 flex items-center gap-3 bg-gray-50/50">
-                    {{-- Tombol Batal (Menggunakan warna default ungu) --}}
-                    <x-button type="button" @click="open = false" class="w-full flex-1">
+                <div class="px-6 py-4 border-t border-gray-100 flex items-center gap-3 bg-gray-50/60 rounded-b-xl sm:rounded-b-2xl">
+                    <x-button type="button" @click="open = false" color="bg-[#6E5BC3] hover:bg-[#5C4AB5] text-white" shadow="shadow-md shadow-[#6E5BC3]/20" class="w-full flex-1">
                         Batal
                     </x-button>
-
-                    {{-- Tombol Ya, Hapus (Menggunakan warna merah rose) --}}
-                    <x-button type="submit" color="bg-rose-500 hover:bg-rose-600" shadow="shadow-md shadow-rose-500/20" class="w-full flex-1">
+                    <x-button type="submit" color="bg-rose-500 hover:bg-rose-600 text-white" shadow="shadow-md shadow-rose-500/20" class="w-full flex-1">
                         Ya, Hapus
                     </x-button>
                 </div>
