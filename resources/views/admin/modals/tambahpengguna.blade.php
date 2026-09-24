@@ -170,7 +170,7 @@
                             </button>
 
                             <div x-show="openStatusDropdown" x-cloak 
-                                class="custom-scrollbar absolute left-0 bottom-full mb-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
+                                class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
                                 <button type="button" @click="status = 'aktif'; statusName = 'Aktif'; openStatusDropdown = false;" 
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-normal transition-all cursor-pointer"
                                     :class="status === 'aktif' ? 'bg-purple-50/70 text-[#604EE6] font-semibold' : ''">
@@ -203,7 +203,7 @@
                             </button>
 
                             <div x-show="openRoleDropdown" x-cloak 
-                                class="custom-scrollbar absolute left-0 bottom-full mb-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
+                                class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
                                 <button type="button" @click="role = ''; roleName = 'Pilih Peran'; openRoleDropdown = false;" 
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer">
                                     Pilih Peran
@@ -233,7 +233,7 @@
                             </button>
 
                             <div x-show="openTimDropdown" x-cloak 
-                                class="custom-scrollbar absolute left-0 bottom-full mb-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
+                                class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
                                 <button type="button" @click="tim = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;" 
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer">
                                     Pilih Tim Kerja

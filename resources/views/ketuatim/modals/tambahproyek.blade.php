@@ -104,7 +104,7 @@
                                 </button>
 
                                 <div x-show="ketuaOpen" x-cloak 
-                                    class="custom-scrollbar absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
+                                    class="custom-scrollbar absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
                                     @forelse($anggotaTim ?? [] as $anggota)
                                         <button type="button" 
                                             @click="ketua = '{{ $anggota->id_pengguna }}'; ketuaNama = '{{ addslashes($anggota->nama ?? $anggota->pengguna->nama) }}'; ketuaOpen = false"
@@ -119,7 +119,7 @@
                             </div>
                         </div>
 
-                        {{-- Dropdown Kustom Status Proyek (Buka ke Atas) --}}
+                        {{-- Dropdown Kustom Status Proyek (Buka ke Bawah) --}}
                         <div>
                             <label class="block text-xs font-bold text-gray-700 mb-2">Status Proyek <span class="text-red-500">*</span></label>
                             <div class="relative" @click.outside="statusOpen = false">
@@ -133,7 +133,7 @@
                                 </button>
 
                                 <div x-show="statusOpen" x-cloak 
-                                    class="custom-scrollbar absolute left-0 right-0 bottom-full mb-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
+                                    class="custom-scrollbar absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
                                     <button type="button" @click="status = 'belum_dimulai'; statusLabel = 'Belum Dimulai'; statusOpen = false"
                                         class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
                                         :class="status === 'belum_dimulai' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Belum Dimulai</button>

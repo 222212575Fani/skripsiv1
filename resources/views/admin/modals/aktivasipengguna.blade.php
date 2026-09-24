@@ -44,7 +44,7 @@
             {{-- Header --}}
             <div class="flex items-center justify-between px-4 py-4 sm:px-8 sm:py-6 border-b border-gray-100">
                 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-500 shadow-sm shrink-0">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-[#6E5BC3] shadow-sm shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A3.333 3.333 0 0118 3.333h-1.5a3.333 3.333 0 00-3.333 3.333V9a3.333 3.333 0 003.333 3.333H18a3.333 3.333 0 013.333 3.333v1.5a3.333 3.333 0 01-3.333 3.333H6a3.333 3.333 0 01-3.333-3.333v-1.5A3.333 3.333 0 016 12.333h1.5a3.333 3.333 0 003.333-3.333V6.667a3.333 3.333 0 00-3.333-3.333H6A3.333 3.333 0 002.667 6.667" />
                         </svg>
@@ -54,7 +54,7 @@
                         <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Berikan otorisasi dan hak akses untuk pengguna ini.</p>
                     </div>
                 </div>
-                <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer shrink-0">
+                <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-[#6E5BC3] hover:bg-purple-50 rounded-full transition-all cursor-pointer shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -116,7 +116,7 @@
                             </button>
 
                             <div x-show="openRoleDropdown" x-cloak 
-                                class="custom-scrollbar absolute left-0 bottom-full mb-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-40 overflow-y-auto">
+                                class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
                                 @php
                                     $nonAdminRoles = collect($roles)->filter(function($r) {
                                         return strtolower($r->nama_role) !== 'admin';
@@ -152,7 +152,7 @@
                             </button>
 
                             <div x-show="openTimDropdown" x-cloak 
-                                class="custom-scrollbar absolute left-0 bottom-full mb-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-40 overflow-y-auto">
+                                class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
                                 <button type="button" 
                                     @click="timId = ''; timName = 'Pilih Tim Kerja (Opsional)'; openTimDropdown = false;"
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer">
