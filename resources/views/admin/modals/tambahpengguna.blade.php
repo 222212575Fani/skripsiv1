@@ -68,6 +68,20 @@
                             <label class="block text-xs font-normal text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
                             <input type="text" name="nama" x-model="nama" placeholder="Masukkan nama lengkap..." maxlength="100" required autocomplete="off"
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                            <div class="mt-1.5 flex items-center">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                                      :class="nama.trim().length > 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
+                                    <template x-if="nama.trim().length > 0">
+                                        <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </template>
+                                    <template x-if="nama.trim().length === 0">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></span>
+                                    </template>
+                                    <span x-text="nama.trim().length > 0 ? 'Nama terisi (' + nama.trim().length + ' karakter)' : 'Nama lengkap beserta gelar'"></span>
+                                </span>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-2">NIP <span class="text-red-500">*</span></label>
@@ -250,37 +264,36 @@
                                 @endforeach
                             </div>
                         </div>
+                    </div>
 
-                        {{-- Petunjuk Dinamis Alur Penetapan Ketua Tim --}}
-                        <div x-show="roleName.toLowerCase().includes('ketua')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
-                                <span class="font-normal text-[#604EE6]">Petunjuk Penetapan Ketua Tim:</span> Jika tim kerja yang akan dipimpin belum dibuat, Anda dapat mengosongkan pilihan Tim Kerja di atas. Pengguna ini dapat langsung ditetapkan sebagai Ketua Tim saat membuat tim di menu <span class="font-normal text-gray-800">Manajemen Tim Kerja</span> (data tim kerja akun ini akan otomatis terhubung dan terisi).
-                            </div>
+                    {{-- Petunjuk Dinamis Alur Penetapan Ketua Tim (Memanjang Sepanjang Container) --}}
+                    <div x-show="roleName.toLowerCase().includes('ketua')" x-cloak class="w-full p-3 sm:p-3.5 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                            <span class="font-normal text-[#604EE6]">Petunjuk Penetapan Ketua Tim:</span> Jika tim kerja yang akan dipimpin belum dibuat, Anda dapat mengosongkan pilihan Tim Kerja di atas. Pengguna ini dapat langsung ditetapkan sebagai Ketua Tim saat membuat tim di menu <span class="font-normal text-gray-800">Manajemen Tim Kerja</span> (data tim kerja akun ini akan otomatis terhubung dan terisi).
                         </div>
+                    </div>
 
-                        {{-- Petunjuk Dinamis Peran Anggota --}}
-                        <div x-show="roleName.toLowerCase().includes('anggota')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
-                                <span class="font-normal text-[#604EE6]">Petunjuk Penempatan Anggota:</span> Pilih tim kerja untuk langsung menempatkan pegawai ke dalam tim terkait, atau kosongkan terlebih dahulu jika penempatan tim kerja akan ditentukan kemudian.
-                            </div>
+                    {{-- Petunjuk Dinamis Peran Anggota (Memanjang Sepanjang Container) --}}
+                    <div x-show="roleName.toLowerCase().includes('anggota')" x-cloak class="w-full p-3 sm:p-3.5 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                            <span class="font-normal text-[#604EE6]">Petunjuk Penempatan Anggota:</span> Pilih tim kerja untuk langsung menempatkan pegawai ke dalam tim terkait, atau kosongkan terlebih dahulu jika penempatan tim kerja akan ditentukan kemudian.
                         </div>
+                    </div>
 
-                        {{-- Petunjuk Dinamis Peran Direktur --}}
-                        <div x-show="roleName.toLowerCase().includes('direktur')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
-                                <span class="font-normal text-[#604EE6]">Peran Struktural:</span> Peran Direktur bersifat pengawasan institusional dan tidak memerlukan penempatan ke dalam tim kerja.
-                            </div>
+                    {{-- Petunjuk Dinamis Peran Direktur (Memanjang Sepanjang Container) --}}
+                    <div x-show="roleName.toLowerCase().includes('direktur')" x-cloak class="w-full p-3 sm:p-3.5 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                            <span class="font-normal text-[#604EE6]">Peran Struktural:</span> Peran Direktur bersifat pengawasan institusional dan tidak memerlukan penempatan ke dalam tim kerja.
                         </div>
-
                     </div>
                 </div>
 
