@@ -57,20 +57,20 @@
                     {{-- Grid 2 Kolom (Nama Tim & Status) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Nama Tim <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Nama Tim <span class="text-red-500">*</span></label>
                             <input type="text" name="nama_tim" placeholder="Masukkan nama tim" minlength="3" maxlength="100" required
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                         </div>
 
                         {{-- Dropdown Status Tim (Buka ke Bawah karena di baris atas) --}}
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Status</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Status</label>
                             <input type="hidden" name="status_tim" x-model="status" required>
 
                             <button @click="openStatusDropdown = !openStatusDropdown; openKetuaDropdown = false;" @click.outside="openStatusDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                <span x-text="statusName" class="text-gray-700 font-normal"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                <span x-text="statusName" class="text-gray-700 font-light"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -78,28 +78,28 @@
                             <div x-show="openStatusDropdown" x-cloak 
                                 class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
                                 <button type="button" @click="status = 'aktif'; statusName = 'Aktif'; openStatusDropdown = false;" 
-                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
-                                    :class="status === 'aktif' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
+                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer"
+                                    :class="status === 'aktif' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : ''">
                                     Aktif
                                 </button>
                                 <button type="button" @click="status = 'nonaktif'; statusName = 'Non-Aktif'; openStatusDropdown = false;" 
-                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
-                                    :class="status === 'nonaktif' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
+                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer"
+                                    :class="status === 'nonaktif' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : ''">
                                     Non-Aktif
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Ketua Tim (Full Width) dengan Dropdown Kustom Buka ke Atas agar TIDAK Keluar Container Modal --}}
+                    {{-- Ketua Tim (Full Width) dengan Dropdown Kustom Buka ke Bawah --}}
                     <div class="relative">
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Ketua Tim <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Ketua Tim <span class="text-red-500">*</span></label>
                         <input type="hidden" name="id_ketua_tim" x-model="ketua" required>
 
                         <button @click="openKetuaDropdown = !openKetuaDropdown; openStatusDropdown = false;" @click.outside="openKetuaDropdown = false" type="button" 
-                            class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                            <span x-text="ketuaName" :class="ketua === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"></span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openKetuaDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                            <span x-text="ketuaName" :class="ketua === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openKetuaDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -128,24 +128,32 @@
                                     {{-- Belum memimpin tim mana pun (Tersedia) --}}
                                     <button type="button" 
                                         @click="ketua = '{{ $user->id_pengguna }}'; ketuaName = '{{ addslashes($user->nama) }}'; openKetuaDropdown = false;"
-                                        class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
-                                        :class="ketua == '{{ $user->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
+                                        class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer"
+                                        :class="ketua == '{{ $user->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : ''">
                                         <div class="flex items-center gap-2 truncate">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
                                             <span class="truncate">{{ $user->nama }}</span>
                                         </div>
-                                        <span class="text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-semibold shrink-0 ml-2">Tersedia</span>
+                                        <span class="text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-medium shrink-0 ml-2">Tersedia</span>
                                     </button>
                                 @endif
                             @endforeach
                         </div>
+
+                        {{-- Hint Otomatisasi Peran --}}
+                        <p class="text-[11px] text-gray-500 font-light mt-1.5 flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Pegawai terpilih otomatis diatur sebagai Ketua Tim dan profil timnya langsung terhubung.</span>
+                        </p>
                     </div>
 
                     {{-- Deskripsi (Full Width Textarea) --}}
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Tim Kerja</label>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Deskripsi Tim Kerja</label>
                         <textarea name="deskripsi_tim" rows="3" maxlength="1000" placeholder="Tuliskan deskripsi singkat..."
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
                 </div>
 

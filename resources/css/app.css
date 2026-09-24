@@ -18,6 +18,13 @@
     font-family: 'Mulish', sans-serif !important;
   }
 
+  /* Seragamkan ketebalan teks isian input, textarea, dan select agar selalu tipis (font-weight: 300 / font-light) */
+  input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-weight: 300 !important;
+  }
+
   /* Seragamkan ketebalan dan gaya semua placeholder input & textarea agar selalu tipis (font-weight: 300 / font-light) */
   input::placeholder,
   textarea::placeholder,

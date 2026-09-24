@@ -62,6 +62,13 @@
             scrollbar-width: none !important;
         }
 
+        /* Penyeragaman seluruh isian input, textarea, select agar konsisten tipis (font-weight: 300) */
+        input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
+        textarea,
+        select {
+            font-weight: 300 !important;
+        }
+
         /* Penyeragaman seluruh placeholder agar konsisten tipis (font-weight: 300) */
         input::placeholder,
         textarea::placeholder,

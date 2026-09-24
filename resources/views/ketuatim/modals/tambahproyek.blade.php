@@ -75,30 +75,30 @@
                     
                     {{-- Nama Proyek --}}
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Nama Proyek <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Nama Proyek <span class="text-red-500">*</span></label>
                         <input type="text" name="nama_proyek" placeholder="Masukkan nama proyek..." maxlength="200" required autocomplete="off"
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                     </div>
 
                     {{-- Deskripsi Proyek --}}
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Proyek</label>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Deskripsi Proyek</label>
                         <textarea name="deskripsi" rows="3" maxlength="2000" placeholder="Tuliskan deskripsi atau ringkasan proyek..." 
-                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
-                    {{-- Grid 2 Kolom (Ketua Proyek & Status Proyek) dengan Dropdown Buka ke Atas --}}
+                    {{-- Grid 2 Kolom (Ketua Proyek & Status Proyek) dengan Dropdown Buka ke Bawah --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         
-                        {{-- Dropdown Kustom Ketua Proyek (Buka ke Atas) --}}
+                        {{-- Dropdown Kustom Ketua Proyek --}}
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Ketua Proyek <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Ketua Proyek <span class="text-red-500">*</span></label>
                             <div class="relative" @click.outside="ketuaOpen = false">
                                 <input type="hidden" name="id_ketua_proyek" x-model="ketua" required>
                                 <button type="button" @click="ketuaOpen = !ketuaOpen; statusOpen = false;"
-                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                    <span :class="ketuaNama ? 'text-gray-700 font-medium' : 'text-gray-400 font-light'" x-text="ketuaNama || 'Pilih Ketua Proyek'"></span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="ketuaOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                    <span :class="ketuaNama ? 'text-gray-700 font-light' : 'text-gray-400 font-light'" x-text="ketuaNama || 'Pilih Ketua Proyek'"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="ketuaOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
@@ -108,12 +108,12 @@
                                     @forelse($anggotaTim ?? [] as $anggota)
                                         <button type="button" 
                                             @click="ketua = '{{ $anggota->id_pengguna }}'; ketuaNama = '{{ addslashes($anggota->nama ?? $anggota->pengguna->nama) }}'; ketuaOpen = false"
-                                            class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
-                                            :class="ketua == '{{ $anggota->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                            class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light"
+                                            :class="ketua == '{{ $anggota->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                             <span>{{ $anggota->nama ?? $anggota->pengguna->nama }}</span>
                                         </button>
                                     @empty
-                                        <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center">Tidak ada anggota tersedia.</p>
+                                        <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Tidak ada anggota tersedia.</p>
                                     @endforelse
                                 </div>
                             </div>
@@ -121,13 +121,13 @@
 
                         {{-- Dropdown Kustom Status Proyek (Buka ke Bawah) --}}
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Status Proyek <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Status Proyek <span class="text-red-500">*</span></label>
                             <div class="relative" @click.outside="statusOpen = false">
                                 <input type="hidden" name="status" x-model="status" required>
                                 <button type="button" @click="statusOpen = !statusOpen; ketuaOpen = false;"
-                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                    <span class="text-gray-700 font-medium" x-text="statusLabel"></span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="statusOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                    <span class="text-gray-700 font-light" x-text="statusLabel"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="statusOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
@@ -135,17 +135,17 @@
                                 <div x-show="statusOpen" x-cloak 
                                     class="custom-scrollbar absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
                                     <button type="button" @click="status = 'belum_dimulai'; statusLabel = 'Belum Dimulai'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'belum_dimulai' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Belum Dimulai</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light"
+                                        :class="status === 'belum_dimulai' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">Belum Dimulai</button>
                                     <button type="button" @click="status = 'berjalan'; statusLabel = 'Berjalan'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'berjalan' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Berjalan</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light"
+                                        :class="status === 'berjalan' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">Berjalan</button>
                                     <button type="button" @click="status = 'selesai'; statusLabel = 'Selesai'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'selesai' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Selesai</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light"
+                                        :class="status === 'selesai' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">Selesai</button>
                                     <button type="button" @click="status = 'terlambat'; statusLabel = 'Terlambat'; statusOpen = false"
-                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left"
-                                        :class="status === 'terlambat' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">Terlambat</button>
+                                        class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light"
+                                        :class="status === 'terlambat' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">Terlambat</button>
                                 </div>
                             </div>
                         </div>
@@ -155,14 +155,14 @@
                     {{-- Grid 2 Kolom (Tanggal Mulai & Tanggal Selesai) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Mulai</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai</label>
                             <input type="date" name="tanggal_mulai" 
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Selesai</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Selesai</label>
                             <input type="date" name="tenggat_waktu" 
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 cursor-pointer">
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                     </div>
 

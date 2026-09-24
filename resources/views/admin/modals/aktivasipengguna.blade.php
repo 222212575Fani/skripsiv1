@@ -7,7 +7,7 @@
         roleName: 'Pilih Peran',
         openRoleDropdown: false,
         timId: '',
-        timName: 'Pilih Tim Kerja (Opsional)',
+        timName: 'Pilih Tim Kerja',
         openTimDropdown: false
     }" 
     @open-modal-aktivasi.window="
@@ -18,7 +18,7 @@
         roleId = '';
         roleName = 'Pilih Peran';
         timId = '';
-        timName = 'Pilih Tim Kerja (Opsional)';
+        timName = 'Pilih Tim Kerja';
     " 
     @close-modal-aktivasi.window="open = false"
     x-show="open" 
@@ -87,30 +87,30 @@
                     {{-- Grid 2 Kolom (Nama & NIP) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Nama Lengkap</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Nama Lengkap</label>
                             <input type="text" x-model="userName" readonly
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-xs font-medium text-gray-500 cursor-not-allowed">
+                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-xs font-light text-gray-500 cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">NIP / Identitas</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">NIP</label>
                             <input type="text" x-model="userNip" readonly
-                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-xs font-medium text-gray-500 cursor-not-allowed">
+                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none text-xs font-light text-gray-500 cursor-not-allowed">
                         </div>
                     </div>
 
-                    {{-- Grid 2 Kolom (Role & Penempatan Tim) dengan Dropdown Scroll Kustom Buka ke Atas --}}
+                    {{-- Grid 2 Kolom (Role & Tim Kerja) dengan Dropdown Scroll Kustom Buka ke Bawah --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         
-                        {{-- DROPDOWN KUSTOM: PILIH PERAN (Buka ke Atas) --}}
+                        {{-- DROPDOWN KUSTOM: PILIH PERAN --}}
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Pilih Peran <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Pilih Peran <span class="text-red-500">*</span></label>
                             
                             <input type="hidden" name="id_role" x-model="roleId" required>
 
                             <button @click="openRoleDropdown = !openRoleDropdown; openTimDropdown = false;" @click.outside="openRoleDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                <span x-text="roleName" :class="roleId === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                <span x-text="roleName" :class="roleId === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -125,8 +125,8 @@
                                 @forelse($nonAdminRoles as $role)
                                     <button type="button" 
                                         @click="roleId = '{{ $role->id_role }}'; roleName = '{{ $role->nama_role }}'; openRoleDropdown = false;"
-                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
-                                        :class="roleId == '{{ $role->id_role }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
+                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer"
+                                        :class="roleId == '{{ $role->id_role }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : ''">
                                         {{ $role->nama_role }}
                                     </button>
                                 @empty
@@ -137,32 +137,34 @@
                             </div>
                         </div>
 
-                        {{-- DROPDOWN KUSTOM: PENEMPATAN TIM (Buka ke Atas) --}}
+                        {{-- DROPDOWN KUSTOM: TIM KERJA --}}
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Penempatan Tim</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Tim Kerja</label>
                             
                             <input type="hidden" name="id_tim" x-model="timId">
 
-                            <button @click="openTimDropdown = !openTimDropdown; openRoleDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                <span x-text="timName" :class="timId === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <button @click="if (!roleName.toLowerCase().includes('direktur')) { openTimDropdown = !openTimDropdown; openRoleDropdown = false; }" @click.outside="openTimDropdown = false" type="button" 
+                                :disabled="roleName.toLowerCase().includes('direktur')"
+                                class="w-full flex items-center justify-between px-4 py-2.5 border border-gray-200 focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all"
+                                :class="roleName.toLowerCase().includes('direktur') ? 'opacity-60 bg-gray-100/70 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-[#F8F7FF] hover:border-[#6E5BC3] focus:border-[#6E5BC3] cursor-pointer'">
+                                <span x-text="roleName.toLowerCase().includes('direktur') ? 'Tidak Memerlukan Tim Kerja' : timName" :class="(timId === '' || roleName.toLowerCase().includes('direktur')) ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
 
-                            <div x-show="openTimDropdown" x-cloak 
+                            <div x-show="openTimDropdown && !roleName.toLowerCase().includes('direktur')" x-cloak 
                                 class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
                                 <button type="button" 
-                                    @click="timId = ''; timName = 'Pilih Tim Kerja (Opsional)'; openTimDropdown = false;"
+                                    @click="timId = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;"
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer">
-                                    Pilih Tim Kerja (Opsional)
+                                    Pilih Tim Kerja
                                 </button>
                                 @forelse($tims as $tim)
                                     <button type="button" 
                                         @click="timId = '{{ $tim->id_tim }}'; timName = '{{ $tim->nama_tim }}'; openTimDropdown = false;"
-                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
-                                        :class="timId == '{{ $tim->id_tim }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
+                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer"
+                                        :class="timId == '{{ $tim->id_tim }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : ''">
                                         {{ $tim->nama_tim }}
                                     </button>
                                 @empty
@@ -170,6 +172,36 @@
                                         Belum ada tim kerja aktif
                                     </div>
                                 @endforelse
+                            </div>
+                        </div>
+
+                        {{-- Petunjuk Dinamis Alur Penetapan Ketua Tim --}}
+                        <div x-show="roleName.toLowerCase().includes('ketua')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                                <span class="font-normal text-[#604EE6]">Petunjuk Penetapan Ketua Tim:</span> Jika tim kerja yang akan dipimpin belum dibuat, Anda dapat mengosongkan pilihan Tim Kerja di atas. Pengguna ini dapat langsung ditetapkan sebagai Ketua Tim saat membuat tim di menu <span class="font-normal text-gray-800">Manajemen Tim Kerja</span> (data tim kerja akun ini akan otomatis terhubung dan terisi).
+                            </div>
+                        </div>
+
+                        {{-- Petunjuk Dinamis Peran Anggota --}}
+                        <div x-show="roleName.toLowerCase().includes('anggota')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                                <span class="font-normal text-[#604EE6]">Petunjuk Penempatan Anggota:</span> Pilih tim kerja untuk langsung menempatkan pegawai ke dalam tim terkait, atau kosongkan terlebih dahulu jika penempatan tim kerja akan ditentukan kemudian.
+                            </div>
+                        </div>
+
+                        {{-- Petunjuk Dinamis Peran Direktur --}}
+                        <div x-show="roleName.toLowerCase().includes('direktur')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                                <span class="font-normal text-[#604EE6]">Peran Struktural:</span> Peran Direktur bersifat pengawasan institusional dan tidak memerlukan penempatan ke dalam tim kerja.
                             </div>
                         </div>
 

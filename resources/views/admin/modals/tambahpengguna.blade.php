@@ -65,14 +65,14 @@
                     {{-- Grid 2 Kolom (Nama Lengkap & NIP) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
                             <input type="text" name="nama" x-model="nama" placeholder="Masukkan nama lengkap..." maxlength="100" required autocomplete="off"
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">NIP <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">NIP <span class="text-red-500">*</span></label>
                             <input type="text" name="nip" x-model="nip" placeholder="18 digit NIP..." required minlength="18" maxlength="18" pattern="[0-9]{18}" title="NIP harus 18 digit angka" autocomplete="off" @input="nip = $el.value = $el.value.replace(/[^0-9]/g, '').slice(0, 18)" 
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                             <div class="mt-1.5 flex items-center">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
                                       :class="nip.length === 18 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
@@ -93,9 +93,9 @@
                     {{-- Grid 2 Kolom (Email BPS & Password) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Email BPS <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Email BPS <span class="text-red-500">*</span></label>
                             <input type="email" name="nama_email_baru" x-model="email" placeholder="user@bps.go.id" maxlength="100" required autocomplete="new-password"
-                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light transition-all"
+                                class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light transition-all"
                                 :class="(email.trim().length > 0 && !(email.trim().toLowerCase().endsWith('@bps.go.id') && email.indexOf('@bps.go.id') > 0)) ? '!border-rose-400 !focus:border-rose-500 !focus:ring-rose-100' : ''">
                             <div class="mt-1.5 flex items-center">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
@@ -127,10 +127,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Password <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Password <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <input :type="showPassword ? 'text' : 'password'" name="kata_sandi_baru" x-model="password" placeholder="Minimal 8 karakter..." required minlength="8" maxlength="100" autocomplete="new-password"
-                                    class="w-full px-4 py-2.5 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                                    class="w-full px-4 py-2.5 pr-10 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                                 <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#604EE6] transition p-1 cursor-pointer focus:outline-none" tabindex="-1" title="Lihat / Sembunyikan Password">
                                     <svg x-show="!showPassword" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                     <svg x-show="showPassword" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" /></svg>
@@ -153,18 +153,18 @@
                         </div>
                     </div>
 
-                    {{-- Grid 3 Kolom (Status Akun, Peran, Tim Kerja) dengan Dropdown Kustom Buka ke Atas --}}
+                    {{-- Grid 3 Kolom (Status Akun, Peran, Tim Kerja) dengan Dropdown Kustom Buka ke Bawah --}}
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         
                         {{-- Dropdown Status Akun --}}
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Status Akun <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Status Akun <span class="text-red-500">*</span></label>
                             <input type="hidden" name="status_akun" x-model="status" required>
 
                             <button @click="openStatusDropdown = !openStatusDropdown; openRoleDropdown = false; openTimDropdown = false;" @click.outside="openStatusDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#604EE6] focus:border-[#604EE6] focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                <span x-text="statusName" class="text-gray-700 font-normal"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#604EE6] focus:border-[#604EE6] focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                <span x-text="statusName" class="text-gray-700 font-light"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -172,18 +172,18 @@
                             <div x-show="openStatusDropdown" x-cloak 
                                 class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1">
                                 <button type="button" @click="status = 'aktif'; statusName = 'Aktif'; openStatusDropdown = false;" 
-                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-normal transition-all cursor-pointer"
-                                    :class="status === 'aktif' ? 'bg-purple-50/70 text-[#604EE6] font-semibold' : ''">
+                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
+                                    :class="status === 'aktif' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
                                     Aktif
                                 </button>
                                 <button type="button" @click="status = 'pending'; statusName = 'Pending'; openStatusDropdown = false;" 
-                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-normal transition-all cursor-pointer"
-                                    :class="status === 'pending' ? 'bg-purple-50/70 text-[#604EE6] font-semibold' : ''">
+                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
+                                    :class="status === 'pending' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
                                     Pending
                                 </button>
                                 <button type="button" @click="status = 'nonaktif'; statusName = 'Non-Aktif'; openStatusDropdown = false;" 
-                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-normal transition-all cursor-pointer"
-                                    :class="status === 'nonaktif' ? 'bg-purple-50/70 text-[#604EE6] font-semibold' : ''">
+                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
+                                    :class="status === 'nonaktif' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
                                     Non-Aktif
                                 </button>
                             </div>
@@ -191,13 +191,13 @@
 
                         {{-- Dropdown Peran --}}
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Peran <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Peran <span class="text-red-500">*</span></label>
                             <input type="hidden" name="id_role" x-model="role" required>
 
                             <button @click="openRoleDropdown = !openRoleDropdown; openStatusDropdown = false; openTimDropdown = false;" @click.outside="openRoleDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#604EE6] focus:border-[#604EE6] focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                <span x-text="roleName" :class="role === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#604EE6] focus:border-[#604EE6] focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                <span x-text="roleName" :class="role === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openRoleDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -211,8 +211,8 @@
                                 @foreach($roles as $r)
                                     <button type="button" 
                                         @click="role = '{{ $r->id_role }}'; roleName = '{{ $r->nama_role }}'; openRoleDropdown = false;"
-                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-normal transition-all cursor-pointer"
-                                        :class="role == '{{ $r->id_role }}' ? 'bg-purple-50/70 text-[#604EE6] font-semibold' : ''">
+                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
+                                        :class="role == '{{ $r->id_role }}' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
                                         {{ $r->nama_role }}
                                     </button>
                                 @endforeach
@@ -221,18 +221,20 @@
 
                         {{-- Dropdown Tim Kerja --}}
                         <div class="relative">
-                            <label class="block text-xs font-bold text-gray-700 mb-2">Tim Kerja</label>
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Tim Kerja</label>
                             <input type="hidden" name="id_tim" x-model="tim">
 
-                            <button @click="openTimDropdown = !openTimDropdown; openStatusDropdown = false; openRoleDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
-                                class="w-full flex items-center justify-between px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#604EE6] focus:border-[#604EE6] focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-medium transition-all cursor-pointer">
-                                <span x-text="timName" :class="tim === '' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <button @click="if (!roleName.toLowerCase().includes('direktur')) { openTimDropdown = !openTimDropdown; openStatusDropdown = false; openRoleDropdown = false; }" @click.outside="openTimDropdown = false" type="button" 
+                                :disabled="roleName.toLowerCase().includes('direktur')"
+                                class="w-full flex items-center justify-between px-4 py-2.5 border border-gray-200 focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-light transition-all"
+                                :class="roleName.toLowerCase().includes('direktur') ? 'opacity-60 bg-gray-100/70 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-[#F8F7FF] hover:border-[#604EE6] focus:border-[#604EE6] cursor-pointer'">
+                                <span x-text="roleName.toLowerCase().includes('direktur') ? 'Tidak Memerlukan Tim Kerja' : timName" :class="(tim === '' || roleName.toLowerCase().includes('direktur')) ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
 
-                            <div x-show="openTimDropdown" x-cloak 
+                            <div x-show="openTimDropdown && !roleName.toLowerCase().includes('direktur')" x-cloak 
                                 class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
                                 <button type="button" @click="tim = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;" 
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer">
@@ -241,11 +243,41 @@
                                 @foreach($tims as $t)
                                     <button type="button" 
                                         @click="tim = '{{ $t->id_tim }}'; timName = '{{ $t->nama_tim }}'; openTimDropdown = false;"
-                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-normal transition-all cursor-pointer"
-                                        :class="tim == '{{ $t->id_tim }}' ? 'bg-purple-50/70 text-[#604EE6] font-semibold' : ''">
+                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
+                                        :class="tim == '{{ $t->id_tim }}' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
                                         {{ $t->nama_tim }}
                                     </button>
                                 @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Petunjuk Dinamis Alur Penetapan Ketua Tim --}}
+                        <div x-show="roleName.toLowerCase().includes('ketua')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                                <span class="font-normal text-[#604EE6]">Petunjuk Penetapan Ketua Tim:</span> Jika tim kerja yang akan dipimpin belum dibuat, Anda dapat mengosongkan pilihan Tim Kerja di atas. Pengguna ini dapat langsung ditetapkan sebagai Ketua Tim saat membuat tim di menu <span class="font-normal text-gray-800">Manajemen Tim Kerja</span> (data tim kerja akun ini akan otomatis terhubung dan terisi).
+                            </div>
+                        </div>
+
+                        {{-- Petunjuk Dinamis Peran Anggota --}}
+                        <div x-show="roleName.toLowerCase().includes('anggota')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                                <span class="font-normal text-[#604EE6]">Petunjuk Penempatan Anggota:</span> Pilih tim kerja untuk langsung menempatkan pegawai ke dalam tim terkait, atau kosongkan terlebih dahulu jika penempatan tim kerja akan ditentukan kemudian.
+                            </div>
+                        </div>
+
+                        {{-- Petunjuk Dinamis Peran Direktur --}}
+                        <div x-show="roleName.toLowerCase().includes('direktur')" x-cloak class="sm:col-span-2 p-3 bg-purple-50/70 border border-purple-100 rounded-xl flex items-start gap-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[11px] text-gray-600 font-light leading-relaxed">
+                                <span class="font-normal text-[#604EE6]">Peran Struktural:</span> Peran Direktur bersifat pengawasan institusional dan tidak memerlukan penempatan ke dalam tim kerja.
                             </div>
                         </div>
 

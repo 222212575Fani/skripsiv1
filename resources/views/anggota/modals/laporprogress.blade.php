@@ -105,10 +105,10 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1.5">Tambahan Progress Baru (%) <span class="text-red-500">*</span></label>
+                            <label class="block text-xs font-normal text-gray-700 mb-1.5">Tambahan Progress Baru (%) <span class="text-red-500">*</span></label>
                             <input type="number" name="progress_minggu_berjalan_tambahan" x-model.number="progressTambahan" min="0" :max="100 - progressSebelumnya" step="0.01" required
                                 placeholder="Contoh: 30"
-                                class="w-full px-4 py-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-bold text-gray-800 placeholder:text-gray-400 placeholder:font-light">
+                                class="w-full px-4 py-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-800 placeholder:text-gray-400 placeholder:font-light">
                         </div>
 
                         <input type="hidden" name="progress_minggu_berjalan" :value="totalProgress">
@@ -121,23 +121,23 @@
 
                     {{-- Uraian Progress --}}
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Uraian Progress</label>
-                        <textarea name="uraian_progress" rows="3" maxlength="2000" placeholder="Jelaskan pekerjaan yang telah diselesaikan pada periode ini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-normal text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Uraian Progress</label>
+                        <textarea name="uraian_progress" rows="3" maxlength="2000" placeholder="Jelaskan pekerjaan yang telah diselesaikan pada periode ini..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
                     {{-- Kendala Internal & Eksternal --}}
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Kendala Internal</label>
-                        <textarea name="kendala_internal" rows="2" maxlength="2000" placeholder="Hambatan dari dalam tim..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-normal text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Kendala Internal</label>
+                        <textarea name="kendala_internal" rows="2" maxlength="2000" placeholder="Hambatan dari dalam tim..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Kendala Eksternal</label>
-                        <textarea name="kendala_eksternal" rows="2" maxlength="2000" placeholder="Hambatan dari luar tim/pihak lain..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-normal text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Kendala Eksternal</label>
+                        <textarea name="kendala_eksternal" rows="2" maxlength="2000" placeholder="Hambatan dari luar tim/pihak lain..." class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
                     {{-- Area Upload Multi-File dengan Progress Bar & Ikon Sampah --}}
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">Dokumen Pendukung (Bisa Banyak File)</label>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Dokumen Pendukung (Bisa Banyak File)</label>
                         
                         <div class="relative border-2 border-dashed border-purple-200 hover:border-[#6E5BC3] rounded-2xl p-6 bg-purple-50/20 hover:bg-purple-50/50 transition-all text-center cursor-pointer group">
                             <input type="file" id="dokumen_input" name="dokumen_pendukung[]" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx" @change="handleFileChange($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">

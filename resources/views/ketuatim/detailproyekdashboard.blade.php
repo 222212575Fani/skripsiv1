@@ -163,7 +163,7 @@
                                 class="w-full flex items-center justify-between px-3.5 py-2.5 bg-white border rounded-xl text-xs font-normal text-gray-700 transition-all cursor-pointer shadow-2xs focus:outline-none"
                                 :class="open ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-gray-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                                 <div class="flex items-center gap-2 truncate">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                                     </svg>
                                     <span class="{{ $currentStatus === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-light' }}">{{ $statuses[$currentStatus] ?? 'Semua Aktivitas' }}</span>
@@ -171,7 +171,7 @@
                                         {{ $counts[$currentStatus] ?? 0 }}
                                     </span>
                                 </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200 shrink-0" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200 shrink-0" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
@@ -435,19 +435,19 @@
                         @csrf
                         <div class="p-8 space-y-5">
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-normal text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
                                 <input type="text" name="nama_aktivitas" placeholder="Masukkan nama aktivitas..." required autocomplete="off"
-                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light">
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Aktivitas</label>
+                                <label class="block text-xs font-normal text-gray-700 mb-2">Deskripsi Aktivitas</label>
                                 <textarea name="deskripsi_aktivitas" rows="3" placeholder="Tuliskan deskripsi atau ringkasan aktivitas..."
-                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-2">Penanggung Jawab <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-normal text-gray-700 mb-2">Penanggung Jawab <span class="text-red-500">*</span></label>
                                 @php
                                     $timId = $proyek->id_tim ?? null;
                                     $idKetuaTim = optional($proyek->timKerja)->id_ketua_tim
@@ -459,18 +459,18 @@
                                 <div class="relative group/filter" @click.outside="pjOpen = false">
                                     <input type="hidden" name="id_penanggung_jawab" x-model="pj">
                                     <button type="button" @click="pjOpen = !pjOpen"
-                                        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-normal transition-all cursor-pointer">
-                                        <span :class="pj ? 'text-gray-700 font-medium' : 'text-gray-400 font-light'" x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 group-hover/filter:text-[#6E5BC3] transition-all duration-200" :class="pjOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] rounded-2xl text-xs font-light transition-all cursor-pointer">
+                                        <span :class="pj ? 'text-gray-700 font-light' : 'text-gray-400 font-light'" x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 group-hover/filter:text-[#6E5BC3] transition-all duration-200" :class="pjOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                     </button>
                                     <div x-show="pjOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-[24px] shadow-[0_14px_28px_rgba(0,0,0,0.14)] p-2 z-[1000] space-y-1 max-h-44 overflow-y-auto">
-                                        <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#6E5BC3] text-xs font-normal">
+                                        <div class="px-3 py-2 border-b border-gray-100 flex items-center gap-2 text-[#6E5BC3] text-xs font-light">
                                             <span>Pilih Penanggung Jawab</span>
                                         </div>
                                         @forelse($listAnggotaTim as $member)
-                                            @if($member->pengguna)
+                                             @if($member->pengguna)
                                                 <button type="button" @click="pj = '{{ $member->pengguna->id_pengguna }}'; pjNama = '{{ addslashes($member->pengguna->nama) }}'; pjOpen = false"
-                                                    class="w-full flex items-center px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
+                                                    class="w-full flex items-center px-3.5 py-2.5 rounded-xl text-xs font-light transition-all cursor-pointer"
                                                     :class="pj == '{{ $member->pengguna->id_pengguna }}' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
                                                     <span>{{ $member->pengguna->nama }}</span>
                                                 </button>
@@ -484,21 +484,21 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
                                     @php
                                         $minMulai = max(date('Y-m-d'), $proyek->tanggal_mulai ?? date('Y-m-d'));
                                         $maxMulai = $proyek->tanggal_target_selesai ?? null;
                                     @endphp
                                     <input type="date" name="tanggal_mulai" required x-model="tglMulai"
                                         min="{{ $minMulai }}" @if($maxMulai) max="{{ $maxMulai }}" @endif
-                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700 cursor-pointer">
+                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700 cursor-pointer">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Selesai (Target) <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Selesai (Target) <span class="text-red-500">*</span></label>
                                     @php $maxSelesai = $proyek->tanggal_target_selesai ?? null; @endphp
                                     <input type="date" name="tanggal_target_selesai" required 
                                         :min="tglMulai ? tglMulai : '{{ $minMulai }}'" @if($maxSelesai) max="{{ $maxSelesai }}" @endif
-                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700 cursor-pointer">
+                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700 cursor-pointer">
                                 </div>
                             </div>
                         </div>
@@ -623,19 +623,19 @@
 
                         <div class="p-8 space-y-5">
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-normal text-gray-700 mb-2">Nama Aktivitas <span class="text-red-500">*</span></label>
                                 <input type="text" name="nama_aktivitas" x-model="nama" required autocomplete="off"
-                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700">
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700">
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-2">Deskripsi Aktivitas</label>
+                                <label class="block text-xs font-normal text-gray-700 mb-2">Deskripsi Aktivitas</label>
                                 <textarea name="deskripsi_aktivitas" x-model="deskripsi" rows="3"
-                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700 resize-none"></textarea>
+                                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700 resize-none"></textarea>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-2">Penanggung Jawab <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-normal text-gray-700 mb-2">Penanggung Jawab <span class="text-red-500">*</span></label>
                                 @php
                                     $timId = $proyek->id_tim ?? null;
                                     $idKetuaTim = optional($proyek->timKerja)->id_ketua_tim
@@ -647,15 +647,15 @@
                                 <div class="relative group/filter" @click.outside="pjOpen = false">
                                     <input type="hidden" name="id_penanggung_jawab" x-model="pj">
                                     <button type="button" @click="pjOpen = !pjOpen"
-                                        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-xs font-normal cursor-pointer">
-                                        <span :class="pj ? 'text-gray-700 font-medium' : 'text-gray-400 font-light'" x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                                        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-xs font-light cursor-pointer">
+                                        <span :class="pj ? 'text-gray-700 font-light' : 'text-gray-400 font-light'" x-text="pjNama || 'Pilih Penanggung Jawab'"></span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                     </button>
                                     <div x-show="pjOpen" x-cloak x-transition class="pj-dropdown-scroll absolute left-0 right-0 mt-2 bg-white border border-gray-100 rounded-[24px] shadow-lg p-2 z-[1000] space-y-1 max-h-44 overflow-y-auto">
                                         @foreach($listAnggotaTim as $member)
-                                            @if($member->pengguna)
+                                             @if($member->pengguna)
                                                 <button type="button" @click="pj = '{{ $member->pengguna->id_pengguna }}'; pjNama = '{{ addslashes($member->pengguna->nama) }}'; pjOpen = false"
-                                                    class="w-full flex items-center px-3.5 py-2.5 rounded-xl text-xs font-normal text-gray-700 hover:bg-gray-50 cursor-pointer">
+                                                    class="w-full flex items-center px-3.5 py-2.5 rounded-xl text-xs font-light text-gray-700 hover:bg-gray-50 cursor-pointer">
                                                     <span>{{ $member->pengguna->nama }}</span>
                                                 </button>
                                             @endif
@@ -670,16 +670,16 @@
                             @endphp
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
                                     <input type="date" name="tanggal_mulai" x-model="tglMulai" required 
                                         min="{{ $minMulai }}" @if($maxSelesai) max="{{ $maxSelesai }}" @endif
-                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700">
+                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Selesai (Target) <span class="text-red-500">*</span></label>
+                                    <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Selesai (Target) <span class="text-red-500">*</span></label>
                                     <input type="date" name="tanggal_target_selesai" x-model="tglSelesai" required 
                                         :min="tglMulai ? tglMulai : '{{ $minMulai }}'" @if($maxSelesai) max="{{ $maxSelesai }}" @endif
-                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700">
+                                        class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700">
                                 </div>
                             </div>
                         </div>

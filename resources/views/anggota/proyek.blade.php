@@ -157,7 +157,7 @@
                         class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-light transition-all cursor-pointer shadow-2xs lg:min-w-42.5 focus:outline-none"
                         :class="bulanOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                         <div class="flex items-center gap-2 truncate">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             <span class="truncate" :class="(bulan === 'semua' && tahun === 'semua') ? 'text-gray-400 font-light' : 'text-gray-700 font-light'" x-text="
@@ -165,7 +165,7 @@
                                 (tahun === 'semua' ? '' : ' ' + tahun)
                             "></span>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
@@ -221,7 +221,7 @@
                         class="w-full lg:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-light transition-all cursor-pointer shadow-2xs lg:min-w-40 focus:outline-none"
                         :class="filterOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                         <div class="flex items-center gap-2 truncate">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" />
                             </svg>
                             <span class="truncate" :class="status === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-light'" x-text="{
@@ -231,7 +231,7 @@
                                 'terlambat': 'Terlambat'
                             }[status] || 'Semua Status'"></span>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="filterOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
@@ -319,7 +319,7 @@
                                             Lihat {{ $totalAktProyek }} Aktivitas
                                         </span>
                                     </div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openAktivitas ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openAktivitas ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>

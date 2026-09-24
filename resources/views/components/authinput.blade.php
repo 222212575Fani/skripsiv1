@@ -12,7 +12,7 @@
             name="{{ $name }}" 
             value="{{ $value }}"
             placeholder="{{ $placeholder }}"
-            {{ $attributes->merge(['class' => 'w-full h-[42px] sm:h-[44px] rounded-lg sm:rounded-[10px] border border-[#D7D7D7] bg-white pl-11 pr-11 text-xs sm:text-[13px] text-slate-800 placeholder:text-gray-400 placeholder:font-light outline-none focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] transition-all']) }}
+            {{ $attributes->merge(['class' => 'w-full h-[42px] sm:h-[44px] rounded-lg sm:rounded-[10px] border border-[#D7D7D7] bg-white pl-11 pr-11 text-xs sm:text-[13px] font-light text-slate-800 placeholder:text-gray-400 placeholder:font-light outline-none focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] transition-all']) }}
             @if($required) required @endif
         >
 

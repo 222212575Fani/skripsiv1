@@ -125,15 +125,15 @@
                     {{-- 2. Custom Dropdown Filter Tim Kerja --}}
                     <div class="relative w-full lg:w-auto shrink-0">
                         <button @click="openTimDropdown = !openTimDropdown; openStatusDropdown = false;" @click.outside="openTimDropdown = false" type="button" 
-                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white border rounded-full text-xs font-normal text-[#604EE6] transition-all cursor-pointer shadow-2xs w-full lg:w-auto focus:outline-none"
+                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white border rounded-full text-xs font-light text-[#604EE6] transition-all cursor-pointer shadow-2xs w-full lg:w-auto focus:outline-none"
                             :class="openTimDropdown ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-1.5 truncate">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <span class="truncate max-w-[200px]" :class="timFilter === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-normal'" x-text="timFilterName"></span>
+                                <span class="truncate max-w-[200px]" :class="timFilter === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-light'" x-text="timFilterName"></span>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -142,7 +142,7 @@
                             <button type="button" 
                                 @click="timFilter = 'semua'; timFilterName = 'Semua Tim Kerja'; openTimDropdown = false;"
                                 class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                :class="timFilter === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                :class="timFilter === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                 <span>Semua Tim Kerja</span>
                                 <span x-show="timFilter === 'semua'" class="text-[#6E5BC3]">✓</span>
                             </button>
@@ -150,7 +150,7 @@
                                 <button type="button" 
                                     @click="timFilter = '{{ $t->id_tim ?? $t->id }}'; timFilterName = '{{ $t->nama_tim }}'; openTimDropdown = false;"
                                     class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                    :class="timFilter === '{{ $t->id_tim ?? $t->id }}' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                    :class="timFilter === '{{ $t->id_tim ?? $t->id }}' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                     <span class="truncate">{{ $t->nama_tim }}</span>
                                     <span x-show="timFilter === '{{ $t->id_tim ?? $t->id }}'" class="text-[#6E5BC3]">✓</span>
                                 </button>
@@ -161,15 +161,15 @@
                     {{-- 3. Custom Dropdown Filter Status Proyek --}}
                     <div class="relative w-full lg:w-auto shrink-0">
                         <button @click="openStatusDropdown = !openStatusDropdown; openTimDropdown = false;" @click.outside="openStatusDropdown = false" type="button" 
-                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white border rounded-full text-xs font-normal text-[#604EE6] transition-all cursor-pointer shadow-2xs w-full lg:w-auto focus:outline-none"
+                            class="flex items-center justify-between gap-3 px-4 py-2 bg-white border rounded-full text-xs font-light text-[#604EE6] transition-all cursor-pointer shadow-2xs w-full lg:w-auto focus:outline-none"
                             :class="openStatusDropdown ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-1.5 truncate">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="truncate max-w-[140px]" :class="statusFilter === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-normal'" x-text="statusFilterName"></span>
+                                <span class="truncate max-w-[140px]" :class="statusFilter === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-light'" x-text="statusFilterName"></span>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] transition-transform duration-200 shrink-0" :class="openStatusDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -178,35 +178,35 @@
                             <button type="button" 
                                 @click="statusFilter = 'semua'; statusFilterName = 'Semua Status'; openStatusDropdown = false;"
                                 class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                :class="statusFilter === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                :class="statusFilter === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                 <span>Semua Status</span>
                                 <span x-show="statusFilter === 'semua'" class="text-[#6E5BC3]">✓</span>
                             </button>
                             <button type="button" 
                                 @click="statusFilter = 'belum_dimulai'; statusFilterName = 'Belum Dimulai'; openStatusDropdown = false;"
                                 class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                :class="statusFilter === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                :class="statusFilter === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                 <span>Belum Dimulai</span>
                                 <span x-show="statusFilter === 'belum_dimulai'" class="text-[#6E5BC3]">✓</span>
                             </button>
                             <button type="button" 
                                 @click="statusFilter = 'berjalan'; statusFilterName = 'Sedang Berjalan'; openStatusDropdown = false;"
                                 class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                :class="statusFilter === 'berjalan' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                :class="statusFilter === 'berjalan' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                 <span>Sedang Berjalan</span>
                                 <span x-show="statusFilter === 'berjalan'" class="text-[#6E5BC3]">✓</span>
                             </button>
                             <button type="button" 
                                 @click="statusFilter = 'selesai'; statusFilterName = 'Selesai'; openStatusDropdown = false;"
                                 class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                :class="statusFilter === 'selesai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                :class="statusFilter === 'selesai' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                 <span>Selesai</span>
                                 <span x-show="statusFilter === 'selesai'" class="text-[#6E5BC3]">✓</span>
                             </button>
                             <button type="button" 
                                 @click="statusFilter = 'terlambat'; statusFilterName = 'Terlambat'; openStatusDropdown = false;"
                                 class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-between"
-                                :class="statusFilter === 'terlambat' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-bold' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal'">
+                                :class="statusFilter === 'terlambat' ? 'bg-[#F8F7FF] text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                 <span>Terlambat</span>
                                 <span x-show="statusFilter === 'terlambat'" class="text-[#6E5BC3]">✓</span>
                             </button>
