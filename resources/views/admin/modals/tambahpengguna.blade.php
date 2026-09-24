@@ -68,20 +68,6 @@
                             <label class="block text-xs font-normal text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
                             <input type="text" name="nama" x-model="nama" placeholder="Masukkan nama lengkap..." maxlength="100" required autocomplete="off"
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
-                            <div class="mt-1.5 flex items-center">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
-                                      :class="nama.trim().length > 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
-                                    <template x-if="nama.trim().length > 0">
-                                        <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                    </template>
-                                    <template x-if="nama.trim().length === 0">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></span>
-                                    </template>
-                                    <span x-text="nama.trim().length > 0 ? 'Nama terisi (' + nama.trim().length + ' karakter)' : 'Nama lengkap beserta gelar'"></span>
-                                </span>
-                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-2">NIP <span class="text-red-500">*</span></label>
@@ -167,8 +153,8 @@
                         </div>
                     </div>
 
-                    {{-- Grid 3 Kolom (Status Akun, Peran, Tim Kerja) dengan Dropdown Kustom Buka ke Bawah --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    {{-- Grid 2 Kolom (Status Akun & Peran) dengan Dropdown Kustom Buka ke Bawah --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         
                         {{-- Dropdown Status Akun --}}
                         <div class="relative">
@@ -232,37 +218,37 @@
                                 @endforeach
                             </div>
                         </div>
+                    </div>
 
-                        {{-- Dropdown Tim Kerja --}}
-                        <div class="relative">
-                            <label class="block text-xs font-normal text-gray-700 mb-2">Tim Kerja</label>
-                            <input type="hidden" name="id_tim" x-model="tim">
+                    {{-- Baris: Tim Kerja (Lebar Penuh) --}}
+                    <div class="relative">
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Tim Kerja</label>
+                        <input type="hidden" name="id_tim" x-model="tim">
 
-                            <button @click="if (!roleName.toLowerCase().includes('direktur')) { openTimDropdown = !openTimDropdown; openStatusDropdown = false; openRoleDropdown = false; }" @click.outside="openTimDropdown = false" type="button" 
-                                :disabled="roleName.toLowerCase().includes('direktur')"
-                                class="w-full flex items-center justify-between px-4 py-2.5 border border-gray-200 focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-light transition-all"
-                                :class="roleName.toLowerCase().includes('direktur') ? 'opacity-60 bg-gray-100/70 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-[#F8F7FF] hover:border-[#604EE6] focus:border-[#604EE6] cursor-pointer'">
-                                <span x-text="roleName.toLowerCase().includes('direktur') ? 'Tidak Memerlukan Tim Kerja' : timName" :class="(tim === '' || roleName.toLowerCase().includes('direktur')) ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                </svg>
+                        <button @click="if (!roleName.toLowerCase().includes('direktur')) { openTimDropdown = !openTimDropdown; openStatusDropdown = false; openRoleDropdown = false; }" @click.outside="openTimDropdown = false" type="button" 
+                            :disabled="roleName.toLowerCase().includes('direktur')"
+                            class="w-full flex items-center justify-between px-4 py-2.5 border border-gray-200 focus:ring-2 focus:ring-[#604EE6]/20 rounded-xl text-xs font-light transition-all"
+                            :class="roleName.toLowerCase().includes('direktur') ? 'opacity-60 bg-gray-100/70 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-[#F8F7FF] hover:border-[#604EE6] focus:border-[#604EE6] cursor-pointer'">
+                            <span x-text="roleName.toLowerCase().includes('direktur') ? 'Tidak Memerlukan Tim Kerja' : timName" :class="(tim === '' || roleName.toLowerCase().includes('direktur')) ? 'text-gray-400 font-light' : 'text-gray-700 font-light'"></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] transition-transform duration-200" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+
+                        <div x-show="openTimDropdown && !roleName.toLowerCase().includes('direktur')" x-cloak 
+                            class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
+                            <button type="button" @click="tim = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;" 
+                                class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer">
+                                Pilih Tim Kerja
                             </button>
-
-                            <div x-show="openTimDropdown && !roleName.toLowerCase().includes('direktur')" x-cloak 
-                                class="custom-scrollbar absolute left-0 top-full mt-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-44 overflow-y-auto">
-                                <button type="button" @click="tim = ''; timName = 'Pilih Tim Kerja'; openTimDropdown = false;" 
-                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer">
-                                    Pilih Tim Kerja
+                            @foreach($tims as $t)
+                                <button type="button" 
+                                    @click="tim = '{{ $t->id_tim }}'; timName = '{{ $t->nama_tim }}'; openTimDropdown = false;"
+                                    class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
+                                    :class="tim == '{{ $t->id_tim }}' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
+                                    {{ $t->nama_tim }}
                                 </button>
-                                @foreach($tims as $t)
-                                    <button type="button" 
-                                        @click="tim = '{{ $t->id_tim }}'; timName = '{{ $t->nama_tim }}'; openTimDropdown = false;"
-                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#604EE6] font-light transition-all cursor-pointer"
-                                        :class="tim == '{{ $t->id_tim }}' ? 'bg-purple-50/70 text-[#604EE6] font-light' : ''">
-                                        {{ $t->nama_tim }}
-                                    </button>
-                                @endforeach
-                            </div>
+                            @endforeach
                         </div>
                     </div>
 
