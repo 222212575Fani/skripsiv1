@@ -117,16 +117,23 @@
 
                             <div x-show="openRoleDropdown" x-cloak 
                                 class="custom-scrollbar absolute left-0 bottom-full mb-1.5 w-full bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-40 overflow-y-auto">
-                                @foreach($roles as $role)
-                                    @if(strtolower($role->nama_role) !== 'admin')
-                                        <button type="button" 
-                                            @click="roleId = '{{ $role->id_role }}'; roleName = '{{ $role->nama_role }}'; openRoleDropdown = false;"
-                                            class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
-                                            :class="roleId == '{{ $role->id_role }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
-                                            {{ $role->nama_role }}
-                                        </button>
-                                    @endif
-                                @endforeach
+                                @php
+                                    $nonAdminRoles = collect($roles)->filter(function($r) {
+                                        return strtolower($r->nama_role) !== 'admin';
+                                    });
+                                @endphp
+                                @forelse($nonAdminRoles as $role)
+                                    <button type="button" 
+                                        @click="roleId = '{{ $role->id_role }}'; roleName = '{{ $role->nama_role }}'; openRoleDropdown = false;"
+                                        class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
+                                        :class="roleId == '{{ $role->id_role }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
+                                        {{ $role->nama_role }}
+                                    </button>
+                                @empty
+                                    <div class="px-3 py-2 text-[11px] text-amber-600 bg-amber-50 rounded-lg font-medium text-center">
+                                        Data peran belum ada di database. Silakan jalankan seeder.
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
 
@@ -151,14 +158,18 @@
                                     class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-purple-50 hover:text-[#6E5BC3] font-light transition-all cursor-pointer">
                                     Pilih Tim Kerja (Opsional)
                                 </button>
-                                @foreach($tims as $tim)
+                                @forelse($tims as $tim)
                                     <button type="button" 
                                         @click="timId = '{{ $tim->id_tim }}'; timName = '{{ $tim->nama_tim }}'; openTimDropdown = false;"
                                         class="w-full text-left px-3.5 py-2.5 rounded-lg text-xs text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-normal transition-all cursor-pointer"
                                         :class="timId == '{{ $tim->id_tim }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-semibold' : ''">
                                         {{ $tim->nama_tim }}
                                     </button>
-                                @endforeach
+                                @empty
+                                    <div class="px-3 py-2 text-[11px] text-gray-400 italic text-center">
+                                        Belum ada tim kerja aktif
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
 
