@@ -269,6 +269,13 @@ class KetuaTimController extends Controller
             ]);
 
             // 2. Tambahkan Ketua Proyek ke tabel pivot 'anggota_proyek' (id_peran_proyek = 1)
+            if (!DB::table('peran_proyek')->where('id_peran_proyek', 1)->exists()) {
+                DB::table('peran_proyek')->insertOrIgnore([
+                    ['id_peran_proyek' => 1, 'nama_peran_proyek' => 'Ketua Proyek', 'created_at' => now(), 'updated_at' => now()],
+                    ['id_peran_proyek' => 2, 'nama_peran_proyek' => 'Anggota', 'created_at' => now(), 'updated_at' => now()],
+                ]);
+            }
+
             DB::table('anggota_proyek')->insert([
                 'id_proyek'       => $proyek->id_proyek,
                 'id_pengguna'     => $request->id_ketua_proyek,
@@ -381,6 +388,13 @@ class KetuaTimController extends Controller
                     ->delete();
 
                 // Masukkan ketua baru ke tabel pivot
+                if (!DB::table('peran_proyek')->where('id_peran_proyek', 1)->exists()) {
+                    DB::table('peran_proyek')->insertOrIgnore([
+                        ['id_peran_proyek' => 1, 'nama_peran_proyek' => 'Ketua Proyek', 'created_at' => now(), 'updated_at' => now()],
+                        ['id_peran_proyek' => 2, 'nama_peran_proyek' => 'Anggota', 'created_at' => now(), 'updated_at' => now()],
+                    ]);
+                }
+
                 DB::table('anggota_proyek')->insert([
                     'id_proyek'       => $proyek->id_proyek,
                     'id_pengguna'     => $request->id_ketua_proyek,
