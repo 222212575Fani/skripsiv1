@@ -60,14 +60,14 @@
         </div>
 
         {{-- KONTROL DESKTOP (Hanya Tampil di Layar >= xl): Underline Tabs & Kotak Cari + Tombol Tambah --}}
-        <div class="hidden xl:flex items-center justify-between gap-4 border-b border-gray-200/80 px-1">
+        <div class="hidden xl:flex items-end justify-between gap-4 border-b border-gray-200/80 px-1">
             {{-- Underline Tabs --}}
-            <div id="proyek-tabs-wrapper" class="flex items-center gap-6 overflow-x-auto text-xs font-semibold scrollbar-none">
+            <div id="proyek-tabs-wrapper" class="flex items-center gap-6 overflow-x-auto text-xs font-normal scrollbar-none -mb-px">
                 @foreach($statuses as $key => $label)
                     <a href="{{ route('ketuatim.manajemenproyek', array_merge(['status' => $key], request('search') ? ['search' => request('search')] : [])) }}"
-                       class="pb-3 flex items-center gap-2 transition-all relative whitespace-nowrap {{ $currentStatus == $key ? 'text-[#6E5BC3] border-b-2 border-[#6E5BC3] font-bold' : 'text-gray-500 hover:text-gray-800' }}">
+                       class="pb-3 flex items-center gap-2 transition-all relative whitespace-nowrap border-b-2 {{ $currentStatus == $key ? 'text-[#604EE6] border-[#604EE6] font-normal' : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 font-light' }}">
                         <span>{{ $label }}</span>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $currentStatus == $key ? 'bg-purple-100 text-[#6E5BC3]' : 'bg-gray-100 text-gray-500' }}">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-light {{ $currentStatus == $key ? 'bg-purple-100 text-[#604EE6]' : 'bg-gray-100 text-gray-500' }}">
                             {{ $counts[$key] ?? 0 }}
                         </span>
                     </a>
