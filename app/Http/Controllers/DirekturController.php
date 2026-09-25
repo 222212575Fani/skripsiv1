@@ -41,7 +41,7 @@ class DirekturController extends Controller
         }
 
         // 1. Keterangan Subtitle Total Proyek
-        $totalPersenText = 'Total proyek terdaftar';
+        $totalPersenText = 'Proyek terdaftar';
         $totalTrend = 'chart';
 
         // 2. Perhitungan Persentase Status terhadap Total Proyek
@@ -373,17 +373,25 @@ class DirekturController extends Controller
         }
 
         $topPersonText = '-';
+        $topPersonFull = '-';
+        $topSubtitle = 'Personil dengan penugasan terbanyak';
         if (!empty($personList) && $personList[0]['total'] > 0) {
             $maxTotal = $personList[0]['total'];
             $topPersons = array_filter($personList, fn($p) => $p['total'] === $maxTotal);
             $topNames = array_column($topPersons, 'nama');
+            $topCount = count($topNames);
+            $topPersonFull = implode(', ', $topNames);
             
-            if (count($topNames) <= 3) {
-                $namesJoined = implode(', ', $topNames);
+            if ($topCount === 1) {
+                $topPersonText = $topNames[0];
+                $topSubtitle = $maxTotal . ' proyek aktif';
+            } elseif ($topCount === 2) {
+                $topPersonText = $topNames[0] . ', ' . $topNames[1];
+                $topSubtitle = 'Masing-masing ' . $maxTotal . ' proyek aktif';
             } else {
-                $namesJoined = implode(', ', array_slice($topNames, 0, 2)) . ', dan ' . (count($topNames) - 2) . ' lainnya';
+                $topPersonText = implode(', ', array_slice($topNames, 0, 2)) . ' (+' . ($topCount - 2) . ' lainnya)';
+                $topSubtitle = $topCount . ' personil (masing-masing ' . $maxTotal . ' proyek)';
             }
-            $topPersonText = $namesJoined;
         }
 
         $avgWorkload = count($personList) > 0 ? round($totalWorkload / count($personList), 1) : 0;
@@ -400,6 +408,8 @@ class DirekturController extends Controller
             ],
             'summary' => [
                 'topPerson' => $topPersonText,
+                'topPersonFull' => $topPersonFull,
+                'topSubtitle' => $topSubtitle,
                 'avgWorkload' => $avgWorkload,
                 'totalAnggota' => count($personList),
                 'totalProyekAktif' => $proyekList->count(),

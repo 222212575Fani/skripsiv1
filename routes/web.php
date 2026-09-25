@@ -10,16 +10,6 @@ use App\Http\Controllers\DirekturController;
 use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
-    if (auth()->check()) {
-        $role = auth()->user()->role?->nama_role;
-        return match ($role) {
-            'Admin' => redirect()->route('admin.manajemenpengguna'),
-            'Direktur' => redirect()->route('direktur.dashboard'),
-            'Ketua Tim' => redirect()->route('ketuatim.dashboard'),
-            'Anggota' => redirect()->route('anggota.proyekaktivitas'),
-            default => redirect()->route('login'),
-        };
-    }
     return view('welcome');
 })->name('home');
 

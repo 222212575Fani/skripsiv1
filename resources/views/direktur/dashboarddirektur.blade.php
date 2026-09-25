@@ -12,7 +12,7 @@
             <x-cardstatistikdashboard 
                 title="Total Proyek" 
                 value="{{ $statsDirektorat['total'] ?? 0 }}" 
-                percent="{{ $statsDirektorat['total_persen_text'] ?? 'Total proyek terdaftar' }}" 
+                percent="{{ $statsDirektorat['total_persen_text'] ?? 'Proyek terdaftar' }}" 
                 percentColor="text-indigo-600" 
                 trend="chart" 
                 color="text-indigo-600" 

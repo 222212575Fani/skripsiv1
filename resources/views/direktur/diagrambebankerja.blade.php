@@ -104,8 +104,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
         <div class="bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-[22px] sm:rounded-3xl p-4 text-white flex flex-col justify-between shadow-xs">
             <span class="text-[10px] sm:text-[11px] font-medium text-purple-100 uppercase tracking-wider">Beban Tertinggi</span>
-            <span class="text-base sm:text-lg font-bold mt-1 truncate" :title="summary.topPerson" x-text="summary.topPerson"></span>
-            <span class="text-[10px] sm:text-[11px] text-purple-100 mt-0.5">Personil dengan penugasan terbanyak</span>
+            <span class="text-base sm:text-lg font-bold mt-1 truncate" :title="summary.topPersonFull || summary.topPerson" x-text="summary.topPerson"></span>
+            <span class="text-[10px] sm:text-[11px] text-purple-100 mt-0.5" x-text="summary.topSubtitle || 'Personil dengan penugasan terbanyak'"></span>
         </div>
 
         <div class="bg-[#F8F7FF] border border-purple-100 rounded-[22px] sm:rounded-3xl p-4 flex flex-col justify-between shadow-xs">
@@ -144,7 +144,7 @@
 
             labels: {!! json_encode($bebanKerjaInitial['labels'] ?? []) !!},
             datasets: {!! json_encode($bebanKerjaInitial['datasets'] ?? []) !!},
-            summary: {!! json_encode($bebanKerjaInitial['summary'] ?? ['topPerson' => '-', 'avgWorkload' => 0, 'totalAnggota' => 0, 'totalProyekAktif' => 0]) !!},
+            summary: {!! json_encode($bebanKerjaInitial['summary'] ?? ['topPerson' => '-', 'topPersonFull' => '-', 'topSubtitle' => 'Personil dengan penugasan terbanyak', 'avgWorkload' => 0, 'totalAnggota' => 0, 'totalProyekAktif' => 0]) !!},
 
             get hasValidData() {
                 return this.labels.length > 0 && this.datasets.total && this.datasets.total.some(val => Number(val) > 0);
@@ -172,7 +172,7 @@
                 .then(data => {
                     this.labels = data.labels || [];
                     this.datasets = data.datasets || {};
-                    this.summary = data.summary || { topPerson: '-', avgWorkload: 0, totalAnggota: 0, totalProyekAktif: 0 };
+                    this.summary = data.summary || { topPerson: '-', topPersonFull: '-', topSubtitle: 'Personil dengan penugasan terbanyak', avgWorkload: 0, totalAnggota: 0, totalProyekAktif: 0 };
                     this.bulanOpen = false;
                     this.openTimDropdown = false;
                     this.updateChart();
