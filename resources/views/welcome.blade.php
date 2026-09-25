@@ -101,32 +101,12 @@
 
                 <!-- Action Buttons Desktop (Right Floating Pill - Hanya di layar besar lg agar tidak tabrakan dengan hamburger) -->
                 <div class="hidden lg:flex items-center bg-white/95 backdrop-blur-md p-1.5 rounded-full shadow-lg shadow-black/5 border border-white/60">
-                    @auth
-                        @php
-                            $role = auth()->user()->role?->nama_role;
-                            $dashboardRoute = match ($role) {
-                                'Admin' => route('admin.manajemenpengguna'),
-                                'Direktur' => route('direktur.dashboard'),
-                                'Ketua Tim' => route('ketuatim.dashboard'),
-                                'Anggota' => route('anggota.proyekaktivitas'),
-                                default => route('login'),
-                            };
-                        @endphp
-                        <a href="{{ $dashboardRoute }}" class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-[#604EE6] hover:bg-[#503ED8] text-white text-xs sm:text-[13px] font-bold shadow-xs transition-all">
-                            <span>Buka Dashboard</span>
-                            <span class="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-semibold">{{ $role }}</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                            </svg>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="px-4 py-1.5 rounded-full text-slate-700 hover:text-slate-950 text-xs sm:text-[13px] font-bold transition-all">
-                            Masuk
-                        </a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center gap-1.5 px-4.5 py-1.5 rounded-full bg-[#18181B] hover:bg-black text-white text-xs sm:text-[13px] font-bold shadow-xs transition-all">
-                            <span>Daftar Akun</span>
-                        </a>
-                    @endauth
+                    <a href="{{ route('login') }}" class="px-4 py-1.5 rounded-full text-slate-700 hover:text-slate-950 text-xs sm:text-[13px] font-bold transition-all">
+                        Masuk
+                    </a>
+                    <a href="{{ route('register') }}" class="inline-flex items-center gap-1.5 px-4.5 py-1.5 rounded-full bg-[#18181B] hover:bg-black text-white text-xs sm:text-[13px] font-bold shadow-xs transition-all">
+                        <span>Daftar Akun</span>
+                    </a>
                 </div>
 
                 <!-- Mobile Menu Button (Muncul di layar < lg) -->
@@ -218,22 +198,14 @@
                 </nav>
 
                 <div class="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
-                    @auth
-                        <a href="{{ $dashboardRoute }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#604EE6] hover:bg-[#503ED8] text-white font-bold text-sm shadow-md transition-all">
-                            <span>Buka Dashboard</span>
-                            <span class="px-2 py-0.5 rounded-full bg-white/20 text-[10px]">{{ $role }}</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-purple-50 text-[#604EE6] border border-purple-200 font-extrabold text-sm shadow-xs transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
-                            <span>Masuk ke Sistem</span>
-                        </a>
-                        <a href="{{ route('register') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#18181B] hover:bg-black text-white font-bold text-sm shadow-md transition-all">
-                            <span>Daftar Akun Baru</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
-                    @endauth
+                    <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-purple-50 text-[#604EE6] border border-purple-200 font-extrabold text-sm shadow-xs transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                        <span>Masuk ke Sistem</span>
+                    </a>
+                    <a href="{{ route('register') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#18181B] hover:bg-black text-white font-bold text-sm shadow-md transition-all">
+                        <span>Daftar Akun Baru</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -270,34 +242,20 @@
 
                 <!-- Finseer-style Action Buttons -->
                 <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4">
-                    @auth
-                        <a href="{{ $dashboardRoute }}" class="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-center gap-3.5 pl-7 pr-2.5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-sm sm:text-base shadow-[0_10px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_14px_30px_rgba(0,0,0,0.25)] hover:scale-[1.02] active:scale-[0.99] transition-all">
-                            <span>Menuju Dashboard Anda</span>
-                            <span class="w-9 h-9 rounded-full bg-[#604EE6] group-hover:bg-[#503ED8] text-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:rotate-45">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7V17"/>
-                                </svg>
-                            </span>
-                        </a>
-                        <a href="#alur-akses" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-sm sm:text-base shadow-xs hover:scale-[1.02] active:scale-[0.99] transition-all">
-                            <span>Pelajari Alur Akses</span>
-                        </a>
-                    @else
-                        <!-- Primary: White Pill with Purple Arrow Circle -->
-                        <a href="{{ route('login') }}" class="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-center gap-3.5 pl-7 pr-2.5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-sm sm:text-base shadow-[0_10px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_14px_30px_rgba(0,0,0,0.25)] hover:scale-[1.02] active:scale-[0.99] transition-all">
-                            <span>Masuk ke Sistem</span>
-                            <span class="w-9 h-9 rounded-full bg-[#604EE6] group-hover:bg-[#503ED8] text-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:rotate-45">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7V17"/>
-                                </svg>
-                            </span>
-                        </a>
-                        
-                        <!-- Secondary: Translucent Glass Pill -->
-                        <a href="#alur-akses" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-sm sm:text-base shadow-xs hover:scale-[1.02] active:scale-[0.99] transition-all">
-                            <span>Pelajari Alur Akses</span>
-                        </a>
-                    @endauth
+                    <!-- Primary: White Pill with Purple Arrow Circle -->
+                    <a href="{{ route('login') }}" class="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-center gap-3.5 pl-7 pr-2.5 py-2.5 rounded-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-sm sm:text-base shadow-[0_10px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_14px_30px_rgba(0,0,0,0.25)] hover:scale-[1.02] active:scale-[0.99] transition-all">
+                        <span>Masuk ke Sistem</span>
+                        <span class="w-9 h-9 rounded-full bg-[#604EE6] group-hover:bg-[#503ED8] text-white flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:rotate-45">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 17L17 7M17 7H7M17 7V17"/>
+                            </svg>
+                        </span>
+                    </a>
+                    
+                    <!-- Secondary: Translucent Glass Pill -->
+                    <a href="#alur-akses" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-sm sm:text-base shadow-xs hover:scale-[1.02] active:scale-[0.99] transition-all">
+                        <span>Pelajari Alur Akses</span>
+                    </a>
                 </div>
             </div>
 
