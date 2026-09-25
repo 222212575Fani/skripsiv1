@@ -301,319 +301,6 @@
                 </div>
             </div>
 
-            <!-- UI MOCKUP PREVIEW DASHBOARD (Floating White Card inside Purple Hero) -->
-            <div class="mt-14 sm:mt-18 max-w-5xl xl:max-w-6xl 2xl:max-w-[1360px] mx-auto">
-                <div class="rounded-[28px] sm:rounded-[36px] p-2.5 sm:p-3.5 bg-white/25 backdrop-blur-xl border border-white/40 shadow-[0_25px_60px_rgba(30,15,90,0.3)]">
-                    <div class="rounded-[20px] sm:rounded-[28px] bg-white border border-slate-100 overflow-hidden shadow-2xl text-slate-800">
-                        
-                        <!-- Mockup Window Header -->
-                        <div class="bg-slate-50 border-b border-slate-200/80 px-5 py-3.5 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
-                                <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
-                                <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
-                                <span class="ml-2 text-xs font-semibold text-slate-400 hidden sm:inline">proxis.bps.go.id/dashboard</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    Sistem Aktif
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Mockup Content Canvas -->
-                        <div class="p-3.5 sm:p-5 lg:p-6 bg-[#FAF9FE] space-y-4 sm:space-y-5">
-                            
-                            <!-- 1. HEADER CONTAINER UNGU ESTETIK (Persis Dashboard Direktur) -->
-                            <div class="bg-gradient-to-r from-[#604EE6] to-[#8470E5] rounded-xl sm:rounded-2xl p-4 sm:p-5 text-white shadow-xs flex items-center justify-between">
-                                <div>
-                                    <h2 class="text-sm sm:text-base font-bold">Halo, Selamat Pagi, Direktur! 👋</h2>
-                                    <p class="text-[11px] sm:text-xs text-purple-100 mt-0.5">Selamat Datang di Dashboard Monitoring Direktorat Sistem Informasi Statistik</p>
-                                </div>
-                                <div class="hidden md:flex items-center gap-2">
-                                    <span class="px-3 py-1 rounded-full bg-white/20 text-white text-[11px] font-bold backdrop-blur-xs">
-                                        T.A. 2026
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- 2. CARD STATISTIK PROYEK DALAM DIREKTORAT SIS (5 Cards persis x-cardstatistikdashboard) -->
-                            <div class="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
-                                
-                                <!-- Card 1: Total Proyek -->
-                                <div class="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xs border border-gray-100 flex justify-between items-center min-w-0">
-                                    <div class="flex flex-col justify-center min-w-0 flex-1 mr-2">
-                                        <p class="text-[9px] sm:text-[10px] font-normal uppercase tracking-wider text-gray-900 truncate">Total Proyek</p>
-                                        <p class="text-xl sm:text-2xl font-extrabold text-indigo-600 mt-0.5 tracking-tight leading-none">24</p>
-                                        <div class="flex items-center gap-1 mt-1 text-[9px] sm:text-[10px] font-medium text-teal-600 truncate">
-                                            <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                            </svg>
-                                            <span class="truncate">+12% bulan ini</span>
-                                        </div>
-                                    </div>
-                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                <!-- Card 2: Belum Dimulai -->
-                                <div class="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xs border border-gray-100 flex justify-between items-center min-w-0">
-                                    <div class="flex flex-col justify-center min-w-0 flex-1 mr-2">
-                                        <p class="text-[9px] sm:text-[10px] font-normal uppercase tracking-wider text-gray-900 truncate">Belum Dimulai</p>
-                                        <p class="text-xl sm:text-2xl font-extrabold text-amber-600 mt-0.5 tracking-tight leading-none">3</p>
-                                        <div class="flex items-center gap-1 mt-1 text-[9px] sm:text-[10px] font-medium text-amber-600 truncate">
-                                            <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                                            </svg>
-                                            <span class="truncate">12.5% dari total</span>
-                                        </div>
-                                    </div>
-                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                <!-- Card 3: Sedang Berjalan -->
-                                <div class="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xs border border-gray-100 flex justify-between items-center min-w-0">
-                                    <div class="flex flex-col justify-center min-w-0 flex-1 mr-2">
-                                        <p class="text-[9px] sm:text-[10px] font-normal uppercase tracking-wider text-gray-900 truncate">Sedang Berjalan</p>
-                                        <p class="text-xl sm:text-2xl font-extrabold text-blue-600 mt-0.5 tracking-tight leading-none">16</p>
-                                        <div class="flex items-center gap-1 mt-1 text-[9px] sm:text-[10px] font-medium text-blue-600 truncate">
-                                            <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                                            </svg>
-                                            <span class="truncate">66.7% dari total</span>
-                                        </div>
-                                    </div>
-                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                <!-- Card 4: Selesai -->
-                                <div class="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xs border border-gray-100 flex justify-between items-center min-w-0">
-                                    <div class="flex flex-col justify-center min-w-0 flex-1 mr-2">
-                                        <p class="text-[9px] sm:text-[10px] font-normal uppercase tracking-wider text-gray-900 truncate">Proyek Selesai</p>
-                                        <p class="text-xl sm:text-2xl font-extrabold text-emerald-600 mt-0.5 tracking-tight leading-none">5</p>
-                                        <div class="flex items-center gap-1 mt-1 text-[9px] sm:text-[10px] font-medium text-emerald-600 truncate">
-                                            <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span class="truncate">20.8% dari total</span>
-                                        </div>
-                                    </div>
-                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                <!-- Card 5: Terlambat -->
-                                <div class="bg-white p-3 sm:p-3.5 rounded-2xl shadow-xs border border-gray-100 flex justify-between items-center min-w-0 col-span-2 lg:col-span-1">
-                                    <div class="flex flex-col justify-center min-w-0 flex-1 mr-2">
-                                        <p class="text-[9px] sm:text-[10px] font-normal uppercase tracking-wider text-gray-900 truncate">Terlambat</p>
-                                        <p class="text-xl sm:text-2xl font-extrabold text-rose-600 mt-0.5 tracking-tight leading-none">0</p>
-                                        <div class="flex items-center gap-1 mt-1 text-[9px] sm:text-[10px] font-medium text-emerald-600 truncate">
-                                            <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <span class="truncate">Tepat Waktu</span>
-                                        </div>
-                                    </div>
-                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 shrink-0">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <!-- 3. KOTAK DAFTAR PROYEK (Persis Komponen Daftar Proyek Direktur) -->
-                            <div class="bg-white rounded-2xl shadow-xs border border-gray-100 p-4 sm:p-5 flex flex-col gap-3.5">
-                                
-                                <!-- Header Kotak + Search & Filter Simulation -->
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2.5 border-b border-gray-100">
-                                    <div>
-                                        <h3 class="text-sm font-bold text-gray-900">Daftar Proyek</h3>
-                                        <p class="text-[10px] sm:text-[11px] text-gray-500">Monitoring progres dan pendelegasian proyek statistik</p>
-                                    </div>
-                                    
-                                    <!-- Controls Capsule Filter (Persis Filter Direktur) -->
-                                    <div class="flex items-center gap-2 overflow-x-auto text-[11px]">
-                                        <div class="flex items-center gap-2 px-3 py-1.5 bg-[#FAF9FE] border border-purple-200 rounded-full text-[#604EE6]">
-                                            <svg class="h-3.5 w-3.5 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                            </svg>
-                                            <span class="text-gray-400">Cari proyek...</span>
-                                        </div>
-                                        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white border border-purple-200 rounded-full text-[#604EE6] font-medium">
-                                            <span>Semua Tim</span>
-                                            <svg class="h-3 w-3 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                            </svg>
-                                        </div>
-                                        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white border border-purple-200 rounded-full text-[#604EE6] font-medium">
-                                            <span>Semua Status</span>
-                                            <svg class="h-3 w-3 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Grid Kartu Proyek Direktur (2 Card Preview Realistis) -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                                    
-                                    <!-- Card Proyek 1: Sedang Berjalan -->
-                                    <div class="bg-white border border-purple-100 hover:border-purple-300 rounded-2xl p-4 flex flex-col justify-between gap-3 shadow-2xs transition-all">
-                                        <div class="flex flex-col gap-2.5">
-                                            <!-- Tim & Status -->
-                                            <div class="flex items-center justify-between gap-2">
-                                                <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-purple-50 text-[#604EE6] border border-purple-100">
-                                                    Tim Integrasi Data & Pengolahan
-                                                </span>
-                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-blue-50 text-blue-700 border-blue-200/60">
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                                                    <span>Sedang Berjalan</span>
-                                                </span>
-                                            </div>
-
-                                            <!-- Judul -->
-                                            <h4 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
-                                                Pengembangan Modul Pengolahan Survei Sosial Ekonomi
-                                            </h4>
-
-                                            <!-- Meta Ketua & Tanggal -->
-                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-gray-600 gap-1.5">
-                                                <div class="flex items-center gap-1.5">
-                                                    <svg class="h-3.5 w-3.5 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                                    </svg>
-                                                    <span class="font-medium text-gray-800">Ir. Hendra Prasetyo</span>
-                                                </div>
-                                                <div class="flex items-center gap-1 text-gray-400">
-                                                    <svg class="h-3.5 w-3.5 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                                    </svg>
-                                                    <span>15 Jan - 30 Sep 26</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Progress Bar -->
-                                            <div class="flex flex-col gap-1 pt-1">
-                                                <div class="flex items-center justify-between text-[11px]">
-                                                    <span class="text-gray-500 font-normal">Progress Proyek</span>
-                                                    <span class="font-bold text-[#604EE6]">85%</span>
-                                                </div>
-                                                <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
-                                                    <div class="bg-[#604EE6] h-full rounded-full transition-all duration-300" style="width: 85%;"></div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Anggota Terlibat & Tombol Aktivitas -->
-                                            <div class="flex items-center justify-between pt-1">
-                                                <div class="flex items-center gap-1.5">
-                                                    <span class="text-[10px] text-gray-400">Anggota:</span>
-                                                    <div class="flex items-center -space-x-1.5">
-                                                        <span class="w-6 h-6 rounded-full bg-purple-100 border border-white text-[#604EE6] text-[9px] font-bold flex items-center justify-center shadow-2xs">HP</span>
-                                                        <span class="w-6 h-6 rounded-full bg-blue-100 border border-white text-blue-600 text-[9px] font-bold flex items-center justify-center shadow-2xs">DA</span>
-                                                        <span class="w-6 h-6 rounded-full bg-emerald-100 border border-white text-emerald-600 text-[9px] font-bold flex items-center justify-center shadow-2xs">RT</span>
-                                                        <span class="w-6 h-6 rounded-full bg-purple-200 border border-white text-[#604EE6] text-[8px] font-extrabold flex items-center justify-center shadow-2xs">+4</span>
-                                                    </div>
-                                                </div>
-                                                <span class="text-[10px] font-bold text-[#604EE6] bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100/80">
-                                                    8 Aktivitas
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card Proyek 2: Selesai -->
-                                    <div class="bg-white border border-purple-100 hover:border-purple-300 rounded-2xl p-4 flex flex-col justify-between gap-3 shadow-2xs transition-all">
-                                        <div class="flex flex-col gap-2.5">
-                                            <!-- Tim & Status -->
-                                            <div class="flex items-center justify-between gap-2">
-                                                <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-purple-50 text-[#604EE6] border border-purple-100">
-                                                    Tim Diseminasi & Layanan Data
-                                                </span>
-                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200/60">
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                                    <span>Selesai</span>
-                                                </span>
-                                            </div>
-
-                                            <!-- Judul -->
-                                            <h4 class="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
-                                                Modernisasi Portal Diseminasi Data Sensus BPS
-                                            </h4>
-
-                                            <!-- Meta Ketua & Tanggal -->
-                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-gray-600 gap-1.5">
-                                                <div class="flex items-center gap-1.5">
-                                                    <svg class="h-3.5 w-3.5 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                                    </svg>
-                                                    <span class="font-medium text-gray-800">Siti Nurhaliza, S.ST.</span>
-                                                </div>
-                                                <div class="flex items-center gap-1 text-gray-400">
-                                                    <svg class="h-3.5 w-3.5 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                                    </svg>
-                                                    <span>01 Feb - 31 Agu 26</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Progress Bar -->
-                                            <div class="flex flex-col gap-1 pt-1">
-                                                <div class="flex items-center justify-between text-[11px]">
-                                                    <span class="text-gray-500 font-normal">Progress Proyek</span>
-                                                    <span class="font-bold text-emerald-600">100%</span>
-                                                </div>
-                                                <div class="w-full bg-emerald-100/60 rounded-full h-1.5 overflow-hidden">
-                                                    <div class="bg-emerald-500 h-full rounded-full transition-all" style="width: 100%;"></div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Anggota Terlibat & Tombol Aktivitas -->
-                                            <div class="flex items-center justify-between pt-1">
-                                                <div class="flex items-center gap-1.5">
-                                                    <span class="text-[10px] text-gray-400">Anggota:</span>
-                                                    <div class="flex items-center -space-x-1.5">
-                                                        <span class="w-6 h-6 rounded-full bg-purple-100 border border-white text-[#604EE6] text-[9px] font-bold flex items-center justify-center shadow-2xs">SN</span>
-                                                        <span class="w-6 h-6 rounded-full bg-amber-100 border border-white text-amber-600 text-[9px] font-bold flex items-center justify-center shadow-2xs">BW</span>
-                                                        <span class="w-6 h-6 rounded-full bg-blue-100 border border-white text-blue-600 text-[9px] font-bold flex items-center justify-center shadow-2xs">FA</span>
-                                                        <span class="w-6 h-6 rounded-full bg-purple-200 border border-white text-[#604EE6] text-[8px] font-extrabold flex items-center justify-center shadow-2xs">+2</span>
-                                                    </div>
-                                                </div>
-                                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100/80">
-                                                    6 Aktivitas
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
@@ -705,7 +392,7 @@
                         Nilai yang Dibawa PROXIS
                     </h2>
                     <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
-                        Prinsip kerja yang memandu jalannya setiap proyek dari tahap awal hingga evaluasi capaian:
+                        Prinsip kerja yang memandu jalannya setiap proyek dari tahap awal hingga evaluasi capaian.
                     </p>
                 </div>
 
@@ -722,7 +409,7 @@
                                 <h3 class="text-base font-extrabold text-slate-800 mb-1 lg:mb-2">
                                     Plan
                                 </h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
                                     Mendorong setiap proyek dimulai dengan perencanaan yang jelas, terstruktur, dan terukur.
                                 </p>
                             </div>
@@ -742,7 +429,7 @@
                                 <h3 class="text-base font-extrabold text-slate-800 mb-1 lg:mb-2">
                                     Run
                                 </h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
                                     Mengawal pelaksanaan proyek agar berjalan sesuai rencana, target, jadwal, dan sumber daya yang tersedia.
                                 </p>
                             </div>
@@ -762,7 +449,7 @@
                                 <h3 class="text-base font-extrabold text-slate-800 mb-1 lg:mb-2">
                                     Observe
                                 </h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
                                     Memastikan perkembangan proyek dapat dipantau secara berkala melalui informasi yang aktual dan terintegrasi.
                                 </p>
                             </div>
@@ -782,7 +469,7 @@
                                 <h3 class="text-base font-extrabold text-slate-800 mb-1 lg:mb-2">
                                     eXchange
                                 </h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
                                     Menjadi titik penghubung pertukaran informasi, koordinasi, dan kolaborasi antar pihak yang terlibat dalam proyek.
                                 </p>
                             </div>
@@ -802,7 +489,7 @@
                                 <h3 class="text-base font-extrabold text-slate-800 mb-1 lg:mb-2">
                                     Information System
                                 </h3>
-                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
                                     Menghadirkan sistem informasi yang andal, transparan, dan terintegrasi untuk mendukung seluruh aktivitas pengelolaan proyek.
                                 </p>
                             </div>
@@ -1025,10 +712,10 @@
                         <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-10 w-auto object-contain">
                         <div>
                             <span class="text-2xl font-black text-[#604EE6] tracking-tight">PROXIS</span>
-                            <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">Direktorat Sistem Informasi Statistik</div>
+                            <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Direktorat Sistem Informasi Statistik</div>
                         </div>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg text-justify">
+                    <p class="text-xs text-slate-600 leading-relaxed max-w-lg text-justify">
                         Sistem pengelolaan dan pemantauan proyek statistik terpadu di lingkungan Direktorat Sistem Informasi Statistik, Badan Pusat Statistik Republik Indonesia.
                     </p>
                     <div class="text-xs text-slate-600 space-y-2.5">
@@ -1040,19 +727,16 @@
                             <a href="https://www.google.com/maps/search/?api=1&query=Badan+Pusat+Statistik+RI,+Jl.+Dr.+Sutomo+No.+6-8,+Jakarta+Pusat" 
                                target="_blank" 
                                rel="noopener noreferrer" 
-                               class="hover:text-[#604EE6] hover:underline transition-colors inline-flex items-center gap-1.5 group"
+                               class="hover:text-[#604EE6] hover:underline transition-colors"
                                title="Buka lokasi Kantor Pusat BPS RI di Google Maps">
-                                <span>Gedung 1 Lantai 3, Jl. Dr. Sutomo No. 6-8, Pasar Baru, Jakarta Pusat 10710</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:text-[#604EE6] shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
+                                Gedung 1 Lantai 3, Jl. Dr. Sutomo No. 6-8, Pasar Baru, Jakarta Pusat 10710
                             </a>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-[#604EE6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
-                            <a href="mailto:sis@bps.go.id" class="hover:text-[#604EE6] hover:underline transition-colors" title="Kirim email ke Helpdesk SIS">
+                            <a href="mailto:sis@bps.go.id" class="text-[13px] hover:text-[#604EE6] hover:underline transition-colors tracking-wide" title="Kirim email ke Helpdesk SIS">
                                 sis@bps.go.id
                             </a>
                         </div>
@@ -1084,9 +768,8 @@
                     <ul class="space-y-2.5 text-xs text-slate-600">
                         <li><a href="{{ route('login') }}" class="hover:text-[#604EE6] transition-colors">Masuk ke Sistem</a></li>
                         <li><a href="{{ route('register') }}" class="hover:text-[#604EE6] transition-colors">Pendaftaran Akun Pegawai</a></li>
-                        <li><a href="https://www.bps.go.id" target="_blank" rel="noopener noreferrer" class="hover:text-[#604EE6] transition-colors flex items-center gap-1.5">
-                            <span>Portal Resmi BPS RI</span>
-                            <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        <li><a href="https://www.bps.go.id" target="_blank" rel="noopener noreferrer" class="hover:text-[#604EE6] transition-colors">
+                            Portal Resmi BPS RI
                         </a></li>
                     </ul>
                 </div>

@@ -74,21 +74,21 @@
         
         {{-- Baris 1: Judul Proyek (Tinggi seragam 2 baris agar seluruh elemen di bawahnya lurus sejajar) --}}
         <div class="min-h-[2.625rem] flex items-start">
-            <h3 class="text-sm font-bold text-[#6E5BC3] leading-snug tracking-tight line-clamp-2" title="{{ $proyek->nama_proyek }}">
+            <h3 class="text-sm font-normal text-[#6E5BC3] leading-snug tracking-tight line-clamp-2" title="{{ $proyek->nama_proyek }}">
                 {{ $proyek->nama_proyek }}
             </h3>
         </div>
 
         {{-- Baris 2: Nama Manager & Status Proyek --}}
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2 text-xs text-gray-700 font-medium">
+            <div class="flex items-center gap-2 text-xs text-gray-700 font-normal">
                 <div class="w-7 h-7 rounded-xl bg-purple-50 flex items-center justify-center text-[#6E5BC3] shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
                 @if($proyek->ketuaProyek)
-                    <span class="text-xs text-gray-800 font-medium">{{ $proyek->ketuaProyek->nama }}</span>
+                    <span class="text-xs text-gray-800 font-normal">{{ $proyek->ketuaProyek->nama }}</span>
                 @else
                     <span class="inline-flex items-center gap-1.5 text-amber-600 font-normal text-xs">
                         <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
@@ -97,13 +97,13 @@
                 @endif
             </div>
             
-            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase border tracking-wide {{ $statusProjBadge }}">
+            <span class="px-3 py-1 rounded-full text-[9px] font-normal uppercase border tracking-wide {{ $statusProjBadge }}">
                 {{ $statusProjLabel }}
             </span>
         </div>
 
         {{-- Baris 3: Tanggal Mulai & Selesai Proyek --}}
-        <div class="flex items-center gap-2 text-xs text-gray-600 font-medium px-0.5">
+        <div class="flex items-center gap-2 text-xs text-gray-600 font-light px-0.5">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
@@ -120,7 +120,7 @@
         {{-- Baris 4: Progress Proyek Keseluruhan --}}
         <div class="flex flex-col gap-1.5 pt-1">
             <div class="flex items-center justify-between text-xs">
-                <span class="text-gray-500 font-medium">Progress Proyek</span>
+                <span class="text-gray-500 font-light">Progress Proyek</span>
                 <span class="font-normal text-gray-700">{{ $progressProyek }}%</span>
             </div>
             <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
@@ -137,19 +137,19 @@
                         $namaPerson = $orang->nama ?? 'Pengguna';
                         $inisial = strtoupper(substr($namaPerson, 0, 2));
                     @endphp
-                    <span class="w-7 h-7 rounded-full bg-purple-100 border-2 border-white text-[#6E5BC3] text-[10px] font-bold flex items-center justify-center shadow-2xs hover:scale-110 hover:z-20 transition-all cursor-pointer" 
+                    <span class="w-7 h-7 rounded-full bg-purple-100 border-2 border-white text-[#6E5BC3] text-[10px] font-normal flex items-center justify-center shadow-2xs hover:scale-110 hover:z-20 transition-all cursor-pointer" 
                           title="{{ $namaPerson }}">
                         {{ $inisial }}
                     </span>
                 @empty
-                    <span class="w-7 h-7 rounded-full bg-purple-100 border-2 border-white text-[#6E5BC3] text-[10px] font-bold flex items-center justify-center shadow-2xs" 
+                    <span class="w-7 h-7 rounded-full bg-purple-100 border-2 border-white text-[#6E5BC3] text-[10px] font-normal flex items-center justify-center shadow-2xs" 
                           title="{{ $ketuaNama }}">
                         {{ strtoupper(substr($ketuaNama, 0, 2)) }}
                     </span>
                 @endforelse
 
                 @if($sisaOrang > 0)
-                    <span class="w-7 h-7 rounded-full bg-purple-200 border-2 border-white text-[#6E5BC3] text-[9px] font-extrabold flex items-center justify-center shadow-2xs hover:scale-110 hover:z-20 transition-all cursor-pointer" 
+                    <span class="w-7 h-7 rounded-full bg-purple-200 border-2 border-white text-[#6E5BC3] text-[9px] font-normal flex items-center justify-center shadow-2xs hover:scale-110 hover:z-20 transition-all cursor-pointer" 
                           title="Dan {{ $sisaOrang }} orang lainnya terlibat">
                         +{{ $sisaOrang }}
                     </span>
@@ -169,7 +169,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l9.75 5.25 9.75-5.25-4.179-2.25m-11.142 0L12 12.75l4.179-2.25m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m-11.142 0L12 7.5l4.179 2.25" />
                 </svg>
-                <span class="text-xs font-bold text-[#4C3B9B]">
+                <span class="text-xs font-normal text-[#4C3B9B]">
                     Lihat {{ $totalAkt }} Aktivitas
                 </span>
             </div>
@@ -242,17 +242,17 @@
                     
                     {{-- Baris 1: Kategori 'Aktivitas' di Kiri & Status Badge di Kanan --}}
                     <div class="flex items-center justify-between gap-2">
-                        <span class="px-2.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-purple-100/70 text-[#6E5BC3] group-hover:bg-[#6E5BC3] group-hover:text-white transition-colors">
+                        <span class="px-2.5 py-0.5 rounded-md text-[9px] font-normal uppercase tracking-wider bg-purple-100/70 text-[#6E5BC3] group-hover:bg-[#6E5BC3] group-hover:text-white transition-colors">
                             Aktivitas
                         </span>
-                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase border tracking-wide shrink-0 {{ $badgeClass }}">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-normal uppercase border tracking-wide shrink-0 {{ $badgeClass }}">
                             {{ $statusLabel }}
                         </span>
                     </div>
 
                     {{-- Baris 2: Judul Aktivitas --}}
                     <div>
-                        <h4 class="text-xs font-bold text-gray-900 group-hover:text-[#6E5BC3] transition-colors leading-snug wrap-break-word">
+                        <h4 class="text-xs font-normal text-gray-800 group-hover:text-[#6E5BC3] transition-colors leading-snug wrap-break-word">
                             {{ $akt->nama_aktivitas }}
                         </h4>
                     </div>
@@ -266,7 +266,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         @if(!empty($pjNamaTim) && $pjNamaTim !== '-' && $pjNamaTim !== 'Belum Ditunjuk')
-                            <span class="font-medium truncate">{{ $pjNamaTim }}</span>
+                            <span class="font-normal truncate">{{ $pjNamaTim }}</span>
                         @else
                             <span class="inline-flex items-center gap-1.5 text-amber-600 font-normal text-[11px]">
                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
@@ -278,7 +278,7 @@
                     {{-- Baris 4: Progress Bar Memanjang Penuh --}}
                     <div class="flex flex-col gap-1.5 pt-0.5">
                         <div class="flex items-center justify-between text-[11px]">
-                            <span class="text-gray-500 font-medium">Progress Aktivitas</span>
+                            <span class="text-gray-500 font-light">Progress Aktivitas</span>
                             <span class="font-normal text-gray-700">{{ $progressValue }}%</span>
                         </div>
                         <div class="w-full bg-purple-50 border border-purple-100 rounded-full h-2 overflow-hidden shadow-2xs">
@@ -288,7 +288,7 @@
 
                     {{-- Baris 5: Tanggal di Kiri & Tombol Lihat Detail di Kanan --}}
                     <div class="flex items-center justify-between pt-2.5 border-t border-purple-100/60 mt-0.5">
-                        <div class="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
+                        <div class="flex items-center gap-1.5 text-[11px] text-gray-500 font-light">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
@@ -302,9 +302,9 @@
                             @endif
                         </div>
 
-                        <div class="flex items-center gap-1 text-[#6E5BC3] font-bold text-[11px] group-hover:underline whitespace-nowrap">
+                        <div class="flex items-center gap-1 text-[#6E5BC3] font-normal text-[11px] group-hover:underline whitespace-nowrap">
                             <span>Lihat Detail</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                             </svg>
                         </div>
