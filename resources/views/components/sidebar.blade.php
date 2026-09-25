@@ -10,10 +10,10 @@
                     </svg>
                 </button>
 
-                <div class="flex items-center gap-3 flex-1">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 flex-1 group hover:opacity-80 transition-opacity" title="Kembali ke Landing Page (Beranda)">
                     <img src="{{ asset('images/logo_bps.png') }}" alt="Logo BPS" class="h-7.5 w-auto object-contain bg-transparent">
                     <h1 class="text-2xl font-black text-[#6E5BC3] leading-none uppercase tracking-tight">PROXIS</h1>
-                </div>
+                </a>
             </div>
         </div>
 
