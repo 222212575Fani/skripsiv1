@@ -7,7 +7,6 @@
 
     <div class="flex items-center justify-center px-4 sm:px-6 md:px-8 py-4 sm:py-6">
         <div class="w-full max-w-[420px]">
-            <div class="text-[#604EE6] text-[28px] font-bold leading-none mb-1.5">*</div>
             <h1 class="text-2xl sm:text-[28px] font-extrabold text-[#121212] leading-tight">
                 Daftar Akun Baru
             </h1>
