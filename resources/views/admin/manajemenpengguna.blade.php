@@ -50,7 +50,7 @@
         {{-- BARIS 1: JUDUL HALAMAN & SUBTITLE --}}
         <div class="px-1">
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">Daftar Pengguna</h1>
-            <p class="text-xs sm:text-sm text-gray-500 mt-1">Kelola data seluruh pengguna sistem, hak akses, dan status akun.</p>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1">Kelola data seluruh pengguna sistem, hak akses, dan status akun</p>
         </div>
 
         {{-- KONTROL DESKTOP (Hanya Tampil di Layar >= xl): Underline Tabs & Kotak Cari + Tombol Tambah --}}

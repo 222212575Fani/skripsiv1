@@ -2,12 +2,12 @@
 
     {{-- SLOT HEADER ACTION: TOMBOL KEMBALI BERSIH & SEJAJAR --}}
     <x-slot name="headerAction">
-        <a href="{{ route('anggota.proyekaktivitas') }}" 
+        <a href="{{ $isKetuaProyek ? route('anggota.daftarproyek') : route('anggota.aktivitassaya') }}" 
            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-light backdrop-blur-sm transition-all border border-white/15 shadow-xs">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span>Kembali ke Daftar Proyek</span>
+            <span>Kembali ke {{ $isKetuaProyek ? 'Daftar Proyek' : 'Daftar Aktivitas' }}</span>
         </a>
     </x-slot>
 
@@ -18,7 +18,7 @@
                 {{ $proyek->nama_proyek }}
             </h1>
             <p class="text-xs sm:text-sm text-purple-100/90 font-light">
-                Kelola seluruh penugasan, jadwal, dan progres aktivitas proyek.
+                Kelola seluruh penugasan, jadwal, dan progres aktivitas proyek
             </p>
         </div>
     </x-slot>

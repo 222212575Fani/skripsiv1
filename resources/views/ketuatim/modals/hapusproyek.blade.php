@@ -32,7 +32,7 @@
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-gray-900 tracking-tight">Hapus Proyek</h3>
-                        <p class="text-xs font-medium text-gray-400">Tindakan ini tidak dapat dibatalkan.</p>
+                        <p class="text-xs font-medium text-gray-400">Tindakan ini tidak dapat dibatalkan</p>
                     </div>
                 </div>
                 <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all">

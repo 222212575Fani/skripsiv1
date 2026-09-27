@@ -67,7 +67,7 @@
                     </div>
                     <div class="min-w-0">
                         <h3 class="text-sm sm:text-base font-bold text-gray-900 tracking-tight truncate">Edit Proyek</h3>
-                        <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Perbarui informasi, penanggung jawab, dan tenggat waktu proyek.</p>
+                        <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Perbarui informasi, penanggung jawab, dan tenggat waktu proyek</p>
                     </div>
                 </div>
                 <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer shrink-0">

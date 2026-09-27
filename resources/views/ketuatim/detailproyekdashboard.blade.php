@@ -18,7 +18,7 @@
                 {{ $proyek->nama_proyek }}
             </h1>
             <p class="text-xs sm:text-sm text-purple-100/90 font-light">
-                Kelola seluruh penugasan, jadwal, dan progres aktivitas proyek.
+                Kelola seluruh penugasan, jadwal, dan progres aktivitas proyek
             </p>
         </div>
     </x-slot>
@@ -421,7 +421,7 @@
                             </div>
                             <div>
                                 <h3 class="text-base font-bold text-gray-900 tracking-tight">Tambah Aktivitas Baru</h3>
-                                <p class="text-xs font-medium text-gray-400">Buat aktivitas baru dan tambahkan ke dalam proyek ini.</p>
+                                <p class="text-xs font-medium text-gray-400">Buat aktivitas baru dan tambahkan ke dalam proyek ini</p>
                             </div>
                         </div>
                         <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer">
@@ -542,7 +542,7 @@
                             </div>
                             <div>
                                 <h3 class="text-base font-bold text-gray-900 tracking-tight">Hapus Aktivitas</h3>
-                                <p class="text-xs font-medium text-gray-400">Tindakan ini tidak dapat dibatalkan.</p>
+                                <p class="text-xs font-medium text-gray-400">Tindakan ini tidak dapat dibatalkan</p>
                             </div>
                         </div>
                         <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 rounded-full cursor-pointer">
@@ -609,7 +609,7 @@
                             </div>
                             <div>
                                 <h3 class="text-base font-bold text-gray-900 tracking-tight">Edit Data Aktivitas</h3>
-                                <p class="text-xs font-medium text-gray-400">Ubah informasi nama, deskripsi, penanggung jawab, serta rentang tanggal aktivitas.</p>
+                                <p class="text-xs font-medium text-gray-400">Ubah informasi nama, deskripsi, penanggung jawab, serta rentang tanggal aktivitas</p>
                             </div>
                         </div>
                         <button type="button" @click="open = false" class="p-2 text-gray-300 hover:text-gray-500 rounded-full cursor-pointer">
@@ -847,7 +847,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
-                                        <p class="text-xs text-gray-500">Belum ada riwayat pelaporan progress untuk aktivitas ini.</p>
+                                        <p class="text-xs text-gray-500 font-light">Belum ada riwayat pelaporan progress untuk aktivitas ini.</p>
                                     </div>
                                 </template>
                             </div>
@@ -868,7 +868,7 @@
                                     </ul>
                                 </template>
                                 <template x-if="kendalaInternal.length === 0">
-                                    <p class="text-[11px] text-gray-500">Tidak ada kendala internal.</p>
+                                    <p class="text-[11px] text-gray-500 font-light">Tidak ada kendala internal.</p>
                                 </template>
                             </div>
 
@@ -885,7 +885,7 @@
                                     </ul>
                                 </template>
                                 <template x-if="kendalaEksternal.length === 0">
-                                    <p class="text-[11px] text-gray-500">Tidak ada kendala eksternal.</p>
+                                    <p class="text-[11px] text-gray-500 font-light">Tidak ada kendala eksternal.</p>
                                 </template>
                             </div>
                         </div>
@@ -899,7 +899,7 @@
                                         <template x-for="doc in dokumen">
                                             <a :href="doc.url || '#'" target="_blank" class="flex items-center justify-between p-2.5 bg-white hover:bg-purple-50/40 border border-gray-200 hover:border-purple-200 rounded-xl transition-all text-xs group/doc">
                                                 <div class="flex items-center gap-2.5 truncate">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                                                     <span class="font-medium text-gray-700 group-hover/doc:text-[#6E5BC3] truncate" x-text="doc.nama"></span>
                                                 </div>
                                                 <span class="text-[10px] font-bold text-[#6E5BC3] bg-purple-50 px-2.5 py-1 rounded-lg shrink-0">Lihat</span>
@@ -914,7 +914,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                             </svg>
                                         </div>
-                                        <p class="text-xs text-gray-500">Belum ada dokumen pendukung yang dilampirkan.</p>
+                                        <p class="text-xs text-gray-500 font-light">Belum ada dokumen pendukung yang dilampirkan.</p>
                                     </div>
                                 </template>
                             </div>

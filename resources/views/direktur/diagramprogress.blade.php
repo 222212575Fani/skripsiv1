@@ -70,7 +70,7 @@
                 <span class="text-base sm:text-lg font-bold mt-1.5 sm:mt-2 truncate" x-text="topTimText"></span>
             </template>
             <template x-if="!hasValidData">
-                <span class="text-sm font-semibold mt-1.5 sm:mt-2">Tidak ada data untuk periode ini</span>
+                <span class="text-sm font-light mt-1.5 sm:mt-2">Tidak ada data untuk periode ini</span>
             </template>
 
             <span class="text-[10px] sm:text-[11px] text-purple-100 mt-0.5 sm:mt-1">Performa tertinggi dari database saat ini</span>
@@ -87,8 +87,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
-            <h4 class="text-xs font-bold text-gray-700">Belum Ada Data Grafik yang Ditampilkan</h4>
-            <p class="text-[11px] text-gray-400 mt-0.5">Belum ada catatan progress atau data statistik tim untuk periode yang dipilih.</p>
+            <h4 class="text-xs font-light text-gray-700">Belum Ada Data Grafik yang Ditampilkan</h4>
+            <p class="text-[11px] text-gray-400 mt-0.5 font-light">Belum ada catatan progress atau data statistik tim untuk periode yang dipilih.</p>
         </div>
     </div>
 </div>

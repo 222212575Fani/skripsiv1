@@ -312,7 +312,7 @@
                 </div>
             @empty
                 <div class="py-6 px-4 text-center bg-gray-50/50 rounded-2xl border border-dashed border-purple-200 flex flex-col items-center justify-center gap-2">
-                    <p class="text-xs text-gray-500 font-normal">
+                    <p class="text-xs text-gray-500 font-light">
                         Proyek ini belum memiliki daftar aktivitas yang terdaftar.
                     </p>
                 </div>

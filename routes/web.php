@@ -17,7 +17,7 @@ Route::get('/portal', function () {
     return view('welcome');
 })->name('portal');
 
-// Auth - Register & Login (Dapat diakses langsung tanpa di-redirect oleh middleware guest)
+// Auth - Register & Login
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -53,13 +53,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [KetuaTimController::class, 'dashboard'])->name('dashboard');
         Route::get('/manajemenproyek', [KetuaTimController::class, 'manajemenProyek'])->name('manajemenproyek');
         Route::post('/manajemenproyek/store', [KetuaTimController::class, 'storeProyek'])->name('manajemenproyek.store');
-        Route::delete('/manajemenproyek/{id}', [KetuaTimController::class, 'destroyProyek'])->name('manajemenproyek.destroy');
+        Route::delete('/manajemenproyek/{id}', [KetuaTimController::class, 'destroy'])->name('manajemenproyek.destroy');
         Route::put('/proyek/{id}', [KetuaTimController::class, 'updateProyek'])->name('proyek.update');
     });
 
     // Anggota
     Route::prefix('anggota')->name('anggota.')->group(function () {
         Route::get('/proyekaktivitas', [AnggotaProyekController::class, 'index'])->name('proyekaktivitas');
+        
+        // PERUBAHAN DI SINI: Arahkan ke method daftarProyek
+        Route::get('/daftarproyek', [AnggotaProyekController::class, 'daftarProyek'])->name('daftarproyek');
+        
         Route::get('/proyekaktivitas/{id}/aktivitas', [AnggotaProyekController::class, 'showAktivitas'])->name('proyek.aktivitas');
         Route::post('/proyekaktivitas/{id}/aktivitas', [AnggotaProyekController::class, 'storeAktivitas'])->name('aktivitas.store');
         Route::put('/aktivitas/{id}', [AnggotaProyekController::class, 'updateAktivitas'])->name('aktivitas.update');

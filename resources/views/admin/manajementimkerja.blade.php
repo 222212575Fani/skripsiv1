@@ -54,7 +54,7 @@
         {{-- BARIS 1: JUDUL HALAMAN & SUBTITLE --}}
         <div class="px-1">
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">Daftar Tim Kerja</h1>
-            <p class="text-xs sm:text-sm text-gray-500 mt-1">Kelola data seluruh tim kerja, penanggung jawab, dan status tim.</p>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1">Kelola data seluruh tim kerja, penanggung jawab, dan status tim</p>
         </div>
 
         {{-- KONTROL DESKTOP (Hanya Tampil di Layar >= xl): Underline Tabs & Kotak Cari + Tombol Tambah --}}

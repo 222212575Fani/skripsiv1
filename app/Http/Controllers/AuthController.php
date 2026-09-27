@@ -66,7 +66,7 @@ class AuthController extends Controller
             'disetujui_oleh' => null,
         ]);
 
-        // Kirim Notifikasi ke Admin menggunakan GeneralNotification (2 parameter: title & message)
+        // Kirim Notifikasi ke Admin menggunakan GeneralNotification
         $admins = Pengguna::whereHas('role', function($query) {
             $query->where('nama_role', 'Admin');
         })->get();
@@ -192,6 +192,7 @@ class AuthController extends Controller
         }
 
         if ($role === 'Anggota') {
+            // Semua pengguna ber-role Anggota PASTI akan diarahkan ke Dashboard
             return redirect()->route('anggota.proyekaktivitas');
         }
 

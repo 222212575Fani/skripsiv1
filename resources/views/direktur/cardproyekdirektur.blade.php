@@ -311,7 +311,7 @@
                 </div>
             @empty
                 <div class="col-span-full p-5 text-center bg-gray-50/50 rounded-2xl border border-dashed border-purple-200">
-                    <p class="text-xs text-gray-500 font-normal">Belum ada aktivitas yang terdaftar dalam proyek ini.</p>
+                    <p class="text-xs text-gray-500 font-light">Belum ada aktivitas yang terdaftar dalam proyek ini.</p>
                 </div>
             @endforelse
         </div>

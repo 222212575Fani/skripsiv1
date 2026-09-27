@@ -126,8 +126,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <h4 class="text-xs font-bold text-gray-700">Belum Ada Catatan Beban Kerja Personil</h4>
-            <p class="text-[11px] text-gray-400 mt-0.5">Tidak ditemukan data penugasan proyek untuk tim dan periode yang dipilih.</p>
+            <h4 class="text-xs font-light text-gray-700">Belum Ada Catatan Beban Kerja Personil</h4>
+            <p class="text-[11px] text-gray-400 mt-0.5 font-light">Tidak ditemukan data penugasan proyek untuk tim dan periode yang dipilih.</p>
         </div>
     </div>
 </div>

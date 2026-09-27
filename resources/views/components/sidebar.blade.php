@@ -24,13 +24,17 @@
                 $role = $user->role->nama_role ?? '';
                 $userId = $user->id_pengguna ?? $user->id;
 
-                $isKetuaProyek = \App\Models\AnggotaProyek::where('id_pengguna', $userId)
-                    ->where('id_peran_proyek', 1)
-                    ->exists();
+                // CEK PERAN KETUA: Dicari dari tabel proyek DAN anggota_proyek
+                $isKetuaProyek = \App\Models\Proyek::where('id_ketua_proyek', $userId)->exists() 
+                              || \App\Models\AnggotaProyek::where('id_pengguna', $userId)
+                                    ->where('id_peran_proyek', 1)
+                                    ->exists();
 
+                // CEK PERAN ANGGOTA: Dicari dari tabel anggota_proyek ATAU penanggung jawab aktivitas
                 $isAnggotaProyek = \App\Models\AnggotaProyek::where('id_pengguna', $userId)
-                    ->where('id_peran_proyek', 2)
-                    ->exists() || \App\Models\AktivitasProyek::where('id_penanggung_jawab', $userId)->exists();
+                                    ->where('id_peran_proyek', 2)
+                                    ->exists() 
+                                || \App\Models\AktivitasProyek::where('id_penanggung_jawab', $userId)->exists();
 
                 $menus = [];
 
@@ -48,43 +52,51 @@
                         ['route' => 'ketuatim.dashboard', 'label' => 'Dashboard', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
                         ['route' => 'ketuatim.manajemenproyek', 'label' => 'Manajemen Proyek', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'],
                     ];
-                } else {
+                } elseif ($role === 'Anggota') {
+                    
+                    // 1. Menu Dashboard SELALU tampil untuk semua Anggota
+                    $menus[] = [
+                        'route' => 'anggota.proyekaktivitas', 
+                        'label' => 'Dashboard', 
+                        'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+                    ];
+
+                    // 2. Daftar Proyek HANYA tampil jika menjabat sebagai KETUA Proyek
                     if ($isKetuaProyek) {
                         $menus[] = [
-                            'route' => 'anggota.proyekaktivitas', 
-                            'label' => 'Proyek', 
+                            'route' => 'anggota.daftarproyek', 
+                            'label' => 'Daftar Proyek', 
                             'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
                         ];
                     }
                     
+                    // 3. Daftar Aktivitas HANYA tampil jika menjabat sebagai ANGGOTA Proyek
+                    // (atau jika dia sama sekali belum di-assign kemana-mana sebagai fallback)
                     if ($isAnggotaProyek || (!$isKetuaProyek && !$isAnggotaProyek)) {
                         $menus[] = [
                             'route' => 'anggota.aktivitassaya', 
-                            'label' => 'Aktivitas', 
+                            'label' => 'Daftar Aktivitas', 
                             'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'
                         ];
                     }
                 }
-
-                $isSingleMenu = count($menus) === 1;
             @endphp
 
             @forelse($menus as $menu)
                 @php 
-                    $isActive = $isSingleMenu || request()->routeIs($menu['route']) || request()->is('*' . $menu['route'] . '*'); 
+                    $isActive = request()->routeIs($menu['route']) 
+                        || ($menu['route'] === 'anggota.daftarproyek' && request()->routeIs('anggota.proyek.aktivitas')); 
                 @endphp
                 
                 <a href="{{ route($menu['route']) }}" 
                     wire:navigate.hover
                     class="group relative flex items-center justify-between px-6 py-2.5 text-xs sm:text-[13px] transition-all duration-200 {{ $isActive ? 'bg-[#F2EDFD] text-[#6E5BC3] font-bold' : 'text-gray-600 hover:text-[#6E5BC3] hover:bg-[#F8F6FF] font-medium' }}">
                     
-                    {{-- Garis Indikator Aktif Kotak Lurus di Sisi Kiri Tanpa Terpotong --}}
                     @if($isActive)
                         <span class="absolute left-0 inset-y-0 w-1 bg-[#6E5BC3]"></span>
                     @endif
 
                     <div class="flex items-center gap-3 min-w-0">
-                        {{-- Icon Badge Kotak Melengkung Sesuai Referensi --}}
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 {{ $isActive ? 'bg-[#6E5BC3] text-white shadow-xs' : 'bg-gray-100/80 text-gray-400 group-hover:bg-purple-100 group-hover:text-[#6E5BC3]' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="{{ $menu['icon'] }}" />
