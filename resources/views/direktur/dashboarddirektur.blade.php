@@ -2,9 +2,17 @@
     <div class="flex flex-col gap-4 sm:gap-6">
 
         {{-- 1. HEADER CONTAINER UNGU ESTETIK --}}
-        <div class="bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-2xl sm:rounded-[28px] shadow-sm p-4 sm:p-6 text-white">
-            <h2 class="text-sm sm:text-base font-bold">Halo, {{ $sapaanWaktu }}, {{ auth()->user()->nama ?? 'Direktur' }}! 👋</h2>
-            <p class="text-xs text-purple-100 mt-1">Selamat Datang di Dashboard Monitoring Direktorat Sistem Informasi Statistik</p>
+        <div class="bg-[#6E5BC3] rounded-2xl sm:rounded-[28px] shadow-sm p-4 sm:p-6 text-white flex items-center justify-between">
+            <h2 class="text-sm sm:text-base font-light">
+                Halo, {{ $sapaanWaktu ?? 'Selamat Datang' }}, {{ auth()->user()->nama ?? 'Direktur' }}!
+            </h2>
+            
+            <div class="flex items-center gap-2 text-xs font-light text-purple-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</span>
+            </div>
         </div>
 
         {{-- 2. CARD STATISTIK PROYEK DALAM DIREKTORAT SIS (GLOBAL) --}}

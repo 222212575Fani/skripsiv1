@@ -30,13 +30,17 @@
         x-init="$watch('search', () => updateVisibility()); $watch('status', () => updateVisibility()); updateVisibility();">
         
         {{-- SECTION 1: KARTU MEMANJANG UTAMA --}}
-        <div class="bg-linear-to-r from-[#6E5BC3] to-[#8470E5] rounded-2xl sm:rounded-[28px] shadow-sm p-4 sm:p-6 text-white flex flex-col justify-between items-start gap-2">
-            <h1 class="text-sm sm:text-base font-bold">
-                Halo, {{ $sapaanWaktu }}, {{ auth()->user()->nama ?? auth()->user()->name }}! 👋
+        <div class="bg-[#6E5BC3] rounded-2xl sm:rounded-[28px] shadow-sm p-4 sm:p-6 text-white flex items-center justify-between">
+            <h1 class="text-sm sm:text-base font-light">
+                Halo, {{ $sapaanWaktu ?? 'Selamat Datang' }}, {{ auth()->user()->nama ?? auth()->user()->name }}!
             </h1>
-            <p class="text-xs text-purple-100 font-normal">
-                Selamat Datang di Dashboard Monitoring Proyek <span class="font-semibold text-white">{{ $timKerja->nama_tim ?? 'Tim Kerja' }}</span>
-            </p>
+            
+            <div class="flex items-center gap-2 text-xs font-light text-purple-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</span>
+            </div>
         </div>
 
         {{-- SECTION 2: KARTU STATISTIK (3 MENYAMPING 2 BARIS PADA LAYAR LEBAR, 1 KOLOM PADA LAYAR KECIL) --}}
