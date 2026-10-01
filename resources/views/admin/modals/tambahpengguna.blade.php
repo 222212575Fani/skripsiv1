@@ -74,7 +74,7 @@
                             <input type="text" name="nip" x-model="nip" placeholder="18 digit NIP..." required minlength="18" maxlength="18" pattern="[0-9]{18}" title="NIP harus 18 digit angka" autocomplete="off" @input="nip = $el.value = $el.value.replace(/[^0-9]/g, '').slice(0, 18)" 
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light">
                             <div class="mt-1.5 flex items-center">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                                <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                                       :class="nip.length === 18 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
                                     <template x-if="nip.length === 18">
                                         <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -98,7 +98,7 @@
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light transition-all"
                                 :class="(email.trim().length > 0 && !(email.trim().toLowerCase().endsWith('@bps.go.id') && email.indexOf('@bps.go.id') > 0)) ? '!border-rose-400 !focus:border-rose-500 !focus:ring-rose-100' : ''">
                             <div class="mt-1.5 flex items-center">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                                <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                                       :class="(email.trim().toLowerCase().endsWith('@bps.go.id') && email.indexOf('@bps.go.id') > 0) 
                                               ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' 
                                               : (email.trim().length > 0 
@@ -137,7 +137,7 @@
                                 </button>
                             </div>
                             <div class="mt-1.5 flex items-center">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                                <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                                       :class="password.length >= 8 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
                                     <template x-if="password.length >= 8">
                                         <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">

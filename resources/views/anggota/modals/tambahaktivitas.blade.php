@@ -62,12 +62,10 @@
                     <div>
                         <label class="block text-xs font-normal text-gray-700 mb-2">Penanggung Jawab <span class="text-red-500">*</span></label>
                         @php
-                            $timId = $proyek->id_tim ?? null;
-                            $idKetuaTim = optional($proyek->timKerja)->id_ketua_tim
-                                ?? \App\Models\TimKerja::where('id_tim', $timId)->value('id_ketua_tim');
-                            $listAnggotaTim = \App\Models\AnggotaTim::with('pengguna')
-                                ->where('id_tim', $timId)->whereNull('tanggal_keluar')->get()
-                                ->filter(fn ($member) => $member->id_pengguna != $idKetuaTim);
+                            $listAnggotaProyek = \App\Models\AnggotaProyek::with('pengguna')
+                                ->where('id_proyek', $proyek->id_proyek)
+                                ->where('id_peran_proyek', 2)
+                                ->get();
                         @endphp
                         <div class="relative group/filter" @click.outside="pjOpen = false">
                             <input type="hidden" name="id_penanggung_jawab" x-model="pj" required>
@@ -84,7 +82,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                     <span>Pilih Penanggung Jawab</span>
                                 </div>
-                                @forelse($listAnggotaTim as $member)
+                                @forelse($listAnggotaProyek as $member)
                                     @if($member->pengguna)
                                         <button type="button" @click="pj = '{{ $member->pengguna->id_pengguna }}'; pjNama = '{{ addslashes($member->pengguna->nama) }}'; pjOpen = false"
                                             class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs font-light transition-all cursor-pointer text-left"
@@ -93,7 +91,7 @@
                                         </button>
                                     @endif
                                 @empty
-                                    <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Tidak ada anggota tim yang dapat dipilih.</p>
+                                    <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Belum ada anggota yang ditugaskan ke proyek ini.</p>
                                 @endforelse
                             </div>
                         </div>

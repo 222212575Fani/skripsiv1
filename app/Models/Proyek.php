@@ -10,6 +10,14 @@ use App\Models\Pengguna;
 use App\Models\TimKerja;
 use Carbon\Carbon;
 
+/**
+ * =========================================================================
+ * MODEL: PROYEK
+ * Merepresentasikan entitas Proyek yang sedang digarap oleh suatu Tim Kerja.
+ * Memiliki kalkulasi otomatis persentase (progress) yang diturunkan 
+ * dari seluruh Aktivitas di bawahnya.
+ * =========================================================================
+ */
 class Proyek extends Model 
 {
     use HasFactory;

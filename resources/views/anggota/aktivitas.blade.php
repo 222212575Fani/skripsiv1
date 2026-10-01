@@ -220,7 +220,7 @@
                             </div>
                         </td>
                         <td class="py-4 px-2 text-center align-middle whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-normal {{ $statusInfo['bg'] }} {{ $statusInfo['text'] }} border {{ $statusInfo['border'] }}">
+                            <span class="inline-flex items-center justify-center gap-1.5 w-32 px-3 py-1 rounded-full text-[11px] font-normal {{ $statusInfo['bg'] }} {{ $statusInfo['text'] }} border {{ $statusInfo['border'] }}">
                                 <span class="w-1.5 h-1.5 rounded-full {{ $statusInfo['dot'] }}"></span>
                                 <span>{{ $statusInfo['label'] }}</span>
                             </span>
@@ -278,7 +278,7 @@
                                         <span class="font-medium text-gray-900 text-xs truncate">{{ $item->nama_aktivitas }}</span>
                                         <span class="text-[10px] text-gray-400 font-light truncate">Proyek: {{ $item->proyek->nama_proyek ?? '-' }}</span>
                                     </div>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-normal {{ $statusInfo['bg'] }} {{ $statusInfo['text'] }} border {{ $statusInfo['border'] }} shrink-0">
+                                    <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-normal {{ $statusInfo['bg'] }} {{ $statusInfo['text'] }} border {{ $statusInfo['border'] }} shrink-0">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $statusInfo['dot'] }}"></span>
                                         <span>{{ $statusInfo['label'] }}</span>
                                     </span>

@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * =========================================================================
+ * MODEL: PENGGUNA (USER)
+ * Ini adalah entitas utama (Core Entity) untuk Autentikasi sistem.
+ * Terhubung ke banyak entitas lain: Role, TimKerja, Proyek, dan Aktivitas.
+ * Dilengkapi trait Notifiable untuk menerima notifikasi sistem (Lonceng).
+ * =========================================================================
+ */
 class Pengguna extends Authenticatable
 {
     use HasFactory, Notifiable;

@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * =========================================================================
+ * MODEL: ANGGOTA TIM (PIVOT)
+ * Merepresentasikan riwayat keanggotaan seorang Pengguna di dalam Tim Kerja.
+ * Digunakan untuk melacak mutasi masuk/keluarnya anggota tim.
+ * =========================================================================
+ */
 class AnggotaTim extends Model
 {
     use HasFactory;

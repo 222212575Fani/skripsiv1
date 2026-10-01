@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: ANGGOTA PROYEK
+// Membangun tabel pivot untuk mencatat pengguna mana yang terlibat di proyek mana,
+// serta apa peran spesifik mereka dalam proyek tersebut.
+// =========================================================================
 return new class extends Migration
 {
     /**

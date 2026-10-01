@@ -10,6 +10,11 @@ use App\Notifications\GeneralNotification; // <-- Import GeneralNotification
 
 class TimKerjaController extends Controller
 {
+        // =========================================================================
+    // KELOMPOK 1: MENAMPILKAN HALAMAN MANAJEMEN TIM KERJA
+    // Mengambil daftar tim kerja dan menampilkannya di Dashboard Admin.
+    // =========================================================================
+
     public function index(Request $request)
     {
         $query = TimKerja::with('ketua');
@@ -47,6 +52,14 @@ class TimKerjaController extends Controller
         return view('admin.manajementimkerja', compact('timKerja', 'counts', 'users', 'ledTeams'));
     }
 
+        // =========================================================================
+    // KELOMPOK 2: KELOLA DATA TIM KERJA (TAMBAH DAN EDIT)
+    // Berisi logika untuk pembuatan tim baru dan perubahan struktur tim.
+    // =========================================================================
+
+    /**
+     * Membuat tim kerja baru beserta penunjukan Ketua Tim (jika ada).
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -116,6 +129,11 @@ class TimKerjaController extends Controller
         }
     }
 
+        /**
+     * Mengubah data tim kerja (Nama, Deskripsi, Ketua Tim).
+     * Berisi logika mutasi jabatan (mengganti ketua lama menjadi anggota, 
+     * dan mengangkat anggota menjadi ketua baru).
+     */
     public function update(Request $request)
     {
         $request->validate([

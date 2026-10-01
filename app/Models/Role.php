@@ -5,6 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * =========================================================================
+ * MODEL: ROLE (HAK AKSES)
+ * Merepresentasikan tingkatan akses dalam sistem (Admin, Direktur, Ketua Tim, Anggota).
+ * =========================================================================
+ */
 class Role extends Model
 {
     use HasFactory;

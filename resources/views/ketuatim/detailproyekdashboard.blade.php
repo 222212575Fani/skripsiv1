@@ -302,7 +302,7 @@
                         </div>
                     </td>
                     <td class="py-3.5 px-3 text-center align-middle">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-light border whitespace-nowrap {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+                        <span class="inline-flex items-center justify-center gap-1.5 w-32 px-3 py-1 rounded-full text-xs font-light border whitespace-nowrap {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
                             <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                             <span>{{ $statusConfig['label'] }}</span>
                         </span>

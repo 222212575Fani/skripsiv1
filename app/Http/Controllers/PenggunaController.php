@@ -12,6 +12,11 @@ use App\Notifications\GeneralNotification;
 
 class PenggunaController extends Controller
 {
+        // =========================================================================
+    // KELOMPOK 1: MENAMPILKAN HALAMAN MANAJEMEN PENGGUNA
+    // Mengambil dan memfilter data seluruh pengguna untuk ditampilkan ke Admin.
+    // =========================================================================
+
     public function index(Request $request)
     {
         $query = Pengguna::with(['role']);
@@ -64,6 +69,11 @@ class PenggunaController extends Controller
 
         return view('admin.manajemenpengguna', compact('users', 'counts', 'roles', 'tims'));
     }
+
+        // =========================================================================
+    // KELOMPOK 2: PERSETUJUAN DAN AKTIVASI AKUN
+    // Mengatur logika persetujuan (approve) untuk akun yang baru mendaftar (pending).
+    // =========================================================================
 
     public function aktivasi(Request $request)
     {
@@ -164,6 +174,12 @@ class PenggunaController extends Controller
             return redirect()->back()->with('error', 'Gagal aktivasi: ' . $e->getMessage());
         }
     }
+
+        // =========================================================================
+    // KELOMPOK 3: KELOLA DATA PENGGUNA (TAMBAH DAN EDIT)
+    // Berisi logika untuk menambah pengguna baru (tanpa registrasi mandiri) 
+    // dan mengupdate data pengguna yang sudah ada.
+    // =========================================================================
 
     public function store(Request $request)
     {
@@ -281,6 +297,11 @@ class PenggunaController extends Controller
         }
     }
 
+        /**
+     * Mengupdate profil pengguna (Nama, NIP, Role, Tim, Status).
+     * Termasuk di dalamnya validasi rumit seperti memindahkan tim, 
+     * mencopot jabatan ketua lama, dan mengirim notifikasi perubahan.
+     */
     public function update(Request $request)
     {
         $request->validate([

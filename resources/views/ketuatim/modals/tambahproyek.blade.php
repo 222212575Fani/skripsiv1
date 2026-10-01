@@ -6,9 +6,12 @@
         ketuaOpen: false, 
         status: 'belum_dimulai', 
         statusLabel: 'Belum Dimulai', 
-        statusOpen: false 
+        statusOpen: false,
+        anggotaOpen: false,
+        selectedAnggota: [],
+        tglMulai: ''
     }" 
-     @open-modal-tambah-proyek.window="open = true; namaProyek = '';" 
+     @open-modal-tambah-proyek.window="open = true; namaProyek = ''; selectedAnggota = [];" 
      @close-modal-tambah-proyek.window="open = false"
      x-show="open" 
      x-cloak
@@ -152,16 +155,42 @@
 
                     </div>
 
+                    {{-- Tambahan Anggota Proyek (Mengikuti Proses Bisnis Usulan) --}}
+                    <div>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Pilih Anggota Proyek (Opsional)</label>
+                        <div class="relative" @click.outside="anggotaOpen = false">
+                            <button type="button" @click="anggotaOpen = !anggotaOpen; ketuaOpen = false; statusOpen = false;"
+                                class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
+                                <span :class="selectedAnggota.length > 0 ? 'text-gray-700 font-light' : 'text-gray-400 font-light'" x-text="selectedAnggota.length > 0 ? selectedAnggota.length + ' Anggota Dipilih' : 'Pilih Anggota Proyek...'"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#6E5BC3] transition-transform duration-200" :class="anggotaOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <div x-show="anggotaOpen" x-cloak 
+                                class="custom-scrollbar absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
+                                @forelse($anggotaTim ?? [] as $anggota)
+                                    <label class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light hover:bg-purple-50">
+                                        <input type="checkbox" name="anggota_proyek[]" value="{{ $anggota->id_pengguna }}" x-model="selectedAnggota" class="mr-3 rounded text-[#6E5BC3] focus:ring-[#6E5BC3] focus:ring-offset-0">
+                                        <span class="text-gray-700">{{ $anggota->nama ?? $anggota->pengguna->nama }}</span>
+                                    </label>
+                                @empty
+                                    <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Tidak ada anggota tersedia.</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Grid 2 Kolom (Tanggal Mulai & Tanggal Selesai) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai</label>
-                            <input type="date" name="tanggal_mulai" 
+                            <input type="date" name="tanggal_mulai" x-model="tglMulai"
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Selesai</label>
-                            <input type="date" name="tenggat_waktu" 
+                            <input type="date" name="tenggat_waktu" :min="tglMulai"
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                     </div>

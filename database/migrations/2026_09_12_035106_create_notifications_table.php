@@ -4,6 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: NOTIFICATIONS
+// Membangun tabel sistem bawaan Laravel untuk fitur notifikasi polimorfik (Lonceng).
+// =========================================================================
 return new class extends Migration
 {
     /**

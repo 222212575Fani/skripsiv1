@@ -15,6 +15,11 @@ use App\Notifications\GeneralNotification;
 class KetuaTimController extends Controller
 {
     // 1. Method untuk halaman Dashboard Monitoring Ketua Tim
+        // =========================================================================
+    // KELOMPOK 1: DASHBOARD KETUA TIM
+    // Menampilkan rangkuman statistik seluruh tim dan proyek.
+    // =========================================================================
+
     public function dashboard(Request $request)
     {
         Proyek::sinkronkanSemuaStatus();
@@ -172,6 +177,11 @@ class KetuaTimController extends Controller
     }
 
     // 2. Method untuk halaman Manajemen Proyek Ketua Tim
+        // =========================================================================
+    // KELOMPOK 2: MENAMPILKAN HALAMAN MANAJEMEN PROYEK
+    // Menampilkan daftar proyek khusus untuk tim yang diketuai oleh pengguna.
+    // =========================================================================
+
     public function manajemenProyek(Request $request)
     {
         Proyek::sinkronkanSemuaStatus();
@@ -225,6 +235,13 @@ class KetuaTimController extends Controller
     }
     
     // 3. Method untuk menyimpan data Proyek baru dari modal
+        // =========================================================================
+    // KELOMPOK 3: KELOLA PROYEK (TAMBAH, UBAH, HAPUS)
+    // =========================================================================
+
+    /**
+     * Menyimpan data proyek baru dan menentukan Ketua Proyek.
+     */
     public function storeProyek(Request $request)
     {
         $request->validate([
@@ -234,6 +251,8 @@ class KetuaTimController extends Controller
             'status'          => 'required|in:belum_dimulai,berjalan,selesai,terlambat',
             'tanggal_mulai'   => 'nullable|date',
             'tenggat_waktu'   => 'nullable|date|after_or_equal:tanggal_mulai',
+            'anggota_proyek'  => 'nullable|array',
+            'anggota_proyek.*'=> 'exists:pengguna,id_pengguna',
         ], [
             'nama_proyek.required'         => 'Nama proyek wajib diisi.',
             'nama_proyek.max'              => 'Nama proyek maksimal 200 karakter.',
@@ -284,6 +303,26 @@ class KetuaTimController extends Controller
                 'updated_at'      => now(),
             ]);
 
+            // [TAMBAHAN SESUAI PROSES BISNIS] Tambahkan juga anggota proyek yang dipilih
+            if ($request->has('anggota_proyek') && is_array($request->anggota_proyek)) {
+                $anggotaData = [];
+                foreach ($request->anggota_proyek as $idAnggota) {
+                    // Pastikan tidak menduplikasi ketua proyek sebagai anggota biasa
+                    if ($idAnggota != $request->id_ketua_proyek) {
+                        $anggotaData[] = [
+                            'id_proyek'       => $proyek->id_proyek,
+                            'id_pengguna'     => $idAnggota,
+                            'id_peran_proyek' => 2, // 2 = Anggota
+                            'created_at'      => now(),
+                            'updated_at'      => now(),
+                        ];
+                    }
+                }
+                if (!empty($anggotaData)) {
+                    DB::table('anggota_proyek')->insert($anggotaData);
+                }
+            }
+
             // 3. KIRIM NOTIFIKASI OTOMATIS KE KETUA PROYEK TERPILIH
             $ketuaProyek = Pengguna::find($request->id_ketua_proyek);
             if ($ketuaProyek && $ketuaProyek->id_pengguna !== $userId) {
@@ -316,6 +355,9 @@ class KetuaTimController extends Controller
     }
 
     // 4. Method untuk menghapus data Proyek
+        /**
+     * Menghapus proyek dari sistem.
+     */
     public function destroy($id)
     {
         try {
@@ -341,6 +383,9 @@ class KetuaTimController extends Controller
     }
 
     // 5. Method untuk mengupdate data Proyek
+        /**
+     * Memperbarui data proyek dan struktur Ketua Proyek.
+     */
     public function updateProyek(Request $request, $id)
     {
         $request->validate([
@@ -350,6 +395,8 @@ class KetuaTimController extends Controller
             'status'          => 'required|in:belum_dimulai,berjalan,selesai,terlambat',
             'tanggal_mulai'   => 'nullable|date',
             'tenggat_waktu'   => 'nullable|date|after_or_equal:tanggal_mulai',
+            'anggota_proyek'  => 'nullable|array',
+            'anggota_proyek.*'=> 'exists:pengguna,id_pengguna',
         ], [
             'nama_proyek.required'         => 'Nama proyek wajib diisi.',
             'nama_proyek.max'              => 'Nama proyek maksimal 200 karakter.',

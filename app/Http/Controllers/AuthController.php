@@ -13,8 +13,13 @@ use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
+    // =========================================================================
+    // KELOMPOK 1: REGISTRASI PENGGUNA
+    // Mengatur tampilan halaman daftar dan logika penyimpanan akun baru.
+    // =========================================================================
+
     /**
-     * Menampilkan halaman register
+     * Menampilkan halaman form pendaftaran (Register).
      */
     public function showRegister()
     {
@@ -22,7 +27,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Memproses registrasi akun baru
+     * Memproses data registrasi dari form.
+     * Logika utama:
+     * 1. Validasi ketat (BPS email domain, panjang NIP, dll).
+     * 2. Membuat akun dengan status default 'pending' dan role null.
+     * 3. Mengirimkan notifikasi pendaftaran ke Admin.
      */
     public function register(Request $request)
     {
@@ -84,8 +93,13 @@ class AuthController extends Controller
             ->with('registered_email', $user->email);
     }
 
+    // =========================================================================
+    // KELOMPOK 2: OTENTIKASI & LOGIN
+    // Mengatur halaman masuk, validasi hak akses berjenjang, dan proses masuk.
+    // =========================================================================
+
     /**
-     * Menampilkan halaman login
+     * Menampilkan halaman form masuk (Login).
      */
     public function showLogin()
     {
@@ -93,7 +107,12 @@ class AuthController extends Controller
     }
 
     /**
-     * Memproses login dengan pengecekan status, role, dan penempatan tim
+     * Memproses percobaan login.
+     * Ini adalah gerbang keamanan utama sistem yang mengecek 4 hal:
+     * 1. Apakah email & password benar?
+     * 2. Apakah status akun disetujui (bukan pending/nonaktif)?
+     * 3. Apakah role sudah diberikan?
+     * 4. Khusus Anggota/Ketua Tim: Apakah sudah dimasukkan ke dalam tim kerja?
      */
     public function login(Request $request)
     {
@@ -172,8 +191,14 @@ class AuthController extends Controller
         return back()->withInput()->with('error', 'Gagal masuk ke sistem.');
     }
 
+    // =========================================================================
+    // KELOMPOK 3: PENGARAHAN (REDIRECT) & LOGOUT
+    // Mengatur arah halaman setelah login berhasil dan logika keluar.
+    // =========================================================================
+
     /**
-     * Redirect berdasarkan Role
+     * Mengarahkan (redirect) pengguna ke halaman beranda/dashboard yang sesuai 
+     * berdasarkan jenis hak akses (Role) masing-masing.
      */
     private function redirectByRole(Pengguna $pengguna)
     {
@@ -203,7 +228,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Proses Logout
+     * Menghancurkan sesi pengguna dengan aman dan mengarahkannya kembali ke halaman login.
      */
     public function logout(Request $request)
     {

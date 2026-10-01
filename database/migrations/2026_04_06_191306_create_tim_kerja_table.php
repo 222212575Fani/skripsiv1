@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: TIM KERJA
+// Membangun tabel fisik 'tim_kerja'. Menghubungkan Ketua Tim (dari Pengguna) 
+// menggunakan relasi Foreign Key dengan constraint hapus 'restrict'.
+// =========================================================================
 return new class extends Migration
 {
     /**

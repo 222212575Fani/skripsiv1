@@ -168,7 +168,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-2">Tenggat Waktu</label>
-                            <input type="date" name="tenggat_waktu" x-model="tanggal_target_selesai" 
+                            <input type="date" name="tenggat_waktu" x-model="tanggal_target_selesai" :min="tanggal_mulai"
                                 class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                     </div>

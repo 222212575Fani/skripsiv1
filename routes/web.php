@@ -17,7 +17,10 @@ Route::get('/portal', function () {
     return view('welcome');
 })->name('portal');
 
-// Auth - Register & Login
+// =========================================================================
+// KELOMPOK ROUTES: AUTENTIKASI (PUBLIC)
+// Rute ini bisa diakses oleh siapa saja tanpa perlu login (Register, Login).
+// =========================================================================
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -25,12 +28,19 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
+// =========================================================================
+// KELOMPOK ROUTES: PROTECTED (MEMBUTUHKAN LOGIN)
+// Semua rute di dalam blok ini WAJIB login. Jika tidak login, akan dilempar kembali.
+// =========================================================================
 Route::middleware('auth')->group(function () {
     // Notifikasi Real-time
     Route::get('/notifications/check', [NotificationController::class, 'check'])->name('notifications.check');
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
 
-    // Admin
+    // -------------------------------------------------------------------------
+    // HAK AKSES: ADMIN
+    // Mengatur halaman manajemen data inti (Pengguna dan Tim Kerja)
+    // -------------------------------------------------------------------------
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
         Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
@@ -41,14 +51,20 @@ Route::middleware('auth')->group(function () {
         Route::post('/manajementimkerja/update', [TimKerjaController::class, 'update'])->name('timkerja.update');
     });
 
-    // Direktur
+    // -------------------------------------------------------------------------
+    // HAK AKSES: DIREKTUR UTAMA
+    // Mengatur halaman Dashboard pemantauan grafik performa dan beban kerja
+    // -------------------------------------------------------------------------
     Route::prefix('direktur')->name('direktur.')->group(function () {
         Route::get('/dashboard', [DirekturController::class, 'dashboard'])->name('dashboard');
         Route::get('/dashboard/dataprogress', [DirekturController::class, 'getChartData'])->name('chart.data');
         Route::get('/dashboard/databebankerja', [DirekturController::class, 'getBebanKerjaData'])->name('chart.bebankerja');
     });
 
-    // Ketua Tim
+    // -------------------------------------------------------------------------
+    // HAK AKSES: KETUA TIM
+    // Mengatur halaman pembuatan proyek baru di dalam lingkup tim kerjanya
+    // -------------------------------------------------------------------------
     Route::prefix('ketuatim')->name('ketuatim.')->group(function () {
         Route::get('/dashboard', [KetuaTimController::class, 'dashboard'])->name('dashboard');
         Route::get('/manajemenproyek', [KetuaTimController::class, 'manajemenProyek'])->name('manajemenproyek');
@@ -57,7 +73,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/proyek/{id}', [KetuaTimController::class, 'updateProyek'])->name('proyek.update');
     });
 
-    // Anggota
+    // -------------------------------------------------------------------------
+    // HAK AKSES: KETUA PROYEK & ANGGOTA
+    // Mengatur segala logika detail pekerjaan (Aktivitas) dan pelaporan Progress
+    // -------------------------------------------------------------------------
     Route::prefix('anggota')->name('anggota.')->group(function () {
         Route::get('/proyekaktivitas', [AnggotaProyekController::class, 'index'])->name('proyekaktivitas');
         

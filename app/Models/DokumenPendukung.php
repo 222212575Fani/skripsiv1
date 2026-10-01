@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * =========================================================================
+ * MODEL: DOKUMEN PENDUKUNG
+ * Merepresentasikan entitas file (berkas) yang diunggah anggota 
+ * sebagai bukti fisik penyelesaian suatu Aktivitas/Progress.
+ * =========================================================================
+ */
 class DokumenPendukung extends Model
 {
     use HasFactory;

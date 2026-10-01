@@ -4,6 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: PERAN PROYEK
+// Membangun tabel referensi 'peran_proyek' (1 = Ketua, 2 = Anggota).
+// =========================================================================
 return new class extends Migration
 {
     /**

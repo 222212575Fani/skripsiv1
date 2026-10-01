@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: PENGGUNA
+// Membangun tabel fisik 'pengguna'. Mengandung kredensial login (email, password),
+// Foreign Key ke tabel Role, serta atribut persetujuan akun oleh admin.
+// =========================================================================
 return new class extends Migration
 {
     /**

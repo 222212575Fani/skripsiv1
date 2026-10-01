@@ -4,6 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: ANGGOTA TIM
+// Membangun tabel fisik 'anggota_tim' (tabel pivot). Menyimpan riwayat masuk/keluar.
+// =========================================================================
 return new class extends Migration
 {
     /**

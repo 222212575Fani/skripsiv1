@@ -9,6 +9,11 @@ use Carbon\Carbon;
 
 class DirekturController extends Controller
 {
+        // =========================================================================
+    // KELOMPOK 1: DASHBOARD DIREKTUR
+    // Menampilkan statistik high-level untuk Direktur (Top Management).
+    // =========================================================================
+
     public function dashboard(Request $request)
     {
         Proyek::sinkronkanSemuaStatus();
@@ -105,6 +110,11 @@ class DirekturController extends Controller
     }
 
     // Method khusus untuk merespons AJAX filter tahun & bulan secara dinamis
+        // =========================================================================
+    // KELOMPOK 2: DATA GRAFIK (CHART API)
+    // Mengembalikan data JSON untuk diproses oleh JavaScript Grafik/Chart.
+    // =========================================================================
+
     public function getChartData(Request $request)
     {
         $tahun = $request->input('tahun', date('Y'));

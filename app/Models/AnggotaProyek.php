@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * =========================================================================
+ * MODEL: ANGGOTA PROYEK (PIVOT)
+ * Merepresentasikan relasi *Many-to-Many* antara Pengguna dan Proyek.
+ * Menyimpan informasi tambahan berupa 'Peran Proyek' (Ketua / Anggota).
+ * =========================================================================
+ */
 class AnggotaProyek extends Model
 {
     use HasFactory;

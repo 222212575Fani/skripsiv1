@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * =========================================================================
+ * MODEL: PROGRESS AKTIVITAS
+ * Merepresentasikan riwayat pelaporan persentase capaian (%) dari anggota 
+ * beserta uraian laporannya setiap kali mengupdate status tugas.
+ * =========================================================================
+ */
 class ProgressAktivitas extends Model
 {
     use HasFactory;

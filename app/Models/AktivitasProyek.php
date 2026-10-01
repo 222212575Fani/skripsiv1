@@ -8,6 +8,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\KendalaAktivitas;
 
+/**
+ * =========================================================================
+ * MODEL: AKTIVITAS PROYEK
+ * Merepresentasikan entitas tugas/aktivitas turunan dari suatu Proyek.
+ * Mengatur relasi ke Proyek, Penanggung Jawab, Dokumen, dan Kendala.
+ * =========================================================================
+ */
 class AktivitasProyek extends Model
 {
     use HasFactory;

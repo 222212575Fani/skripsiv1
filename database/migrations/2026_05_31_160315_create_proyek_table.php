@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: PROYEK
+// Membangun tabel fisik utama 'proyek'. Menyimpan data jadwal, status, dan 
+// akumulasi capaian keseluruhan (persen_progress).
+// =========================================================================
 return new class extends Migration
 {
     /**

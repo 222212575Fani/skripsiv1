@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * =========================================================================
+ * MODEL: TIM KERJA
+ * Merepresentasikan kelompok kerja (Divisi) yang diketuai oleh 1 Pengguna 
+ * dan membawahi banyak Proyek serta Anggota Tim.
+ * =========================================================================
+ */
 class TimKerja extends Model
 {
     use HasFactory;

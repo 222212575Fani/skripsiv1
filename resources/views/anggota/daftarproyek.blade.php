@@ -243,7 +243,7 @@
 
                         {{-- 5. Status --}}
                         <td class="py-4 px-2 text-center align-middle whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-normal {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} border {{ $statusConfig['border'] }}">
+                            <span class="inline-flex items-center justify-center gap-1.5 w-32 px-3 py-1 rounded-full text-[11px] font-normal {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} border {{ $statusConfig['border'] }}">
                                 <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                 <span>{{ $statusConfig['label'] }}</span>
                             </span>
@@ -303,7 +303,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-normal {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} border {{ $statusConfig['border'] }} shrink-0">
+                                    <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-normal {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} border {{ $statusConfig['border'] }} shrink-0">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                         <span>{{ $statusConfig['label'] }}</span>
                                     </span>

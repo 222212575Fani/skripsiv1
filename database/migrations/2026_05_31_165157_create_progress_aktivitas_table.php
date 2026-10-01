@@ -4,6 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+// =========================================================================
+// MIGRATION: PROGRESS AKTIVITAS
+// Membangun tabel pelaporan mingguan (progress_minggu_berjalan) dari setiap aktivitas.
+// =========================================================================
 return new class extends Migration
 {
     /**
