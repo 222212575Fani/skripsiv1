@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: KONFIRMASI HAPUS AKTIVITAS
+    Dibuka event open-hapus-aktivitas membawa URL hapus. Dikirim (DELETE) ke route
+    anggota.aktivitas.destroy; riwayat progress, kendala, dan dokumen ikut terhapus.
+    =========================================================================
+--}}
 <div x-data="{ open: false, deleteUrl: '' }" 
      @open-modal-hapus-aktivitas.window="open = true; deleteUrl = $event.detail.url" 
      @open-hapus-aktivitas.window="open = true; deleteUrl = $event.detail.url" 

@@ -21,7 +21,9 @@ return new class extends Migration
             $table->foreign('id_aktivitas')->references('id_aktivitas')->on('aktivitas_proyek');
             $table->unsignedBigInteger('id_pengguna');
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');
+            // Kenaikan progress pada laporan ini (bukan total), sehingga riwayat bisa ditelusuri
             $table->decimal('progress_minggu_berjalan', 5, 2);
+            // Uraian pekerjaan bersifat opsional
             $table->text('uraian_progress')->nullable();
             $table->timestamps();
         });

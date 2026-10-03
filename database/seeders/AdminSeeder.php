@@ -7,6 +7,15 @@ use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * =========================================================================
+ * SEEDER: ADMIN AWAL
+ * Membuat satu akun Admin (admin@bps.go.id) agar sistem bisa dipakai pertama kali:
+ * pengguna lain mendaftar dengan status pending dan hanya Admin yang dapat mengaktifkannya.
+ * Aman dijalankan berulang karena memakai updateOrCreate. Ganti kata sandi bawaan
+ * setelah login pertama.
+ * =========================================================================
+ */
 class AdminSeeder extends Seeder
 {
     /**
@@ -18,7 +27,7 @@ class AdminSeeder extends Seeder
         $adminRole = Role::where('nama_role', 'Admin')->first();
 
         // Jika role Admin belum ada, seeder dihentikan
-        if (!$adminRole) {
+        if (! $adminRole) {
             return;
         }
 

@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    HALAMAN: DETAIL PROYEK DI DASHBOARD KETUA TIM (BELUM DIPAKAI)
+    Catatan: berkas ini belum dipanggil oleh route atau view mana pun saat ini; detail aktivitas
+    pada dashboard ditampilkan lewat modal anggota.detailaktivitas. Dibiarkan sebagai cadangan.
+    =========================================================================
+--}}
 <x-layoutfull title="Detail Proyek & Aktivitas">
 
     {{-- SLOT HEADER ACTION: TOMBOL KEMBALI BERSIH & SEJAJAR --}}

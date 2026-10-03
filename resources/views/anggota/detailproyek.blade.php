@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    HALAMAN: KELOLA AKTIVITAS PADA SATU PROYEK
+    Route anggota.proyek.aktivitas -> AnggotaProyekController@showAktivitas.
+    Ketua Proyek ($isKetuaProyek) melihat semua aktivitas dan mendapat tombol tambah, ubah, hapus;
+    Anggota biasa hanya melihat aktivitas miliknya tanpa tombol pengelolaan.
+    =========================================================================
+--}}
 <x-layoutfull title="Detail Proyek & Aktivitas" :showNotification="false">
 
     {{-- SLOT HEADER ACTION: TOMBOL KEMBALI BERSIH & SEJAJAR --}}
@@ -384,7 +392,7 @@
                                 {{-- Baris Atas: Indikator Status di Sisi Kiri Atas & Icon Aksi di Kanan Atas --}}
                                 <div class="flex items-center justify-between gap-2">
                                     {{-- Indikator Status di Kiri Atas --}}
-                                    <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+                                    <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                         <span>{{ $statusConfig['label'] }}</span>
                                     </span>

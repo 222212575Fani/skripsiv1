@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    HALAMAN: LANDING PAGE (BERANDA)
+    Route home dan portal. Halaman perkenalan PROXIS yang dapat dilihat tanpa login:
+    makna singkatan, nilai, alur akses pegawai, FAQ, serta tombol masuk dan daftar.
+    =========================================================================
+--}}
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>

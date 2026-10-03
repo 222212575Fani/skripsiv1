@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: KARTU PROYEK DI DASHBOARD DIREKTUR
+    Satu kartu per proyek ($proyek): status, progress (rerata progress aktivitas), ketua proyek,
+    dan daftar aktivitasnya. Mengeklik aktivitas membuka modal detail (dokumen dan kendala).
+    =========================================================================
+--}}
 @php
     use Carbon\Carbon;
 
@@ -71,7 +78,7 @@
             <span class="px-3 py-1 rounded-lg text-[10px] font-normal uppercase tracking-wider bg-purple-50 text-[#6E5BC3] border border-purple-100 truncate max-w-55" title="{{ $namaTim }}">
                 {{ $namaTim }}
             </span>
-            <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-normal border shrink-0 {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+            <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-normal border shrink-0 {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
                 <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                 <span>{{ $statusConfig['label'] }}</span>
             </span>

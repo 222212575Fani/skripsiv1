@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('id_aktivitas')->references('id_aktivitas')->on('aktivitas_proyek');
             $table->unsignedBigInteger('id_pengguna');
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');
+            // Keduanya nullable: laporan boleh hanya berisi salah satu jenis kendala
             $table->text('kendala_internal')->nullable();
             $table->text('kendala_eksternal')->nullable();
             $table->timestamps();

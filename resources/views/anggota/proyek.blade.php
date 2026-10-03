@@ -1,3 +1,12 @@
+{{--
+    =========================================================================
+    HALAMAN: DASHBOARD ANGGOTA / KETUA PROYEK
+    Route anggota.proyekaktivitas -> AnggotaProyekController@index.
+    Menampilkan kartu statistik dan proyek yang diikuti pengguna (sebagai Ketua atau Anggota)
+    beserta aktivitasnya. Filter (cari, peran, bulan/tahun, status) memanggil fetchProjects():
+    memuat ulang halaman yang sama lewat fetch dan mengganti pembungkus daftar proyek.
+    =========================================================================
+--}}
 <x-layoututama title="Dashboard">
     {{-- CSS Kustom untuk Scrollbar Tipis --}}
     <style>

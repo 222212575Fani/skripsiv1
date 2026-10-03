@@ -15,11 +15,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('peran_proyek', function (Blueprint $table) {
-        $table->id('id_peran_proyek'); 
-        $table->string('nama_peran_proyek', 30)->unique();
-        $table->timestamps(); 
-    });
+        Schema::create('peran_proyek', function (Blueprint $table) {
+            $table->id('id_peran_proyek');
+            $table->string('nama_peran_proyek', 30)->unique();
+            $table->timestamps();
+        });
     }
 
     /**

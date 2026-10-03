@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: TAMBAH PENGGUNA
+    Dibuka event open-modal-tambah-pengguna. Admin membuat akun langsung (tanpa registrasi mandiri);
+    dikirim ke route admin.pengguna.store (PenggunaController@store). Status bawaannya aktif.
+    =========================================================================
+--}}
 <div x-data="{ 
         open: false, 
         nama: '',

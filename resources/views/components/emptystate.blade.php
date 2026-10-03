@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: TAMPILAN DATA KOSONG
+    Ditampilkan bila pencarian atau filter tidak menghasilkan data. Parameter: title, message,
+    border, padding.
+    =========================================================================
+--}}
 @props([
     'title' => 'Tidak Ada Data Ditemukan',
     'message' => 'Tidak ada data yang sesuai dengan kata kunci pencarian atau filter yang Anda pilih.',

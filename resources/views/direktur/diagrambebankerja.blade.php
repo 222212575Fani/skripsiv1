@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    KOMPONEN: GRAFIK BEBAN KERJA ANGGOTA TIM
+    Komponen Alpine bebanKerjaChartComponent(). Beban kerja = jumlah proyek per orang pada
+    periode terpilih, dipecah per status. Data dari endpoint JSON direktur.chart.bebankerja
+    (DirekturController@getBebanKerjaData); filter tim dan periode memuat ulang grafik.
+    =========================================================================
+--}}
 <div class="bg-white rounded-2xl sm:rounded-[28px] shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col gap-4 sm:gap-6"
     x-data="bebanKerjaChartComponent()">
 
@@ -17,7 +25,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span class="truncate max-w-50" x-text="timFilterName"></span>
+                        {{-- Abu-abu saat masih "Semua Tim Kerja", gelap saat satu tim dipilih --}}
+                        <span class="truncate max-w-50 transition-colors"
+                            :class="selectedTim === 'all' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"
+                            x-text="timFilterName"></span>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="openTimDropdown ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -53,7 +64,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <span class="truncate" x-text="getFilterLabel()"></span>
+                        {{-- Abu-abu saat masih nilai bawaan (semua bulan, tahun berjalan) --}}
+                        <span class="truncate transition-colors"
+                            :class="(selectedMonth === 'all' && selectedYear === '{{ date('Y') }}') ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"
+                            x-text="getFilterLabel()"></span>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>

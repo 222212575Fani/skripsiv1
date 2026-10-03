@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengguna;
+use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use App\Notifications\GeneralNotification;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
+/**
+ * =========================================================================
+ * CONTROLLER: AUTENTIKASI
+ * Registrasi mandiri (akun berstatus pending), login berlapis (kredensial,
+ * status akun, role, penempatan tim), pengarahan halaman menurut role, dan logout.
+ * =========================================================================
+ */
 class AuthController extends Controller
 {
     // =========================================================================
@@ -43,7 +50,7 @@ class AuthController extends Controller
                 'email',
                 'max:100',
                 'unique:pengguna,email',
-                'regex:/^[A-Za-z0-9._%+-]+@bps\.go\.id$/'
+                'regex:/^[A-Za-z0-9._%+-]+@bps\.go\.id$/',
             ],
             'password' => 'required|string|min:8|max:100|confirmed',
         ], [
@@ -64,25 +71,27 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ]);
 
+        // Kata sandi tidak pernah disimpan apa adanya, melainkan di-hash (Hash::make).
+        // Akun baru berstatus 'pending' dan belum punya role sampai diaktivasi Admin.
         $user = Pengguna::create([
             'nama' => $request->nama,
             'nip' => $request->nip,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'id_role' => null, 
-            'status_akun' => 'pending', 
+            'id_role' => null,
+            'status_akun' => 'pending',
             'disetujui_pada' => null,
             'disetujui_oleh' => null,
         ]);
 
         // Kirim Notifikasi ke Admin menggunakan GeneralNotification
-        $admins = Pengguna::whereHas('role', function($query) {
+        $admins = Pengguna::whereHas('role', function ($query) {
             $query->where('nama_role', 'Admin');
         })->get();
 
         if ($admins->isNotEmpty()) {
             $title = 'Registrasi Pengguna Baru';
-            $message = 'Pengguna baru atas nama ' . $user->nama . ' telah mendaftar dan menunggu aktivasi.';
+            $message = 'Pengguna baru atas nama '.$user->nama.' telah mendaftar dan menunggu aktivasi.';
             Notification::send($admins, new GeneralNotification($title, $message));
         }
 
@@ -117,19 +126,19 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email|max:100',
+            'email' => 'required|email|max:100',
             'password' => 'required|string',
         ], [
-            'email.required'    => 'Alamat email wajib diisi.',
-            'email.email'       => 'Format alamat email tidak valid.',
-            'email.max'         => 'Alamat email maksimal 100 karakter.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
+            'email.max' => 'Alamat email maksimal 100 karakter.',
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
 
         $pengguna = Pengguna::with('role')->where('email', $request->email)->first();
 
         // 1. Validasi Kredensial (Email & Password)
-        if (!$pengguna || !Hash::check($request->password, $pengguna->password)) {
+        if (! $pengguna || ! Hash::check($request->password, $pengguna->password)) {
             return back()
                 ->withInput()
                 ->with('error', 'Email atau kata sandi yang Anda masukkan salah. Silakan periksa kembali.');
@@ -150,7 +159,7 @@ class AuthController extends Controller
         }
 
         // 3. Validasi Penetapan Role
-        if (!$pengguna->id_role) {
+        if (! $pengguna->id_role) {
             return back()
                 ->withInput()
                 ->with('error', 'Peran (Role) akun Anda belum ditetapkan oleh Admin.');
@@ -162,12 +171,12 @@ class AuthController extends Controller
             $isKetua = DB::table('tim_kerja')
                 ->where('id_ketua_tim', $pengguna->id_pengguna)
                 ->exists();
-            
+
             $isAnggota = DB::table('anggota_tim')
                 ->where('id_pengguna', $pengguna->id_pengguna)
                 ->exists();
 
-            if (!$isKetua && !$isAnggota) {
+            if (! $isKetua && ! $isAnggota) {
                 return back()
                     ->withInput()
                     ->with('error', 'Akun Anda aktif, namun belum ditempatkan dalam Tim Kerja. Silakan hubungi Admin.');
@@ -177,6 +186,7 @@ class AuthController extends Controller
         // 5. LOGIN
         $remember = $request->boolean('remember');
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
+            // Ganti ID sesi setelah login untuk mencegah session fixation
             $request->session()->regenerate();
 
             if ($remember) {
@@ -197,7 +207,7 @@ class AuthController extends Controller
     // =========================================================================
 
     /**
-     * Mengarahkan (redirect) pengguna ke halaman beranda/dashboard yang sesuai 
+     * Mengarahkan (redirect) pengguna ke halaman beranda/dashboard yang sesuai
      * berdasarkan jenis hak akses (Role) masing-masing.
      */
     private function redirectByRole(Pengguna $pengguna)
@@ -222,6 +232,7 @@ class AuthController extends Controller
         }
 
         Auth::logout();
+
         return redirect()
             ->route('login')
             ->with('error', 'Role tidak dikenali. Silakan hubungi admin.');
@@ -233,6 +244,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        // Hancurkan sesi dan buat token CSRF baru agar sesi lama tidak bisa dipakai lagi
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

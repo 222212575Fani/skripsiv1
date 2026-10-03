@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 // =========================================================================
 // MIGRATION: AKTIVITAS PROYEK
-// Membangun tabel 'aktivitas_proyek' (Tugas). Berelasi ketat dengan Penanggung Jawab 
+// Membangun tabel 'aktivitas_proyek' (Tugas). Berelasi ketat dengan Penanggung Jawab
 // (id_pengguna) dan mencatat target penyelesaian spesifik per tugas.
 // =========================================================================
 return new class extends Migration
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('deskripsi_aktivitas')->nullable();
             $table->unsignedBigInteger('id_penanggung_jawab');
             $table->foreign('id_penanggung_jawab')->references('id_pengguna')->on('pengguna');
+            // dibuat_oleh / diperbarui_oleh nullable: jejak audit siapa yang membuat dan terakhir mengubah
             $table->unsignedBigInteger('dibuat_oleh')->nullable();
             $table->foreign('dibuat_oleh')->references('id_pengguna')->on('pengguna');
             $table->unsignedBigInteger('diperbarui_oleh')->nullable();
@@ -31,7 +32,10 @@ return new class extends Migration
             $table->date('tanggal_mulai')->nullable();
             $table->date('tanggal_target_selesai');
             $table->date('tanggal_selesai_aktual')->nullable();
+            // Kolom "target" menyimpan PERSENTASE PROGRESS aktivitas saat ini (0-100), bukan target rencana.
+            // Nilainya dijepit 0-100 oleh model dan menjadi dasar rata-rata progress proyek.
             $table->decimal('target', 5, 2);
+            // Status dihitung otomatis dari tanggal dan progress (lihat AktivitasProyek::hitungStatusOtomatis)
             $table->enum('status_aktivitas', ['belum_dimulai', 'berjalan', 'selesai', 'terlambat'])->default('belum_dimulai');
             $table->timestamps();
         });

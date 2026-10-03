@@ -1,3 +1,12 @@
+{{--
+    =========================================================================
+    MODAL: LAPOR PROGRESS AKTIVITAS (USE CASE UTAMA)
+    Dibuka event open-modal-lapor-progress. Anggota mengisi progress, uraian, kendala internal
+    dan eksternal, serta unggahan dokumen (maksimal 5 MB per berkas). Dikirim ke route
+    anggota.aktivitas.progress (AnggotaProyekController@storeProgressAktivitas), yang menghitung
+    ulang progress aktivitas dan proyek serta mengirim notifikasi.
+    =========================================================================
+--}}
 <div x-data="{ 
     open: false, 
     id: '', 

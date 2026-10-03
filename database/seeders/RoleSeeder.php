@@ -2,10 +2,17 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * =========================================================================
+ * SEEDER: ROLE
+ * Mengisi empat role sistem: Admin, Direktur, Ketua Tim, Anggota. Kode aplikasi
+ * mengenali role lewat nama ini (mis. middleware role:Admin), sehingga penulisannya
+ * harus sama persis.
+ * =========================================================================
+ */
 class RoleSeeder extends Seeder
 {
     /**

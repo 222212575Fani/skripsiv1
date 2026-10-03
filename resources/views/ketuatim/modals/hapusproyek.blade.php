@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: KONFIRMASI HAPUS PROYEK
+    Dibuka event open-modal-hapus-proyek membawa URL hapus. Proyek yang sudah punya aktivitas
+    ditolak oleh server dengan pesan agar aktivitasnya dihapus terlebih dahulu.
+    =========================================================================
+--}}
 <div x-data="{ open: false, deleteUrl: '' }" 
      @open-modal-hapus-proyek.window="open = true; deleteUrl = $event.detail.url" 
      @close-modal-hapus-proyek.window="open = false"

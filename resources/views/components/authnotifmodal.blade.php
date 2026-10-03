@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: MODAL INFORMASI SETELAH REGISTRASI / LOGIN DITOLAK
+    Tampil bila session berisi register_success (pendaftaran berhasil) atau account_pending
+    (akun belum diaktivasi). Tombol "Hubungi Admin" membuka email yang sudah terisi otomatis.
+    =========================================================================
+--}}
 @php
     $isRegisterSuccess = session('register_success');
     $isAccountPending = session('account_pending');

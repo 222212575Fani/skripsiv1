@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    HALAMAN: REGISTRASI AKUN
+    Route register -> AuthController@showRegister; form dikirim ke register.post.
+    Validasi di sisi peramban (NIP 18 digit, email @bps.go.id, kata sandi minimal 8 karakter)
+    hanya untuk kenyamanan; validasi yang menentukan tetap dilakukan server di AuthController@register.
+    =========================================================================
+--}}
 <x-layoutauth title="Daftar Akun - Sistem Manajemen Proyek">
     
     <x-authsidepanel 

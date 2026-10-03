@@ -1,3 +1,13 @@
+{{--
+    =========================================================================
+    HALAMAN: MANAJEMEN PENGGUNA (ROLE ADMIN)
+    Route admin.manajemenpengguna -> PenggunaController@index.
+    Data dari controller: $users (paginator), $counts (jumlah akun per status), $roles, $tims.
+    Tab status dan kotak cari memuat ulang daftar lewat fetch ke URL yang sama (header
+    X-Requested-With), lalu hanya mengganti isi pembungkus tabel, jadi halaman tidak berkedip.
+    Tombol aksi membuka modal (aktivasi, tambah, ubah) lewat event window Alpine.
+    =========================================================================
+--}}
 <x-layoututama title="Manajemen Pengguna">
     <div x-data="{ 
         search: '{{ request('search') }}',
@@ -286,7 +296,7 @@
                                     {{-- Baris Atas: Indikator Status di Sisi Kiri Atas & Icon Aksi di Kanan Atas --}}
                                     <div class="flex items-center justify-between gap-2">
                                         {{-- Indikator Status di Kiri Atas --}}
-                                        <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+                                        <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
                                             <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                             <span>{{ $statusConfig['label'] }}</span>
                                         </span>

@@ -1,3 +1,9 @@
+{{--
+    =========================================================================
+    KOMPONEN: KARTU STATISTIK
+    Kartu angka ringkas (judul, nilai, persentase, ikon) untuk statistik proyek di dashboard.
+    =========================================================================
+--}}
 @props([
     'title', 
     'value', 

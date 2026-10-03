@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    HALAMAN: LOGIN
+    Route login -> AuthController@showLogin; form dikirim ke login.post (AuthController@login).
+    Pesan error dan status akun pending ditampilkan lewat komponen authnotifmodal dan toast.
+    =========================================================================
+--}}
 <x-layoutauth title="Login - Sistem Manajemen Proyek">
     
     {{-- Modal Notifikasi Pendaftaran Berhasil & Akun Pending (Top-Floating Banner Style) --}}

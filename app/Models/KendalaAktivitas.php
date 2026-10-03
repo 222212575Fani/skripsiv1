@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * =========================================================================
  * MODEL: KENDALA AKTIVITAS
- * Merepresentasikan catatan hambatan (internal maupun eksternal) 
+ * Merepresentasikan catatan hambatan (internal maupun eksternal)
  * yang dilaporkan anggota saat mengerjakan suatu Aktivitas.
  * =========================================================================
  */
@@ -17,17 +17,20 @@ class KendalaAktivitas extends Model
     use HasFactory;
 
     protected $table = 'kendala_aktivitas';
+
     protected $primaryKey = 'id_kendala';
+
     protected $guarded = [];
 
+    // Aktivitas tempat kendala ini dilaporkan
     public function aktivitas()
     {
         return $this->belongsTo(AktivitasProyek::class, 'id_aktivitas', 'id_aktivitas');
     }
 
+    // Pengguna (anggota) yang melaporkan kendala
     public function pengguna()
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id_pengguna');
     }
 }
-

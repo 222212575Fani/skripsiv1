@@ -16,8 +16,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('proyek', function (Blueprint $table) {
+            // nullable + set null: bila akun ketua proyek dihapus, proyek tetap ada
+            // (Ketua Tim dapat menunjuk ketua proyek pengganti)
             $table->unsignedBigInteger('id_ketua_proyek')->nullable()->after('deskripsi_proyek');
-            $table->foreign('id_ketua_proyek')->references('id_pengguna')->on('pengguna')->onDelete('set null'); // <-- Tambahkan titik koma di sini
+            $table->foreign('id_ketua_proyek')->references('id_pengguna')->on('pengguna')->onDelete('set null');
         });
     }
 

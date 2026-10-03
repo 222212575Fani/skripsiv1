@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * =========================================================================
+ * MIDDLEWARE: CEK STATUS AKUN
+ * Terpasang di setiap request web (lihat bootstrap/app.php). Akun yang berubah
+ * menjadi nonaktif/pending ketika sedang login langsung dikeluarkan.
+ * =========================================================================
+ */
 class CheckActiveUser
 {
     /**
@@ -39,4 +46,3 @@ class CheckActiveUser
         return $next($request);
     }
 }
-

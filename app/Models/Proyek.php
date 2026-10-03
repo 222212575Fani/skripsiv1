@@ -2,35 +2,33 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\AnggotaProyek;
-use App\Models\AktivitasProyek; 
-use App\Models\Pengguna;
-use App\Models\TimKerja;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * =========================================================================
  * MODEL: PROYEK
  * Merepresentasikan entitas Proyek yang sedang digarap oleh suatu Tim Kerja.
- * Memiliki kalkulasi otomatis persentase (progress) yang diturunkan 
+ * Memiliki kalkulasi otomatis persentase (progress) yang diturunkan
  * dari seluruh Aktivitas di bawahnya.
  * =========================================================================
  */
-class Proyek extends Model 
+class Proyek extends Model
 {
     use HasFactory;
 
     protected $table = 'proyek';           // Menyesuaikan nama tabel fisik
+
     protected $primaryKey = 'id_proyek'; // Menyesuaikan primary key fisik
 
-    protected $guarded = []; 
+    protected $guarded = [];
 
     protected $casts = [
         'persen_progress' => 'float',
     ];
-    
+
     // Relasi ke tabel Pengguna (sebagai Ketua Proyek)
     public function ketuaProyek()
     {
@@ -72,31 +70,37 @@ class Proyek extends Model
         return min(100, max(0, round((float) ($rataRataProgress ?? 0), 2)));
     }
 
+    /**
+     * Model event untuk proyek: status selalu dihitung ulang tiap kali disimpan,
+     * sehingga pengguna tidak bisa mengisinya secara manual.
+     */
     protected static function boot()
     {
         parent::boot();
 
+        // Sebelum disimpan: tentukan status otomatis dari tanggal dan progress.
         static::saving(function ($proyek) {
             $proyek->status_proyek = $proyek->hitungStatusOtomatis();
         });
 
+        // Setelah disimpan/dihapus: hapus penanda cache agar data disinkronkan ulang.
         static::saved(function () {
-            \Illuminate\Support\Facades\Cache::forget('proyek_status_synced_recent');
+            Cache::forget('proyek_status_synced_recent');
         });
 
         static::deleted(function () {
-            \Illuminate\Support\Facades\Cache::forget('proyek_status_synced_recent');
+            Cache::forget('proyek_status_synced_recent');
         });
     }
 
     /**
-     * Hitung status proyek secara otomatis (real-time)
-     * Berdasarkan Tanggal Mulai, Tanggal Target Selesai, dan Progres.
-     * 
-     * 1. Jika progres sudah 100%, otomatis Selesai (bisa selesai lebih cepat).
-     * 2. Jika hari ini masih sebelum tanggal mulai, otomatis Belum Dimulai.
-     * 3. Jika hari ini sudah melewati tanggal target selesai dan progres < 100%, otomatis Terlambat.
-     * 4. Jika berada di rentang tanggal berjalan dan progres < 100%, otomatis Sedang Berjalan.
+     * Hitung status proyek secara otomatis dari tanggal mulai, tanggal target
+     * selesai, dan progress (rata-rata progress aktivitas). Aturannya sama
+     * dengan status aktivitas; yang pertama cocok langsung dipakai:
+     * 1. Progress 100%                                 -> Selesai.
+     * 2. Lewat tanggal target selesai, progress < 100% -> Terlambat.
+     * 3. Progress > 0% atau sudah masuk tanggal mulai  -> Sedang Berjalan.
+     * 4. Selain itu                                    -> Belum Dimulai.
      */
     public function hitungStatusOtomatis(): string
     {
@@ -140,14 +144,17 @@ class Proyek extends Model
 
     /**
      * Sinkronisasi status dan persentase progress semua proyek di database.
-     * Diberi throttle cache 10 menit agar tidak memberatkan server di setiap request halaman.
+     * Dipanggil di awal halaman dashboard/daftar agar status yang bergantung pada
+     * tanggal (misalnya "terlambat") ikut diperbarui. Dibatasi sekali per 10 menit
+     * lewat cache; aktivitas disinkronkan lebih dulu karena progress proyek
+     * diturunkan dari aktivitasnya.
      */
     public static function sinkronkanSemuaStatus(bool $force = false): void
     {
-        if (!$force && \Illuminate\Support\Facades\Cache::has('proyek_status_synced_recent')) {
+        if (! $force && Cache::has('proyek_status_synced_recent')) {
             return;
         }
-        \Illuminate\Support\Facades\Cache::put('proyek_status_synced_recent', true, now()->addMinutes(10));
+        Cache::put('proyek_status_synced_recent', true, now()->addMinutes(10));
 
         AktivitasProyek::sinkronkanSemuaStatus($force);
 
@@ -163,14 +170,14 @@ class Proyek extends Model
             if ($p->getRawOriginal('status_proyek') !== $statusBaru) {
                 $dirty['status_proyek'] = $statusBaru;
             }
-            if ((float)$p->getRawOriginal('persen_progress') !== (float)$progresBaru) {
+            if ((float) $p->getRawOriginal('persen_progress') !== (float) $progresBaru) {
                 $dirty['persen_progress'] = $progresBaru;
             }
-            if ($statusBaru === 'selesai' && !$p->tanggal_selesai_aktual) {
+            if ($statusBaru === 'selesai' && ! $p->tanggal_selesai_aktual) {
                 $dirty['tanggal_selesai_aktual'] = $today->toDateString();
             }
 
-            if (!empty($dirty)) {
+            if (! empty($dirty)) {
                 $p->updateQuietly($dirty);
             }
         }

@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    LAYOUT UTAMA (SIDEBAR + HEADER)
+    Kerangka semua halaman setelah login: sidebar menurut role, header berisi sapaan, lonceng
+    notifikasi dan menu profil (keluar), slot isi halaman, dan komponen toast.
+    =========================================================================
+--}}
 <!DOCTYPE html>
 <html lang="id">
 <head>

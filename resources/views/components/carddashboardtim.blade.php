@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: KARTU PROYEK DI DASHBOARD KETUA TIM
+    Satu kartu per proyek ($proyek): status, rentang tanggal, progress, ketua proyek, dan
+    daftar aktivitas. Dipakai oleh ketuatim/dashboard.blade.php.
+    =========================================================================
+--}}
 @props(['proyek'])
 
 @php

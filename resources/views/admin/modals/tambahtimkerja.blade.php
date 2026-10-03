@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: TAMBAH TIM KERJA
+    Dibuka event open-modal-tambah. Admin mengisi nama, status, ketua, dan deskripsi tim;
+    dikirim ke route admin.timkerja.store (TimKerjaController@store).
+    =========================================================================
+--}}
 <div x-data="{ 
         open: false, 
         ketua: '', 

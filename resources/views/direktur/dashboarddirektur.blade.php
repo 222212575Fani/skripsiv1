@@ -1,3 +1,12 @@
+{{--
+    =========================================================================
+    HALAMAN: DASHBOARD DIREKTUR
+    Route direktur.dashboard -> DirekturController@dashboard.
+    Berisi kartu statistik seluruh proyek, daftar proyek semua tim (kartu proyek yang dapat
+    ditelusuri sampai aktivitas), grafik rerata progress tim, dan grafik beban kerja.
+    Grafik memakai Chart.js (CDN) dan mengambil datanya dari endpoint JSON direktur.chart.*.
+    =========================================================================
+--}}
 <x-layoututama title="Dashboard Monitoring Direktur">
     <div class="flex flex-col gap-4 sm:gap-6">
 

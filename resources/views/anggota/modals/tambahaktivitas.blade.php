@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: TAMBAH AKTIVITAS (KETUA PROYEK)
+    Dibuka event open-tambah-aktivitas. Dikirim ke route anggota.aktivitas.store
+    (AnggotaProyekController@storeAktivitas). Pilihan penanggung jawab berasal dari anggota tim aktif.
+    =========================================================================
+--}}
 <div x-data="{ open: false, pj: '', pjNama: '', pjOpen: false, tglMulai: '' }" 
      @open-tambah-aktivitas.window="open = true" 
      @close-tambah-aktivitas.window="open = false"

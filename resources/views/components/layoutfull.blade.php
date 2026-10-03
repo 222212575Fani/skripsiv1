@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    LAYOUT: HALAMAN PENUH TANPA SIDEBAR
+    Dipakai halaman detail (kelola aktivitas). Berisi header dengan lonceng notifikasi, slot isi,
+    dan komponen toast. Parameter: title, showNotification.
+    =========================================================================
+--}}
 @props(['title' => 'PROXIS', 'showNotification' => true])
 <!DOCTYPE html>
 <html lang="id">

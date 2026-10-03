@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: INPUT FORMULIR AUTENTIKASI
+    Satu pola input (label, ikon, pesan error) yang dipakai ulang di halaman login dan register.
+    Parameter: label, type, id, name, placeholder, value, required.
+    =========================================================================
+--}}
 @props(['label', 'type' => 'text', 'id', 'name', 'placeholder', 'value' => '', 'required' => false])
 
 <div class="mb-3.5 sm:mb-4">

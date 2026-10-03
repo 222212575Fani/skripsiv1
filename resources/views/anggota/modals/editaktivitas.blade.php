@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: UBAH AKTIVITAS (KETUA PROYEK)
+    Dibuka event open-edit-aktivitas. Dikirim (PUT) ke route anggota.aktivitas.update
+    (AnggotaProyekController@updateAktivitas).
+    =========================================================================
+--}}
 <div x-data="{ 
         open: false, 
         id: '', 

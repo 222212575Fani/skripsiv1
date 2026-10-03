@@ -1,3 +1,9 @@
+{{--
+    =========================================================================
+    KOMPONEN: TOMBOL
+    Tombol standar dengan warna ungu bawaan. Parameter: type, color, shadow; isi tombol lewat slot.
+    =========================================================================
+--}}
 @props([
     'type' => 'button',
     'color' => 'bg-[#6E5BC3] hover:bg-[#5C4AB5]', // Default warna ungu utama

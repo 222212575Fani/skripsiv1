@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    MODAL: UBAH DATA PENGGUNA
+    Dibuka event open-modal-edit-pengguna. Mengubah status akun, role, dan tim; dikirim ke
+    route admin.pengguna.update (PenggunaController@update).
+    Nama dan NIP hanya tampil (terkunci) dan email tidak ditampilkan karena tidak boleh diubah.
+    =========================================================================
+--}}
 @php
     $idRoleKetua = $roles->first(function($r) {
         return stripos($r->nama_role, 'ketua') !== false;
@@ -66,7 +74,7 @@
                     </div>
                     <div class="min-w-0">
                         <h3 class="text-sm sm:text-base font-bold text-gray-900 tracking-tight truncate">Edit Data Pengguna</h3>
-                        <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Ubah hak akses akun, NIP, serta penempatan tim kerja</p>
+                        <p class="text-[11px] sm:text-xs font-medium text-gray-400 truncate">Ubah status, hak akses akun, serta penempatan tim kerja</p>
                     </div>
                 </div>
                 <button type="button" @click="open = false" class="p-1.5 sm:p-2 text-gray-300 hover:text-gray-500 hover:bg-gray-50 rounded-full transition-all cursor-pointer shrink-0">
@@ -79,7 +87,6 @@
             <form action="{{ route('admin.pengguna.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id_pengguna" x-model="id">
-                <input type="hidden" name="nip" x-model="nip">
                 <input type="hidden" name="nama" x-model="nama">
 
                 <div class="p-4 sm:p-8 space-y-4 sm:space-y-5">

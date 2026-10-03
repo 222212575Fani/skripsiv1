@@ -1,14 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnggotaProyekController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DirekturController;
+use App\Http\Controllers\KetuaTimController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\TimKerjaController;
-use App\Http\Controllers\AnggotaProyekController;
-use App\Http\Controllers\KetuaTimController;
-use App\Http\Controllers\DirekturController;
-use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Route;
 
+// Halaman beranda (landing page) yang dapat dilihat tanpa login
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -41,7 +42,7 @@ Route::middleware('auth')->group(function () {
     // HAK AKSES: ADMIN
     // Mengatur halaman manajemen data inti (Pengguna dan Tim Kerja)
     // -------------------------------------------------------------------------
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('role:Admin')->group(function () {
         Route::get('/manajemenpengguna', [PenggunaController::class, 'index'])->name('manajemenpengguna');
         Route::post('/pengguna/aktivasi', [PenggunaController::class, 'aktivasi'])->name('aktivasi');
         Route::post('/manajemenpengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
@@ -55,7 +56,7 @@ Route::middleware('auth')->group(function () {
     // HAK AKSES: DIREKTUR UTAMA
     // Mengatur halaman Dashboard pemantauan grafik performa dan beban kerja
     // -------------------------------------------------------------------------
-    Route::prefix('direktur')->name('direktur.')->group(function () {
+    Route::prefix('direktur')->name('direktur.')->middleware('role:Direktur')->group(function () {
         Route::get('/dashboard', [DirekturController::class, 'dashboard'])->name('dashboard');
         Route::get('/dashboard/dataprogress', [DirekturController::class, 'getChartData'])->name('chart.data');
         Route::get('/dashboard/databebankerja', [DirekturController::class, 'getBebanKerjaData'])->name('chart.bebankerja');
@@ -65,7 +66,7 @@ Route::middleware('auth')->group(function () {
     // HAK AKSES: KETUA TIM
     // Mengatur halaman pembuatan proyek baru di dalam lingkup tim kerjanya
     // -------------------------------------------------------------------------
-    Route::prefix('ketuatim')->name('ketuatim.')->group(function () {
+    Route::prefix('ketuatim')->name('ketuatim.')->middleware('role:Ketua Tim')->group(function () {
         Route::get('/dashboard', [KetuaTimController::class, 'dashboard'])->name('dashboard');
         Route::get('/manajemenproyek', [KetuaTimController::class, 'manajemenProyek'])->name('manajemenproyek');
         Route::post('/manajemenproyek/store', [KetuaTimController::class, 'storeProyek'])->name('manajemenproyek.store');
@@ -77,12 +78,13 @@ Route::middleware('auth')->group(function () {
     // HAK AKSES: KETUA PROYEK & ANGGOTA
     // Mengatur segala logika detail pekerjaan (Aktivitas) dan pelaporan Progress
     // -------------------------------------------------------------------------
-    Route::prefix('anggota')->name('anggota.')->group(function () {
+    Route::prefix('anggota')->name('anggota.')->middleware('role:Anggota')->group(function () {
+        // Dashboard Anggota/Ketua Proyek (halaman utama setelah login)
         Route::get('/proyekaktivitas', [AnggotaProyekController::class, 'index'])->name('proyekaktivitas');
-        
-        // PERUBAHAN DI SINI: Arahkan ke method daftarProyek
+
+        // Daftar proyek yang diketuai pengguna
         Route::get('/daftarproyek', [AnggotaProyekController::class, 'daftarProyek'])->name('daftarproyek');
-        
+
         Route::get('/proyekaktivitas/{id}/aktivitas', [AnggotaProyekController::class, 'showAktivitas'])->name('proyek.aktivitas');
         Route::post('/proyekaktivitas/{id}/aktivitas', [AnggotaProyekController::class, 'storeAktivitas'])->name('aktivitas.store');
         Route::put('/aktivitas/{id}', [AnggotaProyekController::class, 'updateAktivitas'])->name('aktivitas.update');

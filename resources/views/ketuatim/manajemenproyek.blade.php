@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    HALAMAN: MANAJEMEN PROYEK (KETUA TIM)
+    Route ketuatim.manajemenproyek -> KetuaTimController@manajemenProyek.
+    Tabel proyek tim dengan pencarian dan tab status; aksi tambah, ubah, dan hapus membuka modal.
+    Status proyek hanya tampil, karena dihitung otomatis oleh sistem.
+    =========================================================================
+--}}
 <x-layoututama title="Manajemen Proyek">
     <div x-data="{ 
         search: '{{ request('search') }}',
@@ -303,7 +311,7 @@
                             {{-- Baris Atas: Indikator Status di Sisi Kiri Atas & Icon Aksi di Kanan Atas --}}
                             <div class="flex items-center justify-between gap-2">
                                 {{-- Indikator Status di Kiri Atas --}}
-                                <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+                                <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
                                     <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                     <span>{{ $statusConfig['label'] }}</span>
                                 </span>

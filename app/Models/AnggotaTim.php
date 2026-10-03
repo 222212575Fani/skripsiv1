@@ -16,13 +16,13 @@ class AnggotaTim extends Model
 {
     use HasFactory;
 
-    //Nama tabel yang digunakan pada model ini
+    // Nama tabel yang digunakan pada model ini
     protected $table = 'anggota_tim';
 
-    //Primary key dalam tabel anggota tim
+    // Primary key dalam tabel anggota tim
     protected $primaryKey = 'id_anggota_tim';
 
-    //Atribut yang boleh diisi ketika create dan update
+    // Atribut yang boleh diisi ketika create dan update
     protected $fillable = [
         'id_tim',
         'id_pengguna',
@@ -30,7 +30,9 @@ class AnggotaTim extends Model
         'tanggal_keluar',
     ];
 
-    //Casting atribut tanggal/waktu
+    // Casting atribut tanggal/waktu.
+    // tanggal_keluar kosong (null) berarti anggota masih AKTIF di tim itu;
+    // saat pindah tim atau dinonaktifkan, baris tidak dihapus melainkan diberi tanggal keluar.
     protected $casts = [
         'tanggal_bergabung' => 'date',
         'tanggal_keluar' => 'date',
@@ -38,13 +40,13 @@ class AnggotaTim extends Model
         'updated_at' => 'datetime',
     ];
 
-    //Relasi untuk setiap anggota hanya tergabung ke dalam satu tim kerja
+    // Relasi untuk setiap anggota hanya tergabung ke dalam satu tim kerja
     public function TimKerja()
     {
         return $this->belongsTo(TimKerja::class, 'id_tim', 'id_tim');
     }
 
-    //Relasi untuk setiap keanggotaan tim hanya dimiliki oleh satu pengguna
+    // Relasi untuk setiap keanggotaan tim hanya dimiliki oleh satu pengguna
     public function Pengguna()
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id_pengguna');

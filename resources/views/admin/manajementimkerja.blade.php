@@ -1,3 +1,12 @@
+{{--
+    =========================================================================
+    HALAMAN: MANAJEMEN TIM KERJA (ROLE ADMIN)
+    Route admin.manajementimkerja -> TimKerjaController@index.
+    Data: $timKerja (paginator), $counts, $users (calon ketua), $ledTeams (pemetaan ketua -> tim
+    yang sudah dipimpinnya, dipakai modal agar satu orang tidak dipilih menjadi ketua dua tim).
+    Pencarian dan tab status bekerja seperti halaman Manajemen Pengguna.
+    =========================================================================
+--}}
 <x-layoututama title="Manajemen Tim Kerja">
     <div x-data="{ 
         search: '{{ request('search') }}',
@@ -267,7 +276,7 @@
                                     {{-- Baris Atas: Indikator Status di Sisi Kiri Atas & Icon Aksi di Kanan Atas --}}
                                     <div class="flex items-center justify-between gap-2">
                                         {{-- Indikator Status di Kiri Atas --}}
-                                        <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+                                        <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-light border {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
                                             <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                             <span>{{ $statusConfig['label'] }}</span>
                                         </span>

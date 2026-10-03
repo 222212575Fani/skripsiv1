@@ -16,8 +16,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('role', function (Blueprint $table) {
-            $table->id('id_role'); //Atribut yang menyimpan ID peran pengguna
-            $table->string('nama_role', 30)->unique(); //Atribut yang menyimpan nama peran pengguna, bersifat unik untuk menghindari duplikasi jenis peran yang sama dalam sistem
+            $table->id('id_role'); // Atribut yang menyimpan ID peran pengguna
+            $table->string('nama_role', 30)->unique(); // Atribut yang menyimpan nama peran pengguna, bersifat unik untuk menghindari duplikasi jenis peran yang sama dalam sistem
         });
     }
 

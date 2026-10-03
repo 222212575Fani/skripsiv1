@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    KOMPONEN: SIDEBAR
+    Menu navigasi yang berbeda menurut role (Admin, Direktur, Ketua Tim, Anggota). Untuk Anggota,
+    menu Daftar Proyek hanya muncul bagi yang menjadi Ketua Proyek, dan Daftar Aktivitas bagi yang
+    menjadi anggota/penanggung jawab aktivitas (Dashboard selalu tampil).
+    =========================================================================
+--}}
 <aside class="w-70 bg-white text-[#6E5BC3] flex flex-col z-20 relative transition-all duration-300 h-full justify-between border-r border-purple-100/70 shadow-xl md:shadow-none">
     <div class="flex flex-col">
         <!-- Logo / Brand -->

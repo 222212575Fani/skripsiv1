@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    MODAL: UBAH TIM KERJA
+    Dibuka event open-modal-edit-tim. Mengubah nama, deskripsi, status, dan mengganti ketua tim;
+    dikirim ke route admin.timkerja.update (TimKerjaController@update).
+    =========================================================================
+--}}
 <div x-data="{ 
         open: false, 
         id: '', 

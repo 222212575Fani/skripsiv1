@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: HEADER LAMA (BELUM DIPAKAI)
+    Belum dipanggil oleh view mana pun; header yang aktif ditulis langsung di layoututama dan
+    layoutfull. Dibiarkan sebagai cadangan.
+    =========================================================================
+--}}
 @props(['title'])
 
 <header class="h-20 bg-white flex items-center justify-between px-10 border-b border-gray-100 shadow-sm relative z-30">

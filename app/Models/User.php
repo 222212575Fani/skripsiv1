@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * =========================================================================
+ * MODEL: USER (BAWAAN LARAVEL, TIDAK DIPAKAI)
+ * Sistem ini memakai model Pengguna (tabel `pengguna`) untuk autentikasi;
+ * konfigurasinya ada di config/auth.php. Berkas ini hanya sisa kerangka
+ * awal Laravel dan dibiarkan agar struktur bawaan tetap utuh.
+ * =========================================================================
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */

@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    HALAMAN: DAFTAR AKTIVITAS SAYA
+    Route anggota.aktivitassaya -> AnggotaProyekController@aktivitasSaya.
+    Aktivitas yang menjadi tanggung jawab pengguna. Dari sini pengguna membuka modal Lapor
+    Progress (anggota.modals.laporprogress) atau modal detail (anggota.detailaktivitas).
+    =========================================================================
+--}}
 <x-layoututama title="Daftar Aktivitas">
     <div x-data="{ 
         search: '{{ request('search') }}',
@@ -261,7 +269,7 @@
                                         riwayatProgress: @js($item->riwayat_progress ?? []),
                                         dokumen: @js($dokumenList)
                                     })"
-                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all text-xs font-medium shadow-2xs shrink-0 cursor-pointer"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-50 text-[#604EE6] border border-purple-200 hover:bg-purple-100 hover:border-purple-300 transition-all text-xs font-medium shadow-2xs shrink-0 cursor-pointer"
                                     title="Lihat Detail">
                                     <span>Detail</span>
                                 </button>
@@ -278,7 +286,7 @@
                                         <span class="font-medium text-gray-900 text-xs truncate">{{ $item->nama_aktivitas }}</span>
                                         <span class="text-[10px] text-gray-400 font-light truncate">Proyek: {{ $item->proyek->nama_proyek ?? '-' }}</span>
                                     </div>
-                                    <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-normal {{ $statusInfo['bg'] }} {{ $statusInfo['text'] }} border {{ $statusInfo['border'] }} shrink-0">
+                                    <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-normal {{ $statusInfo['bg'] }} {{ $statusInfo['text'] }} border {{ $statusInfo['border'] }} shrink-0">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $statusInfo['dot'] }}"></span>
                                         <span>{{ $statusInfo['label'] }}</span>
                                     </span>
@@ -289,15 +297,15 @@
                                     <span class="text-[11px] font-semibold text-gray-700">{{ $namaPJ }}</span>
                                 </div>
 
-                                <div class="flex items-center justify-between gap-4 text-xs text-gray-600 font-light pt-1">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-[10px] text-gray-400">Progress:</span>
-                                        <div class="w-16 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-4 text-xs text-gray-600 font-light pt-1">
+                                    <div class="flex items-center gap-2 w-full sm:flex-1 sm:max-w-sm">
+                                        <span class="text-[10px] text-gray-400 shrink-0">Progress:</span>
+                                        <div class="flex-1 min-w-12 bg-gray-200 rounded-full h-1.5 overflow-hidden">
                                             <div class="bg-[#604EE6] h-full rounded-full" style="width: {{ $progress }}%"></div>
                                         </div>
-                                        <span class="text-[11px] font-medium text-gray-700">{{ $progress }}%</span>
+                                        <span class="text-[11px] font-medium text-gray-700 shrink-0">{{ $progress }}%</span>
                                     </div>
-                                    <span class="text-[11px] text-gray-500">
+                                    <span class="text-[11px] text-gray-500 whitespace-nowrap">
                                         {{ $item->tanggal_mulai ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }} - 
                                         {{ $item->tanggal_target_selesai ? \Carbon\Carbon::parse($item->tanggal_target_selesai)->format('d/m/Y') : '-' }}
                                     </span>
@@ -318,7 +326,7 @@
                                             riwayatProgress: @js($item->riwayat_progress ?? []),
                                             dokumen: @js($dokumenList)
                                         })"
-                                        class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all text-xs font-medium shadow-2xs cursor-pointer">
+                                        class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-purple-50 text-[#604EE6] border border-purple-200 hover:bg-purple-100 hover:border-purple-300 transition-all text-xs font-medium shadow-2xs cursor-pointer">
                                         <span>Detail</span>
                                     </button>
                                     <button type="button" 

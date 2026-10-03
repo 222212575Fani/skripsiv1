@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    KOMPONEN: GRAFIK RERATA PROGRESS TIM
+    Komponen Alpine progressChartComponent(). Saat filter tahun/bulan berubah, ia memanggil
+    endpoint JSON direktur.chart.data (DirekturController@getChartData) lalu menggambar ulang
+    grafik batang tanpa memuat ulang halaman.
+    =========================================================================
+--}}
 <div class="bg-white rounded-2xl sm:rounded-[28px] shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col gap-4 sm:gap-6"
     x-data="progressChartComponent()">
 
@@ -16,7 +24,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span class="truncate" x-text="getFilterLabel()"></span>
+                    {{-- Teks filter abu-abu saat masih nilai bawaan (semua bulan, tahun berjalan), gelap saat sudah dipilih --}}
+                    <span class="truncate transition-colors"
+                        :class="(selectedMonth === 'all' && selectedYear === '{{ date('Y') }}') ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'"
+                        x-text="getFilterLabel()"></span>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-[#604EE6] transition-transform duration-200 shrink-0" :class="bulanOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>

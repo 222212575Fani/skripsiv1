@@ -1,3 +1,9 @@
+{{--
+    =========================================================================
+    KOMPONEN: PANEL SAMPING HALAMAN LOGIN DAN REGISTRASI
+    Panel ungu berisi sapaan dan slogan di sisi kiri halaman autentikasi.
+    =========================================================================
+--}}
 <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-linear-to-br from-[#6D5CE8] via-[#604EE6] to-[#513FE0]">
     <div class="relative h-full flex flex-col justify-between gap-6 md:gap-0 p-6 sm:p-7 md:p-8 text-white">
         <div></div>

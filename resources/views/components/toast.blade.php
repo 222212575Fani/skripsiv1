@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: TOAST (NOTIFIKASI POP-UP)
+    Menampilkan pesan session success dan error dari controller sebagai pop-up di pojok kanan
+    bawah, menghilang otomatis setelah beberapa detik.
+    =========================================================================
+--}}
 <div class="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3.5 pointer-events-none max-w-[calc(100vw-2rem)] w-[420px]">
     
     {{-- 1. POP-UP BERHASIL (SUCCESS) --}}

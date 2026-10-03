@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    KOMPONEN: LONCENG NOTIFIKASI
+    Menampilkan notifikasi milik pengguna yang login. Isi awal dimuat server; setelah itu Alpine
+    memanggil route notifications.check tiap 30 detik (polling). Saat daftar dibuka, semua
+    notifikasi ditandai terbaca lewat route notifications.readAll.
+    =========================================================================
+--}}
 @props(['white' => false])
 
 @php

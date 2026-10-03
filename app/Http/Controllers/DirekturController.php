@@ -2,20 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Proyek;
 use App\Models\TimKerja;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
+/**
+ * =========================================================================
+ * CONTROLLER: DIREKTUR
+ * Dashboard pemantauan seluruh direktorat: statistik proyek, grafik rerata
+ * progress per tim, grafik beban kerja pegawai, dan daftar proyek yang bisa
+ * ditelusuri sampai aktivitas dan dokumen pendukungnya. Role ini hanya melihat
+ * (tidak mengubah data).
+ * =========================================================================
+ */
 class DirekturController extends Controller
 {
-        // =========================================================================
+    // =========================================================================
     // KELOMPOK 1: DASHBOARD DIREKTUR
     // Menampilkan statistik high-level untuk Direktur (Top Management).
     // =========================================================================
 
     public function dashboard(Request $request)
     {
+        // Pastikan status proyek (mis. "terlambat") sudah sesuai tanggal hari ini
         Proyek::sinkronkanSemuaStatus();
         $now = Carbon::now();
         $semuaProyekData = Proyek::all();
@@ -51,9 +61,12 @@ class DirekturController extends Controller
 
         // 2. Perhitungan Persentase Status terhadap Total Proyek
         $formatPersen = function ($jumlah, $total) {
-            if ($total <= 0) return '0%';
+            if ($total <= 0) {
+                return '0%';
+            }
             $pct = round(($jumlah / $total) * 100, 1);
-            return (floor($pct) == $pct ? (int)$pct : $pct) . '%';
+
+            return (floor($pct) == $pct ? (int) $pct : $pct).'%';
         };
 
         $persenBelumDimulai = $formatPersen($belumDimulai, $totalProyek);
@@ -62,21 +75,21 @@ class DirekturController extends Controller
         $persenTerlambat = $formatPersen($terlambat, $totalProyek);
 
         $statsDirektorat = [
-            'total'                 => $totalProyek,
-            'total_persen_text'     => $totalPersenText,
-            'total_trend'           => $totalTrend,
+            'total' => $totalProyek,
+            'total_persen_text' => $totalPersenText,
+            'total_trend' => $totalTrend,
 
-            'belum_dimulai'         => $belumDimulai,
-            'belum_dimulai_persen'  => $persenBelumDimulai . ' dari total',
+            'belum_dimulai' => $belumDimulai,
+            'belum_dimulai_persen' => $persenBelumDimulai.' dari total',
 
-            'berjalan'              => $berjalan,
-            'berjalan_persen'       => $persenBerjalan . ' dari total',
+            'berjalan' => $berjalan,
+            'berjalan_persen' => $persenBerjalan.' dari total',
 
-            'selesai'               => $selesai,
-            'selesai_persen'        => $persenSelesai . ' dari total',
+            'selesai' => $selesai,
+            'selesai_persen' => $persenSelesai.' dari total',
 
-            'terlambat'             => $terlambat,
-            'terlambat_persen'      => $persenTerlambat . ' dari total',
+            'terlambat' => $terlambat,
+            'terlambat_persen' => $persenTerlambat.' dari total',
         ];
 
         // Ambil data default untuk pertama kali load halaman (default tahun berjalan)
@@ -93,16 +106,16 @@ class DirekturController extends Controller
             'anggotaProyek.pengguna',
             'aktivitasProyek.penanggungJawab',
             'aktivitasProyek.dokumenPendukung',
-            'aktivitasProyek.kendalaAktivitas'
+            'aktivitasProyek.kendalaAktivitas',
         ])->latest('id_proyek')->paginate(15)->withQueryString();
 
         // Ambil data beban kerja anggota untuk pertama kali load halaman
         $bebanKerjaInitial = $this->hitungBebanKerjaAnggota('all', date('Y'), 'all');
 
         return view('direktur.dashboarddirektur', compact(
-            'statsDirektorat', 
-            'namaTim', 
-            'rerataProgressTim', 
+            'statsDirektorat',
+            'namaTim',
+            'rerataProgressTim',
             'daftarTim',
             'semuaProyek',
             'bebanKerjaInitial'
@@ -110,7 +123,7 @@ class DirekturController extends Controller
     }
 
     // Method khusus untuk merespons AJAX filter tahun & bulan secara dinamis
-        // =========================================================================
+    // =========================================================================
     // KELOMPOK 2: DATA GRAFIK (CHART API)
     // Mengembalikan data JSON untuk diproses oleh JavaScript Grafik/Chart.
     // =========================================================================
@@ -125,37 +138,44 @@ class DirekturController extends Controller
         return response()->json([
             'namaTim' => $data['namaTim'],
             'rerataProgressTim' => $data['rerataProgressTim'],
-            'daftarTim' => $data['daftarTim']
+            'daftarTim' => $data['daftarTim'],
         ]);
     }
 
-    // Logika perhitungan rerata progress tim dengan filter tanggal presisi (strict)
+    /**
+     * Rerata progress setiap tim kerja untuk grafik dashboard Direktur.
+     * Rumus: progress tim = rata-rata dari progress semua proyek tim pada periode
+     * yang dipilih; progress proyek = rata-rata progress aktivitasnya.
+     * Filter tahun/bulan memilih proyek yang rentang tanggalnya beririsan dengan periode.
+     * Hasilnya juga dipakai kartu proyek, sehingga Direktur bisa menelusuri
+     * dari tim -> proyek -> aktivitas -> dokumen pendukung.
+     */
     private function hitungRerataProgressTim($tahun, $bulan)
     {
         $timKerjaList = TimKerja::with([
-            'ketuaTim', 
-            'proyek' => function($query) use ($tahun, $bulan) {
+            'ketuaTim',
+            'proyek' => function ($query) use ($tahun, $bulan) {
                 if ($tahun !== 'all' && $bulan !== 'all') {
-                    $query->where(function($q) use ($tahun, $bulan) {
+                    $query->where(function ($q) use ($tahun, $bulan) {
                         $q->whereYear('tanggal_mulai', '<=', $tahun)
-                          ->whereYear('tanggal_target_selesai', '>=', $tahun)
-                          ->whereMonth('tanggal_mulai', '<=', $bulan)
-                          ->whereMonth('tanggal_target_selesai', '>=', $bulan);
-                    })->orWhere(function($q) use ($tahun, $bulan) {
+                            ->whereYear('tanggal_target_selesai', '>=', $tahun)
+                            ->whereMonth('tanggal_mulai', '<=', $bulan)
+                            ->whereMonth('tanggal_target_selesai', '>=', $bulan);
+                    })->orWhere(function ($q) use ($tahun, $bulan) {
                         $q->whereYear('tanggal_mulai', $tahun)
-                          ->whereMonth('tanggal_mulai', $bulan);
+                            ->whereMonth('tanggal_mulai', $bulan);
                     });
                 } elseif ($tahun !== 'all') {
                     $query->whereYear('tanggal_mulai', '<=', $tahun)
-                          ->whereYear('tanggal_target_selesai', '>=', $tahun);
+                        ->whereYear('tanggal_target_selesai', '>=', $tahun);
                 } elseif ($bulan !== 'all') {
                     $query->whereMonth('tanggal_mulai', '<=', $bulan)
-                          ->whereMonth('tanggal_target_selesai', '>=', $bulan);
+                        ->whereMonth('tanggal_target_selesai', '>=', $bulan);
                 }
-            }, 
-            'proyek.aktivitasProyek', 
+            },
+            'proyek.aktivitasProyek',
             'proyek.aktivitasProyek.dokumenPendukung', // Eager loading relasi dokumen pendukung yang benar
-            'proyek.ketuaProyek'
+            'proyek.ketuaProyek',
         ])->get();
 
         $namaTim = [];
@@ -166,11 +186,11 @@ class DirekturController extends Controller
         foreach ($timKerjaList as $tim) {
             $proyeks = $tim->proyek ?? collect();
             $totalProyekTim = $proyeks->count();
-            
+
             $totalProgress = 0;
             if ($totalProyekTim > 0) {
                 foreach ($proyeks as $p) {
-                    if(!$p->relationLoaded('timKerja')) {
+                    if (! $p->relationLoaded('timKerja')) {
                         $p->setRelation('timKerja', $tim);
                     }
                     $semuaProyek->push($p);
@@ -189,7 +209,7 @@ class DirekturController extends Controller
             $tim->proyek_count = $totalProyekTim;
             $tim->proyek_berjalan_count = $proyeks->where('status_proyek', 'berjalan')->count();
             $tim->rerata_progress = round($rerataTim, 2);
-            
+
             $daftarTim[] = $tim;
         }
 
@@ -197,11 +217,11 @@ class DirekturController extends Controller
             'namaTim' => $namaTim,
             'rerataProgressTim' => $rerataProgressTim,
             'daftarTim' => $daftarTim,
-            'semuaProyek' => $semuaProyek
+            'semuaProyek' => $semuaProyek,
         ];
     }
 
-    // Method AJAX untuk data diagram beban kerja personil
+    // Endpoint JSON untuk diagram beban kerja; dipanggil grafik saat filter tim/periode diganti
     public function getBebanKerjaData(Request $request)
     {
         $idTim = $request->input('id_tim', 'all');
@@ -213,7 +233,11 @@ class DirekturController extends Controller
         return response()->json($data);
     }
 
-    // Logika perhitungan beban kerja anggota tim (jumlah proyek per orang dalam periode)
+    /**
+     * Beban kerja = jumlah proyek yang dikerjakan setiap orang pada periode terpilih,
+     * dipecah per status proyek. Berguna bagi Direktur untuk melihat pembagian
+     * pekerjaan antar pegawai (fitur usulan dari pengujian black-box).
+     */
     private function hitungBebanKerjaAnggota($idTim = 'all', $tahun = 'all', $bulan = 'all')
     {
         $now = Carbon::now();
@@ -272,7 +296,7 @@ class DirekturController extends Controller
                     'selesai' => 0,
                     'belum_dimulai' => 0,
                     'terlambat' => 0,
-                    'proyek_ids' => []
+                    'proyek_ids' => [],
                 ];
             }
             foreach ($tim->anggotaTim as $at) {
@@ -286,7 +310,7 @@ class DirekturController extends Controller
                         'selesai' => 0,
                         'belum_dimulai' => 0,
                         'terlambat' => 0,
-                        'proyek_ids' => []
+                        'proyek_ids' => [],
                     ];
                 }
             }
@@ -295,7 +319,7 @@ class DirekturController extends Controller
         foreach ($proyekList as $proyek) {
             $status = strtolower(trim($proyek->status_proyek ?? 'belum_dimulai'));
             $tenggat = $proyek->tenggat_waktu ?? $proyek->tanggal_target_selesai ? Carbon::parse($proyek->tenggat_waktu ?? $proyek->tanggal_target_selesai) : null;
-            
+
             $effectiveStatus = $status;
             if ($status !== 'selesai' && $tenggat && $now->greaterThan($tenggat)) {
                 $effectiveStatus = 'terlambat';
@@ -306,7 +330,7 @@ class DirekturController extends Controller
             $userIdsInProject = [];
             if ($proyek->id_ketua_proyek) {
                 $userIdsInProject[] = $proyek->id_ketua_proyek;
-                if ($idTim === 'all' && !isset($personMap[$proyek->id_ketua_proyek]) && $proyek->ketuaProyek) {
+                if ($idTim === 'all' && ! isset($personMap[$proyek->id_ketua_proyek]) && $proyek->ketuaProyek) {
                     $personMap[$proyek->id_ketua_proyek] = [
                         'id' => $proyek->id_ketua_proyek,
                         'nama' => $proyek->ketuaProyek->nama,
@@ -316,7 +340,7 @@ class DirekturController extends Controller
                         'selesai' => 0,
                         'belum_dimulai' => 0,
                         'terlambat' => 0,
-                        'proyek_ids' => []
+                        'proyek_ids' => [],
                     ];
                 }
             }
@@ -324,7 +348,7 @@ class DirekturController extends Controller
             foreach ($proyek->anggotaProyek as $ap) {
                 if ($ap->id_pengguna) {
                     $userIdsInProject[] = $ap->id_pengguna;
-                    if ($idTim === 'all' && !isset($personMap[$ap->id_pengguna]) && $ap->pengguna) {
+                    if ($idTim === 'all' && ! isset($personMap[$ap->id_pengguna]) && $ap->pengguna) {
                         $personMap[$ap->id_pengguna] = [
                             'id' => $ap->id_pengguna,
                             'nama' => $ap->pengguna->nama,
@@ -334,7 +358,7 @@ class DirekturController extends Controller
                             'selesai' => 0,
                             'belum_dimulai' => 0,
                             'terlambat' => 0,
-                            'proyek_ids' => []
+                            'proyek_ids' => [],
                         ];
                     }
                 }
@@ -343,7 +367,7 @@ class DirekturController extends Controller
             $uniqueUsers = array_unique($userIdsInProject);
             foreach ($uniqueUsers as $uid) {
                 if (isset($personMap[$uid])) {
-                    if (!in_array($proyek->id_proyek, $personMap[$uid]['proyek_ids'])) {
+                    if (! in_array($proyek->id_proyek, $personMap[$uid]['proyek_ids'])) {
                         $personMap[$uid]['proyek_ids'][] = $proyek->id_proyek;
                         $personMap[$uid]['total']++;
                         if (isset($personMap[$uid][$effectiveStatus])) {
@@ -361,6 +385,7 @@ class DirekturController extends Controller
             if ($b['total'] === $a['total']) {
                 return strcmp($a['nama'], $b['nama']);
             }
+
             return $b['total'] <=> $a['total'];
         });
 
@@ -385,22 +410,22 @@ class DirekturController extends Controller
         $topPersonText = '-';
         $topPersonFull = '-';
         $topSubtitle = 'Personil dengan penugasan terbanyak';
-        if (!empty($personList) && $personList[0]['total'] > 0) {
+        if (! empty($personList) && $personList[0]['total'] > 0) {
             $maxTotal = $personList[0]['total'];
-            $topPersons = array_filter($personList, fn($p) => $p['total'] === $maxTotal);
+            $topPersons = array_filter($personList, fn ($p) => $p['total'] === $maxTotal);
             $topNames = array_column($topPersons, 'nama');
             $topCount = count($topNames);
             $topPersonFull = implode(', ', $topNames);
-            
+
             if ($topCount === 1) {
                 $topPersonText = $topNames[0];
-                $topSubtitle = $maxTotal . ' proyek aktif';
+                $topSubtitle = $maxTotal.' proyek aktif';
             } elseif ($topCount === 2) {
-                $topPersonText = $topNames[0] . ', ' . $topNames[1];
-                $topSubtitle = 'Masing-masing ' . $maxTotal . ' proyek aktif';
+                $topPersonText = $topNames[0].', '.$topNames[1];
+                $topSubtitle = 'Masing-masing '.$maxTotal.' proyek aktif';
             } else {
-                $topPersonText = implode(', ', array_slice($topNames, 0, 2)) . ' (+' . ($topCount - 2) . ' lainnya)';
-                $topSubtitle = $topCount . ' personil (masing-masing ' . $maxTotal . ' proyek)';
+                $topPersonText = implode(', ', array_slice($topNames, 0, 2)).' (+'.($topCount - 2).' lainnya)';
+                $topSubtitle = $topCount.' personil (masing-masing '.$maxTotal.' proyek)';
             }
         }
 
@@ -423,7 +448,7 @@ class DirekturController extends Controller
                 'avgWorkload' => $avgWorkload,
                 'totalAnggota' => count($personList),
                 'totalProyekAktif' => $proyekList->count(),
-            ]
+            ],
         ];
     }
 }

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->id('id_anggota_proyek');
             $table->unsignedBigInteger('id_proyek');
             $table->unsignedBigInteger('id_pengguna');
+            // Peran seseorang DI PROYEK INI (1 = Ketua Proyek, 2 = Anggota). Disimpan di tabel pivot
+            // ini, bukan di pengguna, karena orang yang sama bisa berperan berbeda pada proyek berbeda.
             $table->unsignedBigInteger('id_peran_proyek');
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek');
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');

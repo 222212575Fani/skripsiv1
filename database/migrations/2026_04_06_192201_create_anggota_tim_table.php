@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pengguna');
 
             $table->date('tanggal_bergabung');
+            // tanggal_keluar nullable: kosong = masih anggota aktif; terisi = riwayat anggota yang sudah keluar
             $table->date('tanggal_keluar')->nullable();
 
             $table->timestamp('created_at')->useCurrent();

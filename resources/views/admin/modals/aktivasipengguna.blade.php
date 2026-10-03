@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    MODAL: AKTIVASI AKUN PENGGUNA
+    Dibuka event open-modal-aktivasi dari tombol Aktivasi pada akun berstatus pending.
+    Admin memilih role (dan tim untuk Anggota/Ketua Tim), lalu form dikirim ke route admin.aktivasi
+    (PenggunaController@aktivasi).
+    =========================================================================
+--}}
 <div x-data="{ 
         open: false, 
         userId: '', 

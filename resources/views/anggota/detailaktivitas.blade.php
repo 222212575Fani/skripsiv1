@@ -1,3 +1,12 @@
+{{--
+    =========================================================================
+    MODAL: DETAIL AKTIVITAS (HANYA BACA)
+    Dipakai bersama oleh dashboard Anggota, daftar aktivitas, kelola aktivitas, dan dashboard
+    Direktur/Ketua Tim. Dibuka event open-modal-detail-aktivitas yang membawa data aktivitas
+    (penanggung jawab, rentang waktu, progress, riwayat laporan, kendala, dan dokumen pendukung).
+    Inilah tempat penelusuran bukti dukung: setiap dokumen dapat dibuka langsung dari modal ini.
+    =========================================================================
+--}}
 <div x-data="{ 
         open: false, 
         nama: '', 

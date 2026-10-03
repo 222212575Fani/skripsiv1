@@ -1,3 +1,10 @@
+{{--
+    =========================================================================
+    KOMPONEN: TABEL DATA UMUM
+    Kerangka tabel yang dipakai halaman daftar: slot header kolom, isi baris, dan paginasi.
+    Parameter: paginator, itemName, breakpoint, card.
+    =========================================================================
+--}}
 @props([
     'paginator' => null,
     'itemName' => 'data',

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreign('id_aktivitas')->references('id_aktivitas')->on('aktivitas_proyek');
             $table->unsignedBigInteger('id_pengguna');
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');
+            // nama_dokumen = nama asli berkas saat diunggah; file_path = lokasi berkas di storage server.
+            // Isi berkas tidak disimpan di basis data, hanya jalurnya.
             $table->string('nama_dokumen', 255);
             $table->string('file_path', 255);
             $table->timestamps();

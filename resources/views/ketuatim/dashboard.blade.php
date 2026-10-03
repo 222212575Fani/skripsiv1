@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    HALAMAN: DASHBOARD KETUA TIM
+    Route ketuatim.dashboard -> KetuaTimController@dashboard.
+    Kartu statistik proyek tim, daftar proyek tim (filter cari dan status dilakukan di sisi
+    peramban lewat Alpine), dan daftar ketua proyek beserta beban kerjanya.
+    =========================================================================
+--}}
 <x-layoututama title="Dashboard Ketua Tim">
     <div class="flex flex-col gap-8 pb-10" 
         x-data="{

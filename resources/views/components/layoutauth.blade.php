@@ -1,3 +1,9 @@
+{{--
+    =========================================================================
+    LAYOUT: HALAMAN AUTENTIKASI
+    Kerangka HTML untuk login dan register: memuat aset Vite, SweetAlert2, dan komponen toast.
+    =========================================================================
+--}}
 <!DOCTYPE html>
 <html lang="id">
 <head>

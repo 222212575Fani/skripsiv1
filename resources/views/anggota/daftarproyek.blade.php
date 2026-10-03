@@ -1,3 +1,11 @@
+{{--
+    =========================================================================
+    HALAMAN: DAFTAR PROYEK YANG DIKETUAI
+    Route anggota.daftarproyek -> AnggotaProyekController@daftarProyek.
+    Tabel proyek yang diketuai pengguna (tampilan kartu pada layar kecil). Tombol Kelola membuka
+    halaman kelola aktivitas proyek (anggota.proyek.aktivitas).
+    =========================================================================
+--}}
 <x-layoututama title="Daftar Proyek">
     <div x-data="{ 
         search: '{{ request('search') }}',
@@ -303,7 +311,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[10px] font-normal {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} border {{ $statusConfig['border'] }} shrink-0">
+                                    <span class="inline-flex items-center justify-center gap-1.5 min-w-28 whitespace-nowrap px-3 py-0.5 rounded-full text-[10px] font-normal {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} border {{ $statusConfig['border'] }} shrink-0">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $statusConfig['dot'] }}"></span>
                                         <span>{{ $statusConfig['label'] }}</span>
                                     </span>
@@ -316,15 +324,15 @@
                                 </div>
 
                                 {{-- Progress & Tanggal --}}
-                                <div class="flex items-center justify-between gap-4 text-xs text-gray-600 font-light pt-1">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-[10px] text-gray-400">Progress:</span>
-                                        <div class="w-16 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-4 text-xs text-gray-600 font-light pt-1">
+                                    <div class="flex items-center gap-2 w-full sm:flex-1 sm:max-w-sm">
+                                        <span class="text-[10px] text-gray-400 shrink-0">Progress:</span>
+                                        <div class="flex-1 min-w-12 bg-gray-200 rounded-full h-1.5 overflow-hidden">
                                             <div class="bg-[#604EE6] h-full rounded-full" style="width: {{ $persen }}%"></div>
                                         </div>
-                                        <span class="text-[11px] font-medium text-gray-700">{{ $persen }}%</span>
+                                        <span class="text-[11px] font-medium text-gray-700 shrink-0">{{ $persen }}%</span>
                                     </div>
-                                    <span class="text-[11px] text-gray-500">
+                                    <span class="text-[11px] text-gray-500 whitespace-nowrap">
                                         {{ $proyek->tanggal_mulai ? \Carbon\Carbon::parse($proyek->tanggal_mulai)->format('d/m/Y') : '-' }} - 
                                         {{ $proyek->tanggal_target_selesai ? \Carbon\Carbon::parse($proyek->tanggal_target_selesai)->format('d/m/Y') : '-' }}
                                     </span>

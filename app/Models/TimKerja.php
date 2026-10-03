@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * =========================================================================
  * MODEL: TIM KERJA
- * Merepresentasikan kelompok kerja (Divisi) yang diketuai oleh 1 Pengguna 
+ * Merepresentasikan kelompok kerja (Divisi) yang diketuai oleh 1 Pengguna
  * dan membawahi banyak Proyek serta Anggota Tim.
  * =========================================================================
  */
@@ -17,6 +17,7 @@ class TimKerja extends Model
     use HasFactory;
 
     protected $table = 'tim_kerja';
+
     protected $primaryKey = 'id_tim';
 
     protected $fillable = [
@@ -30,6 +31,8 @@ class TimKerja extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    // Satu tim selalu punya tepat satu Ketua Tim (kolom id_ketua_tim wajib terisi).
 
     /**
      * Relasi ke Ketua Tim
@@ -69,6 +72,6 @@ class TimKerja extends Model
     public function anggotaAktif()
     {
         return $this->hasMany(AnggotaTim::class, 'id_tim', 'id_tim')
-                    ->whereNull('tanggal_keluar');
+            ->whereNull('tanggal_keluar');
     }
 }
