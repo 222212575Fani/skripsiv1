@@ -97,8 +97,8 @@
                             class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
-                    {{-- Grid 2 Kolom (Ketua Proyek & Status Proyek) dengan Dropdown Buka ke Bawah --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {{-- Ketua Proyek (status proyek dihitung otomatis oleh sistem, jadi tidak ada di form ini) --}}
+                    <div class="grid grid-cols-1 gap-5">
                         
                         {{-- Dropdown Kustom Ketua Proyek --}}
                         <div>
@@ -126,14 +126,6 @@
                                         <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Tidak ada anggota tersedia.</p>
                                     @endforelse
                                 </div>
-                            </div>
-                        </div>
-
-                        {{-- Status Proyek: dihitung otomatis oleh sistem dari tanggal dan progres, bukan diisi manual --}}
-                        <div>
-                            <label class="block text-xs font-normal text-gray-700 mb-2">Status Proyek</label>
-                            <div class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-500 text-xs font-light cursor-not-allowed">
-                                Otomatis (berdasarkan tanggal dan progres)
                             </div>
                         </div>
 
