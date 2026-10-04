@@ -166,26 +166,42 @@ document.addEventListener('invalid', (e) => {
 
 // Pil pada kolom yang sudah tidak terlihat (mis. modal ditutup lalu dibuka lagi) dibersihkan,
 // beserta penanda "sudah gagal" agar formulir yang dibuka ulang kembali bersih
-function bersihkanPilTersembunyi() {
+function setelPilTersembunyi() {
     document.querySelectorAll('.proxis-pil').forEach((c) => {
         const kolom = c.previousElementSibling;
         const el = kolom && kolom.matches && kolom.matches('input, select, textarea')
             ? kolom
             : kolom?.querySelector?.('input, select, textarea');
-        if (!el || el.offsetParent === null) {
+        if (!el) {
             c.remove();
-            if (el) {
-                el.classList.remove(...KELAS_KOLOM_SALAH);
-                delete el.dataset.pilPaksa;
-                delete el.dataset.pilBlur;
-            }
+        } else if (el.offsetParent === null) {
+            // Dikembalikan ke keadaan awal (abu-abu berisi aturan) agar formulir dibuka ulang bersih
+            delete el.dataset.pilPaksa;
+            delete el.dataset.pilBlur;
+            perbaruiPil(el);
         }
     });
 }
-document.addEventListener('click', () => setTimeout(bersihkanPilTersembunyi, 50));
+document.addEventListener('click', () => setTimeout(setelPilTersembunyi, 50));
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setTimeout(bersihkanPilTersembunyi, 50);
+    if (e.key === 'Escape') setTimeout(setelPilTersembunyi, 50);
 });
+
+// Pil aturan dipasang sejak halaman dibuka (tidak menunggu kolom diklik), termasuk untuk
+// kolom di dalam modal yang masih tersembunyi dan kolom yang baru muncul belakangan
+function pasangPilAwal() {
+    document.querySelectorAll('input, select, textarea').forEach((el) => {
+        if (kolomBisaDivalidasi(el) && aturanKolom(el) && !sudahPunyaPilSendiri(el) && !pilKita(el)) {
+            perbaruiPil(el);
+        }
+    });
+}
+let jadwalPilAwal = null;
+new MutationObserver(() => {
+    clearTimeout(jadwalPilAwal);
+    jadwalPilAwal = setTimeout(pasangPilAwal, 100);
+}).observe(document.documentElement, { childList: true, subtree: true });
+document.addEventListener('DOMContentLoaded', () => setTimeout(pasangPilAwal, 0));
 
 // Mencegah formulir POST terkirim dua kali (klik ganda tombol simpan), yang membuat data
 // tersimpan sekali lalu muncul pesan gagal karena data yang sama dikirim lagi.
