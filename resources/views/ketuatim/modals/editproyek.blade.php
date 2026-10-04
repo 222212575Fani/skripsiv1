@@ -5,13 +5,20 @@
     Hanya proyek milik tim yang dipimpin yang dapat diubah (dicek di KetuaTimController).
     =========================================================================
 --}}
-<div x-data="{ 
-        open: false, 
-        id_proyek: '', 
-        nama_proyek: '', 
-        deskripsi_proyek: '', 
-        id_ketua_proyek: '', 
+@php
+    // Peta id pengguna => nama calon Ketua Proyek, untuk mengisi nama Ketua Proyek saat ini ketika modal dibuka
+    $petaKetua = collect($anggotaTim ?? [])->mapWithKeys(function ($m) {
+        return [(string) ($m->pengguna->id_pengguna ?? $m->id_pengguna) => ($m->pengguna->nama ?? $m->nama)];
+    })->all();
+@endphp
+<div x-data="{
+        open: false,
+        id_proyek: '',
+        nama_proyek: '',
+        deskripsi_proyek: '',
+        id_ketua_proyek: '',
         ketuaProyekNama: '',
+        ketuaDaftar: {{ Js::from($petaKetua) }},
         ketuaOpen: false,
         status_proyek: '',
         statusNama: '',
@@ -27,9 +34,8 @@
         deskripsi_proyek = $event.detail.deskripsi_proyek; 
         id_ketua_proyek = $event.detail.id_ketua_proyek; 
         
-        // Cari nama ketua proyek berdasarkan ID saat modal dibuka
-        let selectedMember = document.querySelector(`input[name='member_data_${id_ketua_proyek}']`);
-        ketuaProyekNama = $event.detail.ketuaProyekNama || '';
+        // Isi otomatis nama Ketua Proyek saat ini berdasarkan ID-nya
+        ketuaProyekNama = ketuaDaftar[String(id_ketua_proyek)] || $event.detail.ketua_proyek?.nama || '';
 
         status_proyek = $event.detail.status_proyek;
         if(status_proyek === 'belum_dimulai') statusNama = 'Belum Dimulai';
