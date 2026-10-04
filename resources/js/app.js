@@ -15,34 +15,55 @@ import Alpine from 'alpinejs';
 window.Swal = Swal;
 
 // =========================================================================
-// VALIDASI FORMULIR SERAGAM
+// VALIDASI FORMULIR LIVE SERAGAM
 // Gelembung validasi bawaan peramban (bahasa mengikuti peramban, tampilannya tidak bisa diubah)
-// dimatikan. Sebagai gantinya muncul pesan merah kecil berbahasa Indonesia tepat di bawah kolom
-// yang bermasalah, di semua formulir. Aturannya tetap dari atribut HTML (required, minlength,
-// pattern, type=email, dst.), jadi formulir tidak perlu diubah satu per satu.
+// dimatikan. Sebagai gantinya, di bawah kolom muncul "pil" status seperti pada halaman registrasi:
+// abu-abu (aturan yang harus dipenuhi), hijau dengan centang (sudah benar) dan merah dengan silang
+// (salah), diperbarui langsung saat pengguna mengetik. Aturannya diambil dari atribut HTML
+// (required, minlength, pattern + title, type=email), jadi formulir tidak perlu diubah satu per satu.
+// Kolom yang sudah punya pil sendiri (halaman registrasi, modal tambah pengguna) tidak ditambahi.
 // =========================================================================
-const IKON_ERROR = '<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
-const KELAS_KOLOM_ERROR = ['!border-rose-400', '!ring-2', '!ring-rose-100'];
+const IKON_PIL = {
+    netral: '<span class="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></span>',
+    benar: '<svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>',
+    salah: '<svg class="w-3 h-3 text-rose-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>',
+};
+const KELAS_PIL = {
+    netral: 'bg-gray-50 text-gray-500 border border-gray-200/70',
+    benar: 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium',
+    salah: 'bg-rose-50 text-rose-600 border border-rose-200/70 font-medium',
+};
+const KELAS_KOLOM_SALAH = ['!border-rose-400', '!ring-2', '!ring-rose-100'];
+const TIPE_DIABAIKAN = ['hidden', 'checkbox', 'radio', 'file', 'submit', 'button', 'reset', 'image'];
+
+function kolomBisaDivalidasi(el) {
+    return el && el.matches && el.matches('input, select, textarea')
+        && !TIPE_DIABAIKAN.includes(el.type) && !el.disabled && el.form;
+}
+
+// Kalimat aturan yang tampil pada pil abu-abu/hijau; kosong bila kolom hanya "wajib diisi"
+function aturanKolom(el) {
+    if (el.pattern) return el.title || 'Format isian sesuai';
+    if (el.type === 'email') return 'Format email valid';
+    if (el.minLength > 0) return `Minimal ${el.minLength} karakter`;
+    return '';
+}
 
 function pesanValidasi(el) {
     const v = el.validity;
-    if (v.valueMissing) {
-        if (el.type === 'checkbox') return 'Centang kolom ini untuk melanjutkan.';
-        return el.tagName === 'SELECT' ? 'Pilih salah satu opsi.' : 'Kolom ini wajib diisi.';
-    }
-    if (v.tooShort) return `Minimal ${el.minLength} karakter (saat ini ${el.value.length} karakter).`;
-    if (v.tooLong) return `Maksimal ${el.maxLength} karakter.`;
-    if (v.patternMismatch) return el.title || 'Format isian tidak sesuai.';
-    if (v.typeMismatch) return el.type === 'email' ? 'Format email tidak valid.' : 'Format isian tidak valid.';
-    if (v.rangeUnderflow) return `Nilai minimal ${el.min}.`;
-    if (v.rangeOverflow) return `Nilai maksimal ${el.max}.`;
-    if (v.badInput || v.stepMismatch) return 'Isian tidak valid.';
-    return el.validationMessage || 'Isian tidak valid.';
+    if (v.valueMissing) return el.tagName === 'SELECT' ? 'Pilih salah satu opsi' : 'Kolom ini wajib diisi';
+    if (v.tooShort) return `Minimal ${el.minLength} karakter (saat ini ${el.value.length} karakter)`;
+    if (v.tooLong) return `Maksimal ${el.maxLength} karakter`;
+    if (v.patternMismatch) return el.title || 'Format isian tidak sesuai';
+    if (v.typeMismatch) return el.type === 'email' ? 'Format email tidak valid' : 'Format isian tidak valid';
+    if (v.rangeUnderflow) return `Nilai minimal ${el.min}`;
+    if (v.rangeOverflow) return `Nilai maksimal ${el.max}`;
+    return el.validationMessage || 'Isian tidak valid';
 }
 
-// Pesan diletakkan setelah pembungkus kolom bila kolom berada di dalam pembungkus berposisi relatif
+// Pil diletakkan setelah pembungkus kolom bila kolom berada di dalam pembungkus berposisi relatif
 // (mis. kolom dengan ikon di dalamnya), agar letak ikon tidak bergeser.
-function titikPesan(el) {
+function titikPil(el) {
     const induk = el.parentElement;
     if (induk && getComputedStyle(induk).position === 'relative'
         && induk.querySelectorAll('input, select, textarea').length === 1) {
@@ -51,30 +72,79 @@ function titikPesan(el) {
     return el;
 }
 
-function pesanDi(el) {
-    return titikPesan(el).nextElementSibling?.classList.contains('proxis-error')
-        ? titikPesan(el).nextElementSibling
-        : null;
+function pilKita(el) {
+    const n = titikPil(el).nextElementSibling;
+    return n && n.classList.contains('proxis-pil') ? n : null;
 }
 
-function tampilkanError(el) {
-    const teks = pesanValidasi(el);
-    let p = pesanDi(el);
-    if (!p) {
-        p = document.createElement('p');
-        p.className = 'proxis-error mt-1.5 flex items-center gap-1 text-[11px] font-normal text-rose-600';
-        p.setAttribute('role', 'alert');
-        titikPesan(el).insertAdjacentElement('afterend', p);
+function sudahPunyaPilSendiri(el) {
+    const n = titikPil(el).nextElementSibling;
+    return !!(n && !n.classList.contains('proxis-pil') && n.querySelector(':scope > span.rounded-full'));
+}
+
+function gambarPil(el, status, teks) {
+    let c = pilKita(el);
+    if (!c) {
+        c = document.createElement('div');
+        c.className = 'proxis-pil mt-1.5 flex flex-wrap items-center gap-1.5';
+        titikPil(el).insertAdjacentElement('afterend', c);
     }
-    p.innerHTML = `${IKON_ERROR}<span></span>`;
-    p.querySelector('span').textContent = teks;
-    el.classList.add(...KELAS_KOLOM_ERROR);
+    c.innerHTML = `<span class="inline-flex items-center justify-center gap-1.5 w-fit max-w-full whitespace-nowrap px-3 py-0.5 rounded-full text-[11px] transition-all duration-200 ${KELAS_PIL[status]}">${IKON_PIL[status]}<span></span></span>`;
+    c.querySelector('span > span:last-child').textContent = teks;
+
+    if (status === 'salah') el.classList.add(...KELAS_KOLOM_SALAH);
+    else el.classList.remove(...KELAS_KOLOM_SALAH);
 }
 
-function hapusError(el) {
-    pesanDi(el)?.remove();
-    el.classList.remove(...KELAS_KOLOM_ERROR);
+function hapusPil(el) {
+    pilKita(el)?.remove();
+    el.classList.remove(...KELAS_KOLOM_SALAH);
 }
+
+// Menentukan tampilan pil untuk satu kolom pada saat ini
+function perbaruiPil(el) {
+    if (!kolomBisaDivalidasi(el) || sudahPunyaPilSendiri(el)) return;
+
+    const aturan = aturanKolom(el);
+    const dipaksa = el.dataset.pilPaksa === '1';       // sudah gagal saat Simpan ditekan
+    const selesaiDiisi = el.dataset.pilBlur === '1';   // pengguna sudah meninggalkan kolom
+    const kosong = el.value === '';
+    const v = el.validity;
+
+    // Kolom hanya "wajib diisi" (tanpa aturan lain): tidak ada pil sampai Simpan ditekan
+    if (!aturan && !dipaksa) {
+        hapusPil(el);
+        return;
+    }
+
+    if (el.checkValidity()) {
+        delete el.dataset.pilPaksa;
+        if (kosong) gambarPil(el, 'netral', aturan);       // kolom opsional yang kosong
+        else gambarPil(el, 'benar', aturan || 'Sudah sesuai');
+        return;
+    }
+
+    if (dipaksa) {
+        gambarPil(el, 'salah', pesanValidasi(el));
+    } else if (kosong || v.tooShort) {
+        const hitung = v.tooShort ? ` (${el.value.length}/${el.minLength})` : '';
+        gambarPil(el, 'netral', aturan + hitung);
+    } else if (v.typeMismatch || (v.patternMismatch && selesaiDiisi)) {
+        gambarPil(el, 'salah', pesanValidasi(el));
+    } else {
+        gambarPil(el, 'netral', aturan);
+    }
+}
+
+// Saat kolom disentuh atau diisi, pil langsung tampil dan diperbarui
+['focusin', 'input', 'change'].forEach((nama) => {
+    document.addEventListener(nama, (e) => perbaruiPil(e.target), true);
+});
+document.addEventListener('focusout', (e) => {
+    if (!kolomBisaDivalidasi(e.target)) return;
+    e.target.dataset.pilBlur = '1';
+    if (pilKita(e.target) || aturanKolom(e.target)) perbaruiPil(e.target);
+}, true);
 
 // Event "invalid" tidak menggelembung, jadi dipasang pada fase capture. preventDefault()
 // mematikan gelembung bawaan peramban; fokus dipindah manual ke kolom pertama yang bermasalah.
@@ -82,7 +152,9 @@ let sudahFokus = false;
 document.addEventListener('invalid', (e) => {
     const el = e.target;
     e.preventDefault();
-    tampilkanError(el);
+    el.dataset.pilPaksa = '1';
+    el.dataset.pilBlur = '1';
+    perbaruiPil(el);
 
     if (!sudahFokus) {
         sudahFokus = true;
@@ -92,32 +164,27 @@ document.addEventListener('invalid', (e) => {
     }
 }, true);
 
-// Saat pengguna mengetik: pesan hilang bila sudah benar, atau diperbarui bila masih salah
-['input', 'change'].forEach((nama) => {
-    document.addEventListener(nama, (e) => {
-        const el = e.target;
-        if (!el.classList || !el.classList.contains('!border-rose-400') || typeof el.checkValidity !== 'function') return;
-        if (el.checkValidity()) hapusError(el);
-        else tampilkanError(el);
-    }, true);
-});
-
-// Pesan sisa pada kolom yang sudah tidak terlihat (mis. modal ditutup lalu dibuka lagi) dibersihkan
-function bersihkanErrorTersembunyi() {
-    document.querySelectorAll('.proxis-error').forEach((p) => {
-        const kolom = p.previousElementSibling;
+// Pil pada kolom yang sudah tidak terlihat (mis. modal ditutup lalu dibuka lagi) dibersihkan,
+// beserta penanda "sudah gagal" agar formulir yang dibuka ulang kembali bersih
+function bersihkanPilTersembunyi() {
+    document.querySelectorAll('.proxis-pil').forEach((c) => {
+        const kolom = c.previousElementSibling;
         const el = kolom && kolom.matches && kolom.matches('input, select, textarea')
             ? kolom
             : kolom?.querySelector?.('input, select, textarea');
         if (!el || el.offsetParent === null) {
-            p.remove();
-            el?.classList.remove(...KELAS_KOLOM_ERROR);
+            c.remove();
+            if (el) {
+                el.classList.remove(...KELAS_KOLOM_SALAH);
+                delete el.dataset.pilPaksa;
+                delete el.dataset.pilBlur;
+            }
         }
     });
 }
-document.addEventListener('click', () => setTimeout(bersihkanErrorTersembunyi, 50));
+document.addEventListener('click', () => setTimeout(bersihkanPilTersembunyi, 50));
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setTimeout(bersihkanErrorTersembunyi, 50);
+    if (e.key === 'Escape') setTimeout(bersihkanPilTersembunyi, 50);
 });
 
 // Mencegah formulir POST terkirim dua kali (klik ganda tombol simpan), yang membuat data
