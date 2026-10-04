@@ -265,9 +265,11 @@ class KetuaTimController extends Controller
             'id_ketua_proyek' => 'required|exists:pengguna,id_pengguna',
             'tanggal_mulai' => 'nullable|date',
             'tenggat_waktu' => 'required|date|after_or_equal:tanggal_mulai',
-            'anggota_proyek' => 'nullable|array',
+            'anggota_proyek' => 'required|array|min:1',
             'anggota_proyek.*' => 'exists:pengguna,id_pengguna',
         ], [
+            'anggota_proyek.required' => 'Pilih minimal satu anggota proyek.',
+            'anggota_proyek.min' => 'Pilih minimal satu anggota proyek.',
             'nama_proyek.required' => 'Nama proyek wajib diisi.',
             'nama_proyek.max' => 'Nama proyek maksimal 200 karakter.',
             'deskripsi.max' => 'Deskripsi proyek maksimal 2000 karakter.',

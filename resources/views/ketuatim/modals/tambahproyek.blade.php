@@ -16,9 +16,10 @@
         statusOpen: false,
         anggotaOpen: false,
         selectedAnggota: [],
+        anggotaError: false,
         tglMulai: ''
-    }" 
-     @open-modal-tambah-proyek.window="open = true; namaProyek = ''; selectedAnggota = [];" 
+    }"
+     @open-modal-tambah-proyek.window="open = true; namaProyek = ''; selectedAnggota = []; anggotaError = false;"
      @close-modal-tambah-proyek.window="open = false"
      x-show="open" 
      x-cloak
@@ -78,7 +79,8 @@
                 </button>
             </div>
 
-            <form action="{{ route('ketuatim.manajemenproyek.store') ?? '#' }}" method="POST" autocomplete="off">
+            <form action="{{ route('ketuatim.manajemenproyek.store') ?? '#' }}" method="POST" autocomplete="off"
+                @submit="if (selectedAnggota.length === 0) { $event.preventDefault(); anggotaError = true; anggotaOpen = true; }">
                 @csrf
 
                 <div class="p-4 sm:p-8 space-y-4 sm:space-y-5">
@@ -129,9 +131,9 @@
                             </div>
                         </div>
 
-                        {{-- Tambahan Anggota Proyek (Mengikuti Proses Bisnis Usulan) --}}
+                        {{-- Anggota Proyek (wajib, minimal satu): Ketua Proyek hanya dapat menugaskan aktivitas kepada anggota yang dipilih di sini --}}
                         <div>
-                        <label class="block text-xs font-normal text-gray-700 mb-2">Pilih Anggota Proyek (Opsional)</label>
+                        <label class="block text-xs font-normal text-gray-700 mb-2">Pilih Anggota Proyek <span class="text-red-500">*</span></label>
                         <div class="relative" @click.outside="anggotaOpen = false">
                             <button type="button" @click="anggotaOpen = !anggotaOpen; ketuaOpen = false; statusOpen = false;"
                                 class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-white hover:bg-[#F8F7FF] border border-gray-200 hover:border-[#6E5BC3] focus:border-[#6E5BC3] focus:ring-2 focus:ring-[#6E5BC3]/20 rounded-xl text-xs font-light transition-all cursor-pointer">
@@ -152,6 +154,25 @@
                                     <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Tidak ada anggota tersedia.</p>
                                 @endforelse
                             </div>
+                        </div>
+
+                        {{-- Pil status pilihan anggota (abu-abu = aturan, hijau = terpenuhi, merah = gagal saat Simpan) --}}
+                        <div class="mt-1.5 flex flex-wrap items-center gap-1.5">
+                            <span class="inline-flex items-center justify-center gap-1.5 w-fit max-w-full whitespace-nowrap px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                                  :class="selectedAnggota.length > 0
+                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium'
+                                      : (anggotaError ? 'bg-rose-50 text-rose-600 border border-rose-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70')">
+                                <template x-if="selectedAnggota.length > 0">
+                                    <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                </template>
+                                <template x-if="selectedAnggota.length === 0 && anggotaError">
+                                    <svg class="w-3 h-3 text-rose-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </template>
+                                <template x-if="selectedAnggota.length === 0 && !anggotaError">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0"></span>
+                                </template>
+                                <span x-text="selectedAnggota.length > 0 ? selectedAnggota.length + ' anggota dipilih' : (anggotaError ? 'Pilih minimal satu anggota proyek' : 'Minimal 1 anggota proyek')"></span>
+                            </span>
                         </div>
                         </div>
 
