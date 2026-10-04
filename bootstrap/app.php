@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CheckActiveUser;
 use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\TanpaCache;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -39,8 +40,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // CheckActiveUser berjalan di setiap request web: akun yang dinonaktifkan Admin
         // langsung dikeluarkan pada permintaan berikutnya
+        // TanpaCache melarang peramban menyimpan halaman, agar tombol Back setelah logout
+        // tidak menampilkan halaman terproteksi dari cache
         $middleware->web(append: [
             CheckActiveUser::class,
+            TanpaCache::class,
         ]);
 
         // Nama pendek "role" untuk dipakai di route, mis. ->middleware('role:Admin')

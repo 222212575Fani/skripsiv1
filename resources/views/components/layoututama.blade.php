@@ -75,6 +75,10 @@
             opacity: 1 !important;
         }
     </style>
+    {{-- Halaman yang dipulihkan dari cache peramban (tombol Back setelah logout) dimuat ulang dari server --}}
+    <script>
+        window.addEventListener('pageshow', function (e) { if (e.persisted) window.location.reload(); });
+    </script>
 </head>
 <body class="m-0 p-0 text-[#2D2A4A] antialiased overflow-hidden flex flex-col h-screen h-[100dvh]" x-data="{ sidebarOpen: false }">
     <div class="flex flex-1 min-h-0 overflow-hidden relative">
