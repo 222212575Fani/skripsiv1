@@ -65,7 +65,7 @@
                 class="w-full sm:w-auto flex items-center justify-between gap-2.5 px-4 py-2 bg-white border rounded-full text-xs font-normal text-[#604EE6] transition-all cursor-pointer shadow-2xs focus:outline-none"
                 :class="openPeriodeDropdown ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                 <div class="flex items-center gap-2 truncate">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" :class="(selectedMonth === 'semua' && selectedYear === '{{ date('Y') }}') ? 'text-gray-400' : 'text-[#604EE6]'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                     {{-- Abu-abu saat masih periode bawaan (semua bulan, tahun berjalan) --}}

@@ -153,7 +153,7 @@
                             class="w-full sm:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-light transition-all cursor-pointer shadow-2xs sm:min-w-40 focus:outline-none"
                             :class="peranOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-2 truncate">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="filterPeran === 'semua' ? 'text-gray-400' : 'text-[#604EE6]'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                                 <span class="truncate" :class="filterPeran === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'" x-text="{
@@ -191,7 +191,7 @@
                             class="w-full sm:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-light transition-all cursor-pointer shadow-2xs sm:min-w-42.5 focus:outline-none"
                             :class="bulanOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-2 truncate">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="(bulan === 'semua' && tahun === '{{ date('Y') }}') ? 'text-gray-400' : 'text-[#604EE6]'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 {{-- Placeholder selaras dengan warna abu-abu muda jika Bulan == semua --}}
@@ -253,7 +253,7 @@
                             class="w-full sm:w-auto flex items-center justify-between gap-3 px-4 py-2.5 bg-white border text-[#604EE6] rounded-full text-xs font-light transition-all cursor-pointer shadow-2xs sm:min-w-40 focus:outline-none"
                             :class="filterOpen ? 'border-[#604EE6] ring-2 ring-purple-100 bg-white' : 'border-purple-200 hover:border-purple-300 hover:bg-[#F8F7FF]'">
                             <div class="flex items-center gap-2 truncate">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#604EE6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="status === 'semua' ? 'text-gray-400' : 'text-[#604EE6]'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v4.172a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-8.586a1 1 0 00-.293-.707L.293 7.293A1 1 0 010 6.586V4z" />
                                 </svg>
                                 <span class="truncate" :class="status === 'semua' ? 'text-gray-400 font-light' : 'text-gray-700 font-medium'" x-text="{

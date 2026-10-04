@@ -5,6 +5,23 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+/* Font Mulish disajikan dari server sendiri (public/fonts), bukan Google Fonts, agar tidak ada
+   kedipan font bawaan saat halaman dimuat ulang dan tetap tampil tanpa koneksi internet */
+@font-face {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 200 1000;
+    font-display: block;
+    src: url('/fonts/mulish-latin.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Mulish';
+    font-style: italic;
+    font-weight: 200 1000;
+    font-display: block;
+    src: url('/fonts/mulish-latin-italic.woff2') format('woff2');
+}
+
 @theme {
     /* 2. Set Mulish sebagai font utama */
     --font-sans: 'Mulish', ui-sans-serif, system-ui, sans-serif;

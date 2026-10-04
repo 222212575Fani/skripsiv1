@@ -20,10 +20,8 @@
     <!-- Vite Assets (Alpine.js & CSS di-handle di sini) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Google Fonts Preconnect & Optimized Font Loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300..1000;1,300..1000&display=swap" rel="stylesheet">
+    <!-- Font Mulish dari server sendiri, dimuat lebih awal agar tidak berkedip -->
+    <link rel="preload" href="{{ asset('fonts/mulish-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
     
     <!-- Livewire Styles -->
     @livewireStyles

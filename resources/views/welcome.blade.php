@@ -17,10 +17,8 @@
     <link rel="shortcut icon" href="{{ asset('images/logo_bps.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo_bps.png') }}">
 
-    <!-- Google Fonts: Mulish -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300..1000;1,300..1000&display=swap" rel="stylesheet">
+    <!-- Font Mulish dari server sendiri, dimuat lebih awal agar tidak berkedip -->
+    <link rel="preload" href="{{ asset('fonts/mulish-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
