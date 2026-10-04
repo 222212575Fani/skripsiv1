@@ -64,7 +64,7 @@
         {{-- BARIS 1: JUDUL HALAMAN & SUBTITLE --}}
         <div class="px-1">
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">Daftar Aktivitas</h1>
-            <p class="text-xs sm:text-sm text-gray-500 font-light mt-1">Daftar aktivitas yang Anda ikuti atau pertanggungjawabkan</p>
+            <p class="text-xs sm:text-sm text-gray-500 font-light mt-1">Daftar aktivitas yang menjadi tanggung jawab Anda</p>
         </div>
 
         {{-- KONTROL DESKTOP (Layar >= xl) --}}
@@ -335,8 +335,10 @@
                 @empty
                     <tr>
                         <td colspan="9" class="py-8">
-                            <x-emptystate 
-                                title="Tidak Ada Aktivitas Ditemukan" 
+                            <x-emptystate
+                                :border="false"
+                                padding="py-16 px-4"
+                                title="Tidak Ada Aktivitas Ditemukan"
                                 message="Tidak ada aktivitas yang sesuai dengan kriteria pencarian atau status yang dipilih." 
                             />
                         </td>

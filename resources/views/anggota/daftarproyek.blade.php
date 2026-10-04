@@ -349,8 +349,10 @@
                 @empty
                     <tr>
                         <td colspan="9" class="py-8">
-                            <x-emptystate 
-                                title="Tidak Ada Proyek Ditemukan" 
+                            <x-emptystate
+                                :border="false"
+                                padding="py-16 px-4"
+                                title="Tidak Ada Proyek Ditemukan"
                                 message="Tidak ada proyek yang sesuai dengan kriteria pencarian atau status yang dipilih." 
                             />
                         </td>
