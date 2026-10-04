@@ -133,9 +133,6 @@
                         </span>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 ml-1">
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-[#604EE6]">
-                            {{ $counts[$statusAktif] ?? 0 }}
-                        </span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -150,9 +147,6 @@
                                 <span class="w-1.5 h-1.5 rounded-full {{ $statusAktif == $key ? 'bg-[#604EE6]' : 'bg-transparent' }}"></span>
                                 <span>{{ $label }}</span>
                             </div>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {{ $statusAktif == $key ? 'bg-[#604EE6] text-white' : 'bg-gray-100 text-gray-600' }}">
-                                {{ $counts[$key] ?? 0 }}
-                            </span>
                         </a>
                     @endforeach
                 </div>

@@ -173,33 +173,23 @@
                             <button @click="status = 'semua'; filterOpen = false;" 
                                 class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
                                 :class="status === 'semua' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Semua Proyek</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'semua' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">{{ $totalProyek }}</span>
-                            </button>
+                                <span>Semua Proyek</span>                            </button>
                             <button @click="status = 'belum_dimulai'; filterOpen = false;" 
                                 class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
                                 :class="status === 'belum_dimulai' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Belum Dimulai</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'belum_dimulai' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">{{ $belumDimulai }}</span>
-                            </button>
+                                <span>Belum Dimulai</span>                            </button>
                             <button @click="status = 'berjalan'; filterOpen = false;" 
                                 class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
                                 :class="status === 'berjalan' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Sedang Berjalan</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'berjalan' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">{{ $berjalan }}</span>
-                            </button>
+                                <span>Sedang Berjalan</span>                            </button>
                             <button @click="status = 'selesai'; filterOpen = false;" 
                                 class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
                                 :class="status === 'selesai' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Selesai</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'selesai' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">{{ $selesai }}</span>
-                            </button>
+                                <span>Selesai</span>                            </button>
                             <button @click="status = 'terlambat'; filterOpen = false;" 
                                 class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-normal transition-all cursor-pointer"
                                 :class="status === 'terlambat' ? 'bg-[#F8F7FF] text-[#6E5BC3]' : 'text-gray-700 hover:bg-gray-50'">
-                                <span>Terlambat</span>
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-normal" :class="status === 'terlambat' ? 'bg-indigo-100/80 text-[#6E5BC3]' : 'bg-gray-100 text-gray-600'">{{ $terlambat }}</span>
-                            </button>
+                                <span>Terlambat</span>                            </button>
                         </div>
                     </div>
                 </div>
