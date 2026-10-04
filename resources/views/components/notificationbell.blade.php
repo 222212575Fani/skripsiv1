@@ -68,8 +68,16 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(res => res.json())
+            .then(res => {
+                // Sesi berakhir (mis. akun dinonaktifkan Admin): server mengalihkan ke login, jadi arahkan halaman ini juga
+                if (res.redirected || res.status === 401 || res.status === 419) {
+                    window.location.href = '{{ route('login') }}';
+                    return null;
+                }
+                return res.json();
+            })
             .then(data => {
+                if (!data) return;
                 this.unreadCount = data.unread_count;
                 this.hasUnread = data.has_unread;
                 if (data.notifications) {

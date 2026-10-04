@@ -61,7 +61,7 @@
                         </svg>
                     </x-slot:icon>
                     <x-slot:hint>
-                        <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                        <span class="inline-flex items-center justify-center gap-1.5 w-fit max-w-full whitespace-nowrap px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                               :class="nip.length === 18 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
                             <template x-if="nip.length === 18">
                                 <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -86,7 +86,7 @@
                         </svg>
                     </x-slot:icon>
                     <x-slot:hint>
-                        <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                        <span class="inline-flex items-center justify-center gap-1.5 w-fit max-w-full whitespace-nowrap px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                               :class="(email.trim().toLowerCase().endsWith('@bps.go.id') && email.indexOf('@bps.go.id') > 0) 
                                       ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' 
                                       : (email.trim().length > 0 
@@ -123,7 +123,7 @@
                         </svg>
                     </x-slot:icon>
                     <x-slot:hint>
-                        <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                        <span class="inline-flex items-center justify-center gap-1.5 w-fit max-w-full whitespace-nowrap px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                               :class="password.length >= 8 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' : 'bg-gray-50 text-gray-500 border border-gray-200/70'">
                             <template x-if="password.length >= 8">
                                 <svg class="w-3 h-3 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -146,7 +146,7 @@
                         </svg>
                     </x-slot:icon>
                     <x-slot:hint>
-                        <span class="inline-flex items-center justify-center gap-1.5 w-28 px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
+                        <span class="inline-flex items-center justify-center gap-1.5 w-fit max-w-full whitespace-nowrap px-3 py-0.5 rounded-full text-[11px] transition-all duration-200"
                               :class="(password_confirmation.length >= 8 && password_confirmation === password) 
                                       ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-medium' 
                                       : ((password_confirmation.length > 0 && password_confirmation !== password) 
