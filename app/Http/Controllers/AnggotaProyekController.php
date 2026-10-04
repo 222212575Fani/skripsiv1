@@ -524,6 +524,12 @@ class AnggotaProyekController extends Controller
         abort_unless($this->dapatKelolaAktivitas($proyek), 403);
         $tanggalMulaiMinimum = Carbon::today();
 
+        // Aktivitas yang sudah berjalan boleh tetap memakai tanggal mulai lamanya (yang sudah lewat),
+        // sehingga mengubah nama atau penanggung jawab tidak memaksa tanggal mulai diganti
+        if ($aktivitas->tanggal_mulai && Carbon::parse($aktivitas->tanggal_mulai)->lt($tanggalMulaiMinimum)) {
+            $tanggalMulaiMinimum = Carbon::parse($aktivitas->tanggal_mulai);
+        }
+
         if ($proyek->tanggal_mulai && Carbon::parse($proyek->tanggal_mulai)->gt($tanggalMulaiMinimum)) {
             $tanggalMulaiMinimum = Carbon::parse($proyek->tanggal_mulai);
         }

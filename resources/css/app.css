@@ -42,6 +42,17 @@
     font-weight: 300 !important;
   }
 
+  /* Sembunyikan tombol panah naik/turun bawaan peramban pada kolom angka agar tampilannya bersih */
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   /* Seragamkan ketebalan dan gaya semua placeholder input & textarea agar selalu tipis (font-weight: 300 / font-light) */
   input::placeholder,
   textarea::placeholder,

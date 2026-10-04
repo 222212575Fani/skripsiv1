@@ -13,27 +13,30 @@
         pj: '', 
         pjNama: '',
         pjOpen: false,
-        tglMulai: '', 
-        tglSelesai: '' 
-    }" 
+        tglMulai: '',
+        tglMulaiAwal: '',
+        tglSelesai: ''
+    }"
     @open-modal-edit-aktivitas.window="
-        open = true; 
-        id = $event.detail.id; 
-        nama = $event.detail.nama; 
-        deskripsi = $event.detail.deskripsi; 
-        pj = $event.detail.pj; 
+        open = true;
+        id = $event.detail.id;
+        nama = $event.detail.nama;
+        deskripsi = $event.detail.deskripsi;
+        pj = $event.detail.pj;
         pjNama = $event.detail.pjNama;
-        tglMulai = $event.detail.tglMulai; 
+        tglMulai = $event.detail.tglMulai;
+        tglMulaiAwal = $event.detail.tglMulai;
         tglSelesai = $event.detail.tglSelesai;
-    " 
+    "
     @open-edit-aktivitas.window="
-        open = true; 
-        id = $event.detail.id; 
-        nama = $event.detail.nama; 
-        deskripsi = $event.detail.deskripsi; 
-        pj = $event.detail.pj; 
+        open = true;
+        id = $event.detail.id;
+        nama = $event.detail.nama;
+        deskripsi = $event.detail.deskripsi;
+        pj = $event.detail.pj;
         pjNama = $event.detail.pjNama;
-        tglMulai = $event.detail.tglMulai; 
+        tglMulai = $event.detail.tglMulai;
+        tglMulaiAwal = $event.detail.tglMulai;
         tglSelesai = $event.detail.tglSelesai;
     "
     @close-modal-edit-aktivitas.window="open = false"
@@ -145,8 +148,9 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
-                            <input type="date" name="tanggal_mulai" x-model="tglMulai" required 
-                                min="{{ $minMulai }}"
+                            {{-- Tanggal mulai yang sudah tersimpan tetap boleh dipertahankan walau sudah lewat dari hari ini --}}
+                            <input type="date" name="tanggal_mulai" x-model="tglMulai" required
+                                :min="(tglMulaiAwal && tglMulaiAwal < '{{ $minMulai }}') ? tglMulaiAwal : '{{ $minMulai }}'"
                                 @if($maxSelesai) max="{{ $maxSelesai }}" @endif
                                 class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>

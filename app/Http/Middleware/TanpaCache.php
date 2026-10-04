@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * =========================================================================
@@ -21,8 +23,8 @@ class TanpaCache
         $response = $next($request);
 
         // Unduhan berkas tidak ikut dilarang di-cache
-        if ($response instanceof \Symfony\Component\HttpFoundation\BinaryFileResponse
-            || $response instanceof \Symfony\Component\HttpFoundation\StreamedResponse) {
+        if ($response instanceof BinaryFileResponse
+            || $response instanceof StreamedResponse) {
             return $response;
         }
 

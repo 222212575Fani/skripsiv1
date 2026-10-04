@@ -172,6 +172,8 @@ class AuthController extends Controller
                 ->where('id_ketua_tim', $pengguna->id_pengguna)
                 ->exists();
 
+            // Keanggotaan tim yang dihitung hanya yang masih AKTIF (tanggal_keluar kosong). Baris lama
+            // yang sudah ditutup (pindah tim, dinonaktifkan) tidak boleh meloloskan login.
             $isAnggota = DB::table('anggota_tim')
                 ->where('id_pengguna', $pengguna->id_pengguna)
                 ->whereNull('tanggal_keluar')

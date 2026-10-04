@@ -27,7 +27,9 @@ class DirekturController extends Controller
     {
         // Pastikan status proyek (mis. "terlambat") sudah sesuai tanggal hari ini
         Proyek::sinkronkanSemuaStatus();
-        $now = Carbon::now();
+        // Pembanding tenggat memakai awal hari ini (sama dengan perhitungan status di model), sehingga
+        // proyek baru dihitung terlambat SETELAH tanggal tenggatnya lewat, bukan pada hari tenggatnya
+        $now = Carbon::today();
         $semuaProyekData = Proyek::all();
 
         $totalProyek = $semuaProyekData->count();
@@ -156,15 +158,12 @@ class DirekturController extends Controller
             'ketuaTim',
             'proyek' => function ($query) use ($tahun, $bulan) {
                 if ($tahun !== 'all' && $bulan !== 'all') {
-                    $query->where(function ($q) use ($tahun, $bulan) {
-                        $q->whereYear('tanggal_mulai', '<=', $tahun)
-                            ->whereYear('tanggal_target_selesai', '>=', $tahun)
-                            ->whereMonth('tanggal_mulai', '<=', $bulan)
-                            ->whereMonth('tanggal_target_selesai', '>=', $bulan);
-                    })->orWhere(function ($q) use ($tahun, $bulan) {
-                        $q->whereYear('tanggal_mulai', $tahun)
-                            ->whereMonth('tanggal_mulai', $bulan);
-                    });
+                    // Proyek ikut dihitung bila rentang tanggalnya beririsan dengan bulan yang dipilih
+                    // (mulai sebelum akhir bulan DAN target selesai setelah awal bulan)
+                    $awalBulan = Carbon::create((int) $tahun, (int) $bulan, 1)->startOfMonth();
+                    $akhirBulan = $awalBulan->copy()->endOfMonth();
+                    $query->whereDate('tanggal_mulai', '<=', $akhirBulan->toDateString())
+                        ->whereDate('tanggal_target_selesai', '>=', $awalBulan->toDateString());
                 } elseif ($tahun !== 'all') {
                     $query->whereYear('tanggal_mulai', '<=', $tahun)
                         ->whereYear('tanggal_target_selesai', '>=', $tahun);
@@ -240,7 +239,8 @@ class DirekturController extends Controller
      */
     private function hitungBebanKerjaAnggota($idTim = 'all', $tahun = 'all', $bulan = 'all')
     {
-        $now = Carbon::now();
+        // Awal hari ini, sama dengan perhitungan status di model (terlambat setelah tenggat lewat)
+        $now = Carbon::today();
 
         // Query proyek dengan filter tim & rentang periode
         $proyekQuery = Proyek::with(['anggotaProyek.pengguna', 'ketuaProyek', 'timKerja']);
@@ -249,17 +249,11 @@ class DirekturController extends Controller
         }
 
         if ($tahun !== 'all' && $bulan !== 'all') {
-            $proyekQuery->where(function ($q) use ($tahun, $bulan) {
-                $q->where(function ($sub) use ($tahun, $bulan) {
-                    $sub->whereYear('tanggal_mulai', '<=', $tahun)
-                        ->whereYear('tanggal_target_selesai', '>=', $tahun)
-                        ->whereMonth('tanggal_mulai', '<=', $bulan)
-                        ->whereMonth('tanggal_target_selesai', '>=', $bulan);
-                })->orWhere(function ($sub) use ($tahun, $bulan) {
-                    $sub->whereYear('tanggal_mulai', $tahun)
-                        ->whereMonth('tanggal_mulai', $bulan);
-                });
-            });
+            // Proyek ikut dihitung bila rentang tanggalnya beririsan dengan bulan yang dipilih
+            $awalBulan = Carbon::create((int) $tahun, (int) $bulan, 1)->startOfMonth();
+            $akhirBulan = $awalBulan->copy()->endOfMonth();
+            $proyekQuery->whereDate('tanggal_mulai', '<=', $akhirBulan->toDateString())
+                ->whereDate('tanggal_target_selesai', '>=', $awalBulan->toDateString());
         } elseif ($tahun !== 'all') {
             $proyekQuery->where(function ($q) use ($tahun) {
                 $q->where(function ($sub) use ($tahun) {
@@ -278,7 +272,8 @@ class DirekturController extends Controller
         $proyekList = $proyekQuery->get();
 
         // Query personil dari tim yang dipilih
-        $timQuery = TimKerja::with(['anggotaTim.pengguna', 'ketuaTim']);
+        // Hanya anggota yang masih aktif di tim (tanggal keluar kosong); yang sudah keluar tidak ikut grafik
+        $timQuery = TimKerja::with(['anggotaAktif.pengguna', 'ketuaTim']);
         if ($idTim !== 'all') {
             $timQuery->where('id_tim', $idTim);
         }
@@ -299,7 +294,7 @@ class DirekturController extends Controller
                     'proyek_ids' => [],
                 ];
             }
-            foreach ($tim->anggotaTim as $at) {
+            foreach ($tim->anggotaAktif as $at) {
                 if ($at->pengguna) {
                     $personMap[$at->pengguna->id_pengguna] = [
                         'id' => $at->pengguna->id_pengguna,
@@ -419,10 +414,10 @@ class DirekturController extends Controller
 
             if ($topCount === 1) {
                 $topPersonText = $topNames[0];
-                $topSubtitle = $maxTotal.' proyek aktif';
+                $topSubtitle = $maxTotal.' proyek';
             } elseif ($topCount === 2) {
                 $topPersonText = $topNames[0].', '.$topNames[1];
-                $topSubtitle = 'Masing-masing '.$maxTotal.' proyek aktif';
+                $topSubtitle = 'Masing-masing '.$maxTotal.' proyek';
             } else {
                 $topPersonText = implode(', ', array_slice($topNames, 0, 2)).' (+'.($topCount - 2).' lainnya)';
                 $topSubtitle = $topCount.' personil (masing-masing '.$maxTotal.' proyek)';

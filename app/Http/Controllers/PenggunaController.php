@@ -43,6 +43,9 @@ class PenggunaController extends Controller
 
         $users = $query->latest()->paginate(10)->withQueryString();
 
+        // Menentukan tim yang ditampilkan di kolom tim: bila ia Ketua Tim, tim yang dipimpinnya; bila
+        // bukan, tim tempat ia menjadi anggota AKTIF. Riwayat tim lama (tanggal_keluar terisi) tidak
+        // dipakai, supaya orang yang sudah pindah tim tidak tampil di tim lamanya.
         $users->getCollection()->transform(function ($user) {
             $timAsKetua = DB::table('tim_kerja')
                 ->where('id_ketua_tim', $user->id_pengguna)

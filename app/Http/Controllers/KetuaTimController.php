@@ -252,10 +252,16 @@ class KetuaTimController extends Controller
     // =========================================================================
 
     /**
-     * Menyimpan data proyek baru dan menentukan Ketua Proyek.
-     * Status proyek TIDAK diinput pengguna: model Proyek menghitungnya otomatis
-     * dari tanggal dan progress. Tanggal selesai wajib agar status "terlambat"
-     * selalu bisa ditentukan.
+     * Menyimpan data proyek baru dan menentukan Ketua Proyek beserta anggotanya.
+     *
+     * Aturan yang diperiksa (sesuai proses bisnis):
+     * - Ketua Tim menetapkan Ketua Proyek DAN anggota proyek. Ketua Proyek kemudian hanya dapat
+     *   menugaskan aktivitas kepada anggota yang dipilih di sini, jadi minimal satu anggota wajib.
+     * - Ketua Proyek tersimpan dengan peran sendiri (peran 1), tidak dihitung sebagai anggota biasa
+     *   (peran 2), sehingga anggota yang dipilih harus orang lain selain Ketua Proyek.
+     * - Tanggal mulai dan tanggal selesai wajib. Status proyek TIDAK diisi pengguna: model Proyek
+     *   menghitungnya otomatis dari tanggal dan progress (selesai, terlambat, berjalan, belum dimulai).
+     * - Tim yang sudah dinonaktifkan Admin tidak boleh menerima proyek baru.
      */
     public function storeProyek(Request $request)
     {

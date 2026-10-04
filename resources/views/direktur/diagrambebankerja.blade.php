@@ -125,7 +125,7 @@
         <div class="bg-[#F8F7FF] border border-purple-100 rounded-[22px] sm:rounded-3xl p-4 flex flex-col justify-between shadow-xs">
             <span class="text-[10px] sm:text-[11px] font-medium text-gray-500 uppercase tracking-wider">Total Personil Terdaftar</span>
             <span class="text-base sm:text-lg font-bold text-gray-800 mt-1" x-text="summary.totalAnggota + ' Pegawai'"></span>
-            <span class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5" x-text="summary.totalProyekAktif + ' Proyek aktif pada periode ini'"></span>
+            <span class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5" x-text="summary.totalProyekAktif + ' Proyek pada periode ini'"></span>
         </div>
     </div>
 

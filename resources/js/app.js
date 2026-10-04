@@ -37,15 +37,29 @@ const KELAS_KOLOM_SALAH = ['!border-rose-400', '!ring-2', '!ring-rose-100'];
 const TIPE_DIABAIKAN = ['hidden', 'checkbox', 'radio', 'file', 'submit', 'button', 'reset', 'image'];
 
 function kolomBisaDivalidasi(el) {
+    // Formulir ber-atribut novalidate (mis. halaman login) mengurus validasinya sendiri, jadi dilewati
     return el && el.matches && el.matches('input, select, textarea')
-        && !TIPE_DIABAIKAN.includes(el.type) && !el.disabled && el.form;
+        && !TIPE_DIABAIKAN.includes(el.type) && !el.disabled && el.form && !el.form.noValidate;
 }
 
 // Kalimat aturan yang tampil pada pil abu-abu/hijau; kosong bila kolom hanya "wajib diisi"
+// Kolom angka: satuan (mis. "%") dan keterangan tambahan (mis. "sisa progress") dibaca dari atribut
+// data-satuan dan data-keterangan pada kolomnya
+function teksBatas(el, nilai) {
+    const satuan = el.dataset.satuan || '';
+    return `${nilai}${satuan}`;
+}
+function keteranganKolom(el) {
+    return el.dataset.keterangan ? ` (${el.dataset.keterangan})` : '';
+}
+
 function aturanKolom(el) {
     if (el.pattern) return el.title || 'Format isian sesuai';
     if (el.type === 'email') return 'Format email valid';
     if (el.minLength > 0) return `Minimal ${el.minLength} karakter`;
+    if (el.type === 'number' && el.min !== '' && el.max !== '') {
+        return `Nilai ${teksBatas(el, el.min)} sampai ${teksBatas(el, el.max)}${keteranganKolom(el)}`;
+    }
     return '';
 }
 
@@ -56,8 +70,8 @@ function pesanValidasi(el) {
     if (v.tooLong) return `Maksimal ${el.maxLength} karakter`;
     if (v.patternMismatch) return el.title || 'Format isian tidak sesuai';
     if (v.typeMismatch) return el.type === 'email' ? 'Format email tidak valid' : 'Format isian tidak valid';
-    if (v.rangeUnderflow) return `Nilai minimal ${el.min}`;
-    if (v.rangeOverflow) return `Nilai maksimal ${el.max}`;
+    if (v.rangeUnderflow) return `Nilai minimal ${teksBatas(el, el.min)}`;
+    if (v.rangeOverflow) return `Nilai maksimal ${teksBatas(el, el.max)}${keteranganKolom(el)}`;
     return el.validationMessage || 'Isian tidak valid';
 }
 
@@ -119,17 +133,27 @@ function perbaruiPil(el) {
 
     if (el.checkValidity()) {
         delete el.dataset.pilPaksa;
+        if (!aturan) {                                      // kolom hanya "wajib diisi": tidak perlu pil
+            hapusPil(el);
+            return;
+        }
         if (kosong) gambarPil(el, 'netral', aturan);       // kolom opsional yang kosong
-        else gambarPil(el, 'benar', aturan || 'Sudah sesuai');
+        else gambarPil(el, 'benar', aturan);
         return;
     }
 
-    if (dipaksa) {
+    if (dipaksa && v.valueMissing) {
+        // Kolom wajib yang dikosongkan: cukup garis merah di kolomnya, karena tanda * pada label
+        // sudah menjelaskan bahwa kolom ini wajib diisi (tidak perlu kalimat tambahan)
+        if (aturan) gambarPil(el, 'netral', aturan);
+        else hapusPil(el);
+        el.classList.add(...KELAS_KOLOM_SALAH);
+    } else if (dipaksa) {
         gambarPil(el, 'salah', pesanValidasi(el));
     } else if (kosong || v.tooShort) {
         const hitung = v.tooShort ? ` (${el.value.length}/${el.minLength})` : '';
         gambarPil(el, 'netral', aturan + hitung);
-    } else if (v.typeMismatch || (v.patternMismatch && selesaiDiisi)) {
+    } else if (v.typeMismatch || v.rangeOverflow || v.rangeUnderflow || (v.patternMismatch && selesaiDiisi)) {
         gambarPil(el, 'salah', pesanValidasi(el));
     } else {
         gambarPil(el, 'netral', aturan);
@@ -178,6 +202,9 @@ function setelPilTersembunyi() {
             // Dikembalikan ke keadaan awal (abu-abu berisi aturan) agar formulir dibuka ulang bersih
             delete el.dataset.pilPaksa;
             delete el.dataset.pilBlur;
+            perbaruiPil(el);
+        } else {
+            // Batas kolom bisa berubah tiap formulir dibuka (mis. sisa progress), jadi pil disegarkan
             perbaruiPil(el);
         }
     });

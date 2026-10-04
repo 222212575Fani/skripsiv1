@@ -18,7 +18,7 @@ php artisan test --filter=SomeTest   # single test
 vendor/bin/pint           # code style (Laravel Pint)
 ```
 
-Local `.env` uses MySQL; `.env.example` and tests (`phpunit.xml`) use SQLite (tests: in-memory). Session, cache and queue all use the `database` driver. The test suite currently only contains Laravel's example tests. The local PHP has no `pdo_sqlite`, so DB-backed tests must point at a separate MySQL database via env vars (e.g. `DB_CONNECTION=mysql DB_DATABASE=<test_db> php artisan test`) — never the real `manajemenproyek` database.
+Local `.env` uses MySQL; `.env.example` and tests (`phpunit.xml`) use SQLite (tests: in-memory). Session, cache and queue all use the `database` driver. The local PHP has no `pdo_sqlite`, so DB-backed tests must point at a separate MySQL database via env vars (e.g. `APP_ENV=testing DB_CONNECTION=mysql DB_DATABASE=proxis_test php artisan test`) — never the real `manajemenproyek` database (`RefreshDatabase` wipes it). Tests: `tests/Feature/AturanBisnisTest.php` re-checks, per test-case code (AUTH-xx, USR-xx, TIM-xx, PRY-xx, AKT-xx, PRG-xx), the business rules marked "Sesuai" in the black-box test-case document plus later fixes; `IngatkanProgressTest.php` covers the reminder command.
 
 ## Architecture
 

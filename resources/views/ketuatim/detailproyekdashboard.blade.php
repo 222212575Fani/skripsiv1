@@ -571,16 +571,17 @@
 
         {{-- 3. MODAL EDIT AKTIVITAS --}}
         <div x-data="{ 
-                open: false, id: '', nama: '', deskripsi: '', pj: '', pjNama: '', pjOpen: false, tglMulai: '', tglSelesai: '' 
-             }" 
+                open: false, id: '', nama: '', deskripsi: '', pj: '', pjNama: '', pjOpen: false, tglMulai: '', tglMulaiAwal: '', tglSelesai: ''
+             }"
              @open-edit-aktivitas.window="
-                open = true; 
-                id = $event.detail.id; 
-                nama = $event.detail.nama; 
-                deskripsi = $event.detail.deskripsi; 
-                pj = $event.detail.pj; 
+                open = true;
+                id = $event.detail.id;
+                nama = $event.detail.nama;
+                deskripsi = $event.detail.deskripsi;
+                pj = $event.detail.pj;
                 pjNama = $event.detail.pjNama;
-                tglMulai = $event.detail.tglMulai; 
+                tglMulai = $event.detail.tglMulai;
+                tglMulaiAwal = $event.detail.tglMulai;
                 tglSelesai = $event.detail.tglSelesai;
              " 
              @close-edit-aktivitas.window="open = false"
@@ -672,8 +673,8 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
-                                    <input type="date" name="tanggal_mulai" x-model="tglMulai" required 
-                                        min="{{ $minMulai }}" @if($maxSelesai) max="{{ $maxSelesai }}" @endif
+                                    <input type="date" name="tanggal_mulai" x-model="tglMulai" required
+                                        :min="(tglMulaiAwal && tglMulaiAwal < '{{ $minMulai }}') ? tglMulaiAwal : '{{ $minMulai }}'" @if($maxSelesai) max="{{ $maxSelesai }}" @endif
                                         class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-light text-gray-700">
                                 </div>
                                 <div>

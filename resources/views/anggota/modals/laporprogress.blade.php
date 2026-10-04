@@ -12,14 +12,14 @@
     id: '', 
     nama: '', 
     progressSebelumnya: 0,
-    progressTambahan: 0,
+    progressTambahan: '',
     files: [],
     isUploading: false,
     uploadProgress: 0,
     
     get totalProgress() {
         let total = parseFloat(this.progressSebelumnya) + parseFloat(this.progressTambahan || 0);
-        return total > 100 ? 100 : (total < 0 ? 0 : total.toFixed(2));
+        return total > 100 ? 100 : (total < 0 ? 0 : parseFloat(total.toFixed(2)));
     },
 
     handleFileChange(event) {
@@ -73,8 +73,8 @@
         id = $event.detail.id; 
         nama = $event.detail.nama; 
         progressSebelumnya = parseFloat($event.detail.progress) || 0; 
-        progressTambahan = 0; 
-        files = []; 
+        progressTambahan = '';
+        files = [];
         let docInput = document.getElementById('dokumen_input');
         if(docInput) docInput.value = '';
     "
@@ -115,7 +115,7 @@
 
                         <div>
                             <label class="block text-xs font-normal text-gray-700 mb-1.5">Tambahan Progress Baru (%) <span class="text-red-500">*</span></label>
-                            <input type="number" name="progress_minggu_berjalan_tambahan" x-model.number="progressTambahan" min="0" :max="100 - progressSebelumnya" step="0.01" required
+                            <input type="number" name="progress_minggu_berjalan_tambahan" x-model.number="progressTambahan" min="0" :max="100 - progressSebelumnya" step="0.01" required data-satuan="%" data-keterangan="sisa progress"
                                 placeholder="Contoh: 30"
                                 class="w-full px-4 py-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-800 placeholder:text-gray-400 placeholder:font-light">
                         </div>
@@ -123,7 +123,7 @@
                         <input type="hidden" name="progress_minggu_berjalan" :value="totalProgress">
 
                         <div class="flex items-center justify-between pt-2 border-t border-purple-100 text-xs">
-                            <span class="font-bold text-gray-700">Total Progress Menjadi:</span>
+                            <span class="font-normal text-gray-700">Total Progress Menjadi:</span>
                             <span class="px-2.5 py-1 rounded-lg bg-[#6E5BC3] text-white font-extrabold text-xs shadow-xs" x-text="totalProgress + '%'"></span>
                         </div>
                     </div>
