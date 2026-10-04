@@ -161,11 +161,6 @@
                     </a>
                 </p>
 
-                {{-- Navigasi Kembali ke Beranda / Landing Page --}}
-                <a href="{{ route('home') }}" class="text-[13px] text-[#604EE6] hover:text-[#503ED8] hover:underline transition-colors font-semibold">
-                    Kembali ke Beranda
-                </a>
-
                 {{-- Copyright untuk layar kecil (Mobile / < md) di bagian putih --}}
                 <p class="md:hidden mt-2 text-center text-[12px] text-[#7A7A7A]">
                     © 2026 Direktorat Sistem Informasi Statistik

@@ -8,12 +8,12 @@ use Tests\TestCase;
 class ExampleTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Tidak ada landing page: alamat utama mengarah ke halaman login.
      */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_alamat_utama_diarahkan_ke_halaman_login(): void
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response->assertRedirect('/login');
     }
 }

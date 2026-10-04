@@ -9,14 +9,9 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\TimKerjaController;
 use Illuminate\Support\Facades\Route;
 
-// Halaman beranda (landing page) yang dapat dilihat tanpa login
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-Route::get('/portal', function () {
-    return view('welcome');
-})->name('portal');
+// Tidak ada landing page: alamat utama langsung ke halaman login. Pengguna yang sudah login
+// diteruskan otomatis ke halaman utama sesuai rolenya (lihat redirectUsersTo di bootstrap/app.php)
+Route::redirect('/', '/login')->name('home');
 
 // =========================================================================
 // KELOMPOK ROUTES: AUTENTIKASI (PUBLIC)
