@@ -55,6 +55,8 @@ class PenggunaController extends Controller
                 $timAsAnggota = DB::table('anggota_tim')
                     ->join('tim_kerja', 'anggota_tim.id_tim', '=', 'tim_kerja.id_tim')
                     ->where('anggota_tim.id_pengguna', $user->id_pengguna)
+                    ->whereNull('anggota_tim.tanggal_keluar')
+                    ->orderByDesc('anggota_tim.id_anggota_tim')
                     ->select('tim_kerja.nama_tim', 'tim_kerja.id_tim')
                     ->first();
 

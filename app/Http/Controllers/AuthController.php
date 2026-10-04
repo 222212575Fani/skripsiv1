@@ -174,6 +174,7 @@ class AuthController extends Controller
 
             $isAnggota = DB::table('anggota_tim')
                 ->where('id_pengguna', $pengguna->id_pengguna)
+                ->whereNull('tanggal_keluar')
                 ->exists();
 
             if (! $isKetua && ! $isAnggota) {
