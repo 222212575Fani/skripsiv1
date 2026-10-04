@@ -204,6 +204,23 @@ class TimKerjaController extends Controller
                         $oldKetua->id_role = $roleAnggotaId;
                         $oldKetua->save();
                     }
+
+                    // Mantan ketua tetap menjadi anggota tim ini. Bila ia belum punya keanggotaan
+                    // tim yang aktif (mis. dulu diangkat ketua lewat Tambah Pengguna/Aktivasi),
+                    // catat sekarang agar tidak tersisa tanpa tim dan tidak ditolak saat login.
+                    $sudahAnggotaAktif = DB::table('anggota_tim')
+                        ->where('id_pengguna', $oldKetuaId)
+                        ->whereNull('tanggal_keluar')
+                        ->exists();
+                    if (! $sudahAnggotaAktif) {
+                        DB::table('anggota_tim')->insert([
+                            'id_tim' => $tim->id_tim,
+                            'id_pengguna' => $oldKetuaId,
+                            'tanggal_bergabung' => now(),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
                 }
 
                 // 2. Naikkan role ketua tim baru menjadi 'Ketua Tim'
