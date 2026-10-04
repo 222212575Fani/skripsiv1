@@ -140,8 +140,8 @@
                     {{-- Tanggal Mulai & Tenggat Waktu (Grid 2 Kolom dengan Ikon Kalender Ungu) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai</label>
-                            <input type="date" name="tanggal_mulai" x-model="tanggal_mulai" 
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
+                            <input type="date" name="tanggal_mulai" x-model="tanggal_mulai" required
                                 class="custom-date-input w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                         <div>

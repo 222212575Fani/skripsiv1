@@ -119,7 +119,7 @@
                                     class="custom-scrollbar absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
                                     @forelse($anggotaTim ?? [] as $anggota)
                                         <button type="button" 
-                                            @click="ketua = '{{ $anggota->id_pengguna }}'; ketuaNama = '{{ addslashes($anggota->nama ?? $anggota->pengguna->nama) }}'; ketuaOpen = false"
+                                            @click="ketua = '{{ $anggota->id_pengguna }}'; ketuaNama = '{{ addslashes($anggota->nama ?? $anggota->pengguna->nama) }}'; ketuaOpen = false; selectedAnggota = selectedAnggota.filter(a => a != '{{ $anggota->id_pengguna }}')"
                                             class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light"
                                             :class="ketua == '{{ $anggota->id_pengguna }}' ? 'bg-purple-50/70 text-[#6E5BC3] font-light' : 'text-gray-700 hover:bg-purple-50 hover:text-[#6E5BC3] font-light'">
                                             <span>{{ $anggota->nama ?? $anggota->pengguna->nama }}</span>
@@ -146,9 +146,11 @@
                             <div x-show="anggotaOpen" x-cloak 
                                 class="custom-scrollbar absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.12)] p-1.5 z-50 space-y-1 max-h-48 overflow-y-auto">
                                 @forelse($anggotaTim ?? [] as $anggota)
-                                    <label class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all cursor-pointer text-left font-light hover:bg-purple-50">
-                                        <input type="checkbox" name="anggota_proyek[]" value="{{ $anggota->id_pengguna }}" x-model="selectedAnggota" class="mr-3 rounded text-[#6E5BC3] focus:ring-[#6E5BC3] focus:ring-offset-0">
+                                    <label class="w-full flex items-center px-3.5 py-2.5 rounded-lg text-xs transition-all text-left font-light"
+                                        :class="ketua == '{{ $anggota->id_pengguna }}' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-purple-50'">
+                                        <input type="checkbox" name="anggota_proyek[]" value="{{ $anggota->id_pengguna }}" x-model="selectedAnggota" :disabled="ketua == '{{ $anggota->id_pengguna }}'" class="mr-3 rounded text-[#6E5BC3] focus:ring-[#6E5BC3] focus:ring-offset-0">
                                         <span class="text-gray-700">{{ $anggota->nama ?? $anggota->pengguna->nama }}</span>
+                                        <span x-show="ketua == '{{ $anggota->id_pengguna }}'" x-cloak class="ml-2 text-[10px] text-gray-400">(Ketua Proyek)</span>
                                     </label>
                                 @empty
                                     <p class="px-3.5 py-2.5 text-xs text-gray-400 text-center font-light">Tidak ada anggota tersedia.</p>
@@ -181,8 +183,8 @@
                     {{-- Grid 2 Kolom (Tanggal Mulai & Tanggal Selesai) --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai</label>
-                            <input type="date" name="tanggal_mulai" x-model="tglMulai"
+                            <label class="block text-xs font-normal text-gray-700 mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
+                            <input type="date" name="tanggal_mulai" x-model="tglMulai" required
                                 class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6E5BC3]/20 focus:border-[#6E5BC3] outline-none text-xs font-light text-gray-700 cursor-pointer">
                         </div>
                         <div>

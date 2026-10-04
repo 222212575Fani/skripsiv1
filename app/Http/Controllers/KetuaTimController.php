@@ -263,7 +263,7 @@ class KetuaTimController extends Controller
             'nama_proyek' => 'required|string|max:200',
             'deskripsi' => 'nullable|string|max:2000',
             'id_ketua_proyek' => 'required|exists:pengguna,id_pengguna',
-            'tanggal_mulai' => 'nullable|date',
+            'tanggal_mulai' => 'required|date',
             'tenggat_waktu' => 'required|date|after_or_equal:tanggal_mulai',
             'anggota_proyek' => 'required|array|min:1',
             'anggota_proyek.*' => 'exists:pengguna,id_pengguna',
@@ -275,11 +275,19 @@ class KetuaTimController extends Controller
             'deskripsi.max' => 'Deskripsi proyek maksimal 2000 karakter.',
             'id_ketua_proyek.required' => 'Pilih salah satu Ketua Proyek dari anggota tim.',
             'id_ketua_proyek.exists' => 'Ketua proyek yang dipilih tidak valid.',
+            'tanggal_mulai.required' => 'Tanggal mulai proyek wajib diisi.',
             'tanggal_mulai.date' => 'Format tanggal mulai tidak valid.',
             'tenggat_waktu.required' => 'Tanggal selesai proyek wajib diisi.',
             'tenggat_waktu.date' => 'Format target tanggal selesai tidak valid.',
             'tenggat_waktu.after_or_equal' => 'Target tanggal selesai tidak boleh mendahului tanggal mulai proyek.',
         ]);
+
+        // Ketua Proyek tidak dihitung sebagai anggota biasa, dan hanya anggota biasa yang bisa
+        // dipilih sebagai penanggung jawab aktivitas. Karena itu perlu minimal satu anggota lain.
+        $anggotaLain = array_diff($request->anggota_proyek, [$request->id_ketua_proyek]);
+        if (empty($anggotaLain)) {
+            return redirect()->back()->withInput()->with('error', 'Pilih minimal satu anggota proyek selain Ketua Proyek.');
+        }
 
         // Transaksi: proyek, anggota proyek, dan notifikasi tersimpan sekaligus atau batal semua
         try {
@@ -449,7 +457,7 @@ class KetuaTimController extends Controller
             'nama_proyek' => 'required|string|max:200',
             'deskripsi' => 'nullable|string|max:2000',
             'id_ketua_proyek' => 'required|exists:pengguna,id_pengguna',
-            'tanggal_mulai' => 'nullable|date',
+            'tanggal_mulai' => 'required|date',
             'tenggat_waktu' => 'required|date|after_or_equal:tanggal_mulai',
             'anggota_proyek' => 'nullable|array',
             'anggota_proyek.*' => 'exists:pengguna,id_pengguna',
@@ -459,6 +467,7 @@ class KetuaTimController extends Controller
             'deskripsi.max' => 'Deskripsi proyek maksimal 2000 karakter.',
             'id_ketua_proyek.required' => 'Pilih salah satu Ketua Proyek dari anggota tim.',
             'id_ketua_proyek.exists' => 'Ketua proyek yang dipilih tidak valid.',
+            'tanggal_mulai.required' => 'Tanggal mulai proyek wajib diisi.',
             'tanggal_mulai.date' => 'Format tanggal mulai tidak valid.',
             'tenggat_waktu.required' => 'Tanggal selesai proyek wajib diisi.',
             'tenggat_waktu.date' => 'Format target tanggal selesai tidak valid.',
