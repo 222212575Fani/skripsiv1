@@ -97,8 +97,8 @@
                             class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#604EE6]/20 focus:border-[#604EE6] outline-none text-xs font-light text-gray-700 placeholder:text-gray-400 placeholder:font-light resize-none"></textarea>
                     </div>
 
-                    {{-- Ketua Proyek (status proyek dihitung otomatis oleh sistem, jadi tidak ada di form ini) --}}
-                    <div class="grid grid-cols-1 gap-5">
+                    {{-- Grid 2 Kolom (Ketua Proyek & Anggota Proyek); status proyek dihitung otomatis oleh sistem, jadi tidak ada di form ini --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         
                         {{-- Dropdown Kustom Ketua Proyek --}}
                         <div>
@@ -129,10 +129,8 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    {{-- Tambahan Anggota Proyek (Mengikuti Proses Bisnis Usulan) --}}
-                    <div>
+                        {{-- Tambahan Anggota Proyek (Mengikuti Proses Bisnis Usulan) --}}
+                        <div>
                         <label class="block text-xs font-normal text-gray-700 mb-2">Pilih Anggota Proyek (Opsional)</label>
                         <div class="relative" @click.outside="anggotaOpen = false">
                             <button type="button" @click="anggotaOpen = !anggotaOpen; ketuaOpen = false; statusOpen = false;"
@@ -155,6 +153,8 @@
                                 @endforelse
                             </div>
                         </div>
+                        </div>
+
                     </div>
 
                     {{-- Grid 2 Kolom (Tanggal Mulai & Tanggal Selesai) --}}
